@@ -254,6 +254,8 @@ public function register(AttestedRequest $request)
 }
 ```
 
+> Both `AttestationRequest` and `AttestedRequest` validates the authenticated user. If the user is not authenticated, an HTTP 403 status code will be returned.
+
 ### Attestation User verification
 
 By default, the authenticator decides how to verify user when creating a credential. Some may ask to press a "Continue" button to confirm presence, others will verify the User with biometrics, patterns or passwords.
