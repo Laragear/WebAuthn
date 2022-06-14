@@ -1,0 +1,65 @@
+<?php
+
+namespace Laragear\WebAuthn\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use JetBrains\PhpStorm\ArrayShape;
+use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
+
+class AssertedRequest extends FormRequest
+{
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    #[ArrayShape([
+        'id' => "string", 'rawId' => "string", 'response.authenticatorData' => "string",
+        'response.clientDataJSON' => "string", 'response.signature' => "string", 'response.userHandle' => "string",
+        'type' => "string"
+    ])]
+    public function rules(): array
+    {
+        return [
+            'id' => 'required|string',
+            'rawId' => 'required|string',
+            'response.authenticatorData' => 'required|string',
+            'response.clientDataJSON' => 'required|string',
+            'response.signature' => 'required|string',
+            'response.userHandle' => 'sometimes|nullable',
+            'type' => 'required|string',
+        ];
+    }
+
+    /**
+     * Check if the login request wants to remember the user as stateful.
+     *
+     * @return bool
+     */
+    public function hasRemember(): bool
+    {
+        return $this->hasHeader('X-WebAuthn-Remember')
+            || $this->hasHeader('WebAuthn-Remember')
+            || $this->filled('remember');
+    }
+
+    /**
+     * Logs in the user for this assertion request.
+     *
+     * @param  string|null  $guard
+     * @return \Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable&\Illuminate\Contracts\Auth\Authenticatable|null
+     */
+    public function login(string $guard = null, bool $remember = null, bool $destroySession = false): ?WebAuthnAuthenticatable
+    {
+        $auth = Auth::guard($guard);
+
+        if ($auth->attempt($this->validated(), $remember ?? $this->hasRemember())) {
+            $this->session()->regenerate($destroySession);
+
+            return $auth->user();
+        }
+
+        return null;
+    }
+}

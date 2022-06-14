@@ -1,0 +1,94 @@
+{
+    "name": "laragear/webauthn",
+    "description": "Authenticate your users with biometric data, devices or USB keys.",
+    "type": "library",
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "keywords": [
+        "laravel",
+        "webauthn",
+        "authentication",
+        "faceid",
+        "touchid",
+        "windows hello",
+        "passkeys"
+    ],
+    "homepage": "https://github.com/laragear/webauthn",
+    "authors": [
+        {
+            "name": "Lukas Buchs",
+            "role": "Original developer"
+        },
+        {
+            "name": "Italo Israel Baeza Cabrera",
+            "email": "DarkGhostHunter@Gmail.com",
+            "role": "Developer",
+            "homepage": "https://patreon.com/packagesforlaravel"
+        }
+    ],
+    "support": {
+        "source": "https://github.com/Laragear/TwoFactor",
+        "issues": "https://github.com/Laragear/TwoFactor/issues"
+    },
+    "require": {
+        "php" : ">=8.0.2",
+        "ext-openssl": "*",
+        "ext-json" : "*",
+        "illuminate/auth": "9.*",
+        "illuminate/http": "9.*",
+        "illuminate/session": "9.*",
+        "illuminate/support": "9.*",
+        "illuminate/config": "9.*",
+        "illuminate/database": "9.*",
+        "illuminate/encryption": "9.*"
+    },
+    "require-dev": {
+        "orchestra/testbench": "7.*",
+        "phpunit/phpunit": "^9.5",
+        "mockery/mockery": "^1.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Laragear\\WebAuthn\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests",
+            "App\\Http\\Controllers\\WebAuthn\\": "stubs/controllers"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit --coverage-clover build/logs/clover.xml",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Laragear\\WebAuthn\\WebAuthnServiceProvider"
+            ]
+        }
+    },
+    "funding": [
+        {
+            "type": "Patreon",
+            "url": "https://patreon.com/PackagesForLaravel"
+        },
+        {
+            "type": "Ko-Fi",
+            "url": "https://ko-fi.com/DarkGhostHunter"
+        },
+        {
+            "type": "Buy me a cofee",
+            "url": "https://www.buymeacoffee.com/darkghosthunter"
+        },
+        {
+            "type": "Paypal",
+            "url": "https://paypal.me/darkghosthunter"
+        }
+    ]
+}

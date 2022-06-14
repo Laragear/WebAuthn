@@ -1,0 +1,53 @@
+name: Feature request
+description: Suggest a feature for this package
+title: "[X.x] Add this cool feature for this package"
+labels: ["enhancement"]
+assignees:
+  - DarkGhostHunter
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for contributing to this package!
+        New features keep this package fresh and fun for everybody to use.
+  - type: checkboxes
+    id: requirements
+    attributes:
+      label: Please check these requirements
+      options:
+        - label: This feature helps everyone using this package
+          required: true
+        - label: It's feasible and maintainable
+          required: true
+        - label: It's non breaking
+          required: true
+        - label: I issued a PR with the implementation (optional)
+          required: false
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe how the feature works
+      placeholder: This new feature would accomplish this, and would be cool to integrate it to the package because...
+    validations:
+      required: true
+  - type: textarea
+    id: sample
+    attributes:
+      label: Code sample
+      description: Sample a small snippet on how the feature works
+      placeholder: |
+        Laragear::newFeature()->cool();
+      render: php
+    validations:
+      required: true
+  - type: dropdown
+    id: supporter
+    attributes:
+      label: Are you a Patreon supporter?
+      description: Patreon supporters get priority review, fixing and responses. Are you not? [Become one!](https://patreon.com/packagesforlaravel)
+      options:
+        - Yes, with my username
+        - No, don't give priority to this
+    validations:
+      required: true
