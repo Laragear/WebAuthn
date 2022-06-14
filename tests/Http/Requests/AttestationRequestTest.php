@@ -144,6 +144,6 @@ class AttestationRequestTest extends TestCase
             'public_key' => 'test_key',
         ]);
 
-        $this->postJson('test')->assertJsonMissingPath('excludeCredentials');
+        $this->postJson('test')->assertJsonMissing(['excludeCredentials']);
     }
 }

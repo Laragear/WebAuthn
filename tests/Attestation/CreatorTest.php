@@ -186,6 +186,6 @@ class CreatorTest extends TestCase
             'public_key' => 'test',
         ])->save();
 
-        $this->response()->assertJsonMissingPath('excludeCredentials');
+        $this->response()->assertJsonMissing(['excludeCredentials']);
     }
 }
