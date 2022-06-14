@@ -121,26 +121,13 @@ php artisan vendor:publish --provider="Laragear\WebAuthn\WebAuthnServiceProvider
 php artisan vendor:publish --provider="Laragear\WebAuthn\WebAuthnServiceProvider" --tag="controllers"
 ```
 
-The `webauthn.php` route file should be added to your `routes` directory. You can pick them up easily in your `RouteServiceProvider`.
+The `webauthn.php` route file should be added to your `routes` directory. You can pick them up easily in your `RouteServiceProvider`, or go the quick way and require the file from your `web.php` routes file.
 
 ```php
-public function boot()
-{
-    $this->configureRateLimiting();
+use Illuminate\Support\Facades\Route;
 
-    $this->routes(function () {
-        Route::middleware('api')
-            ->prefix('api')
-            ->group(base_path('routes/api.php'));
-
-        Route::middleware('web')
-            ->group(base_path('routes/web.php'));
-            
-        // WebAuthn Routes
-        Route::middleware('web')
-            ->group(base_path('routes/webauthn.php'));
-    });
-}
+// WebAuthn Routes
+Route::group([], base_path('routes/webauthn.php'));
 ```
 
 Along with the routes, the authentication controllers will be located at `App\Http\Controllers\WebAuthn`, which these routes point them toward automatically.
