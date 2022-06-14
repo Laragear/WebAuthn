@@ -50,7 +50,7 @@ class CreatorTest extends TestCase
 
     public function test_base_structure(): void
     {
-        $this->freezeSecond();
+        $this->travelTo(now()->startOfSecond());
 
         $this->response()
             ->assertSessionHas('_webauthn', function (Challenge $challenge): bool {

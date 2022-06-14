@@ -52,7 +52,7 @@ class CreatorTest extends TestCase
     {
         config(['webauthn.challenge.timeout' => 120]);
 
-        $this->freezeSecond();
+        $this->travelTo(now()->startOfSecond());
 
         $this->response()
             ->assertSessionHas('_webauthn', static function (Challenge $challenge): bool {

@@ -86,7 +86,7 @@ class WebAuthnCredentialTest extends TestCase
 
         $credential = WebAuthnCredential::find(FakeAuthenticator::CREDENTIAL_ID);
 
-        $this->freezeSecond();
+        $this->travelTo(now()->startOfSecond());
 
         $credential->disable();
         $credential->disable();
@@ -105,7 +105,7 @@ class WebAuthnCredentialTest extends TestCase
 
         $credential = WebAuthnCredential::find('HLs22xpFT7ilSbYvbARFNf9Q3nVyfczTT9LFhtFT89D');
 
-        $this->freezeSecond();
+        $this->travelTo(now()->startOfSecond());
 
         $credential->enable();
         $credential->enable();

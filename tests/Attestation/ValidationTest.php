@@ -63,7 +63,7 @@ class ValidationTest extends TestCase
         $this->validator = new AttestationValidator($this->app);
         $this->validation = new AttestationValidation($this->user, $this->request);
 
-        $this->freezeSecond();
+        $this->travelTo(now()->startOfSecond());
 
         $this->challenge = new Challenge(
             new ByteBuffer(base64_decode(FakeAuthenticator::ATTESTATION_CHALLENGE)),
