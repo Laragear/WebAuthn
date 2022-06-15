@@ -45,11 +45,11 @@ composer require laragear/webauthn
 
 WebAuthn authentication process consists in two _ceremonies_: attestation, and assertion.
 
-Attestation is the process of registering in the app a new public key from the authenticated user device. For that to work, the user must exist, and the device or browser must support WebAuthn.
+Attestation is the process of asking the authenticator (a phone, laptop, USB key...) to create a private-public key pair, and return the public key to the app to store it. For that to work, the user must exist, and the browser must support WebAuthn, which is what intermediates between the authenticator and the app.
 
-Assertion is the process of pushing a cryptographic challenge to the device, and checking the response is valid using the public key already registered inside the application.
+Assertion is the process of pushing a cryptographic challenge to the device, which will return _signed_ by the private key. Upon arrival, the app checks the signature with the public key.
 
-The private key doesn't leave the device, and there are no shared passwords to remember.
+The private key doesn't leave the authenticator, and there are no shared passwords to save, let alone remember.
 
 ## Set up
 
@@ -389,9 +389,9 @@ You may disable the fallback to only allow WebAuthn authentication by [setting `
 
 ### Detecting Cloned Credentials
 
-During assertion, the package will automatically detect if a Credential as been cloned by comparing how many times the user has logged in with it.
+During assertion, the package will automatically detect if a Credential has been cloned by comparing how many times the user has logged in with it.
 
-If it's detected as cloned, the Credential gets blacklisted, a [`CredentialCloned`](#events) event is fired, and the Assertion gets denied.
+If it's detected as cloned, the Credential is disabled, a [`CredentialCloned`](#events) event is fired, and the Assertion gets denied.
 
 You can use the event to warn the user:
 
