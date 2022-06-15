@@ -366,14 +366,14 @@ class AuthenticatorData
     protected static function readFlags(string $binFlag): object
     {
         $flags = (object) [
-            'bit_0' => (bool) ($binFlag & 1),
-            'bit_1' => (bool) ($binFlag & 2),
-            'bit_2' => (bool) ($binFlag & 4),
-            'bit_3' => (bool) ($binFlag & 8),
-            'bit_4' => (bool) ($binFlag & 16),
-            'bit_5' => (bool) ($binFlag & 32),
-            'bit_6' => (bool) ($binFlag & 64),
-            'bit_7' => (bool) ($binFlag & 128),
+           'bit_0' => (bool) $binFlag & 1,
+            'bit_1' => (bool) $binFlag & 2,
+            'bit_2' => (bool) $binFlag & 4,
+            'bit_3' => (bool) $binFlag & 8,
+            'bit_4' => (bool) $binFlag & 16,
+            'bit_5' => (bool) $binFlag & 32,
+            'bit_6' => (bool) $binFlag & 64,
+            'bit_7' => (bool) $binFlag & 128,
             'userPresent' => false,
             'userVerified' => false,
             'attestedDataIncluded' => false,

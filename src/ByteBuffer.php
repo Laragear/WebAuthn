@@ -194,7 +194,7 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
      * Returns the value of a single unsigned 16-bit integer.
      *
      * @param  int  $offset
-     * @return mixed
+     * @return int
      */
     public function getUint16Val(int $offset = 0): int
     {
@@ -209,7 +209,7 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
      * Returns the value of a single unsigned 32-bit integer.
      *
      * @param  int  $offset
-     * @return mixed
+     * @return int
      */
     public function getUint32Val(int $offset = 0): int
     {

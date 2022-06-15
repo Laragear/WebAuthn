@@ -44,7 +44,7 @@ class MayRetrieveCredentialsIdForUser
             return array_filter([
                 'id' => $credential->getKey(),
                 'type' => 'public-key',
-                'transports' => $credential->transports
+                'transports' => $credential->transports,
             ]);
         });
     }

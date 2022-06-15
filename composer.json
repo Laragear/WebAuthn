@@ -44,9 +44,11 @@
         "illuminate/encryption": "9.*"
     },
     "require-dev": {
+        "jetbrains/phpstorm-stubs": "^2022.1",
+        "mockery/mockery": "^1.5",
+        "nunomaduro/larastan": "^2.1",
         "orchestra/testbench": "7.*",
-        "phpunit/phpunit": "^9.5",
-        "mockery/mockery": "^1.5"
+        "phpunit/phpunit": "^9.5"
     },
     "autoload": {
         "psr-4": {

@@ -22,7 +22,7 @@ use Laragear\WebAuthn\Events\CredentialEnabled;
  * @method \Laragear\WebAuthn\Models\WebAuthnCredential firstOr($columns = ['*'], \Closure $callback = null)
  * @method \Laragear\WebAuthn\Models\WebAuthnCredential firstWhere($column, $operator = null, $value = null, $boolean = 'and')
  * @method \Laragear\WebAuthn\Models\WebAuthnCredential updateOrCreate(array $attributes, array $values = [])
- * @method static|null first($columns = ['*'])
+ * @method null|static first($columns = ['*'])
  * @method static static findOrFail($id, $columns = ['*'])
  * @method static static findOrNew($id, $columns = ['*'])
  * @method static static|null find($id, $columns = ['*'])
@@ -98,7 +98,7 @@ class WebAuthnCredential extends Model
     protected $visible = ['id', 'origin', 'alias', 'aaguid', 'attestation_format', 'disabled_at', 'is_enabled'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo&\Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo<\Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable, \Laragear\WebAuthn\Models\WebAuthnCredential>
      */
     public function authenticatable(): MorphTo
     {
