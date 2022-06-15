@@ -45,9 +45,9 @@ composer require laragear/webauthn
 
 WebAuthn authentication process consists in two _ceremonies_: attestation, and assertion.
 
-Attestation is the process of asking the authenticator (a phone, laptop, USB key...) to create a private-public key pair, and return the public key to the app to store it. For that to work, the user must exist, and the browser must support WebAuthn, which is what intermediates between the authenticator and the app.
+Attestation is the process of asking the authenticator (a phone, laptop, USB key...) to create a private-public key pair, and **register** the public key inside the app. For that to work, the user must exist, and the browser must support WebAuthn, which is what intermediates between the authenticator and the app.
 
-Assertion is the process of pushing a cryptographic challenge to the device, which will return _signed_ by the private key. Upon arrival, the app checks the signature with the public key.
+Assertion is the process of pushing a cryptographic challenge to the device, which will return _signed_ by the private key. Upon arrival, the app checks the signature with the public key, ready to **log in**.
 
 The private key doesn't leave the authenticator, and there are no shared passwords to save, let alone remember.
 
@@ -199,7 +199,7 @@ new WebAuthn().login({
 
 ### Custom routes
 
-By default, the helper assumes you're using the [default WebAuthn routes](#4-register-the-controllers). If you're using different routes for WebAuthn, you can set them at runtime. Here is good place to use [ziggy](https://github.com/tighten/ziggy) if it's in your project.
+By default, the helper assumes you're using the [default WebAuthn routes](#4-register-the-routes-and-controllers). If you're using different routes for WebAuthn, you can set them at runtime.
 
 ```javascript
 const webAuthn = new WebAuthn({
@@ -210,6 +210,8 @@ const webAuthn = new WebAuthn({
     login: 'webauthn/login',
 });
 ```
+
+> Here is good place to use [ziggy](https://github.com/tighten/ziggy) if it's in your project.
 
 ### Headers
 
