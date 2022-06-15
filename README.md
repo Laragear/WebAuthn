@@ -61,7 +61,7 @@ We need to make sure your users can register their devices and authenticate with
 
 After that, you can quickly start WebAuthn with the included controllers and helpers to make your life easier.
 
-4. [Register the controllers](#4-register-the-controllers)
+4. [Register the controllers](#4-register-the-routes-and-controllers)
 5. [Use the Javascript helper](#5-use-the-javascript-helper)
 
 ### 1. Add the `eloquent-webauthn` driver
@@ -120,25 +120,28 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
 
 From here you're ready to work with WebAuthn Authentication. The following steps will help you close the gap to a full implementation.
 
-### 4. Register the controllers
+### 4. Register the routes and controllers
 
-WebAuthn uses exclusive controller actions to registering and authenticating users. If you want a quick start, just publish the controllers and routes included in Laragear WebAuthn.
+WebAuthn uses exclusive routes to register and authenticate users. Creating these routes and controller may be cumbersome, specially if it's your first time in the WebAuthn real.
+
+Instead, go for a quick start and publish the controllers included in Laragear WebAuthn. These controllers will be located at `app\Http\Controllers\WebAuthn`.
 
 ```shell
-php artisan vendor:publish --provider="Laragear\WebAuthn\WebAuthnServiceProvider" --tag="routes"
 php artisan vendor:publish --provider="Laragear\WebAuthn\WebAuthnServiceProvider" --tag="controllers"
 ```
 
-The `webauthn.php` route file should be added to your `routes` directory. You can pick them up easily in your `RouteServiceProvider`, or go the quick way and require the file from your `web.php` routes file.
+Next, to pick these controllers easily, go into your `web.php` routes file and register a default set of routes with the `WebAuthn::routes()` method.
 
 ```php
+// web.php
 use Illuminate\Support\Facades\Route;
+use Laragear\WebAuthn\WebAuthn;
+
+Route::view('welcome');
 
 // WebAuthn Routes
-Route::group([], base_path('routes/webauthn.php'));
+WebAuthn::routes();
 ```
-
-Along with the routes, the authentication controllers will be located at `App\Http\Controllers\WebAuthn`, which these routes point them toward automatically.
 
 ### 5. Use the Javascript helper
 

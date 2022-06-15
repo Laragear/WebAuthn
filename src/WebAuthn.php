@@ -2,6 +2,8 @@
 
 namespace Laragear\WebAuthn;
 
+use Illuminate\Support\Facades\Route;
+
 /**
  * @internal
  */
@@ -23,16 +25,26 @@ class WebAuthn
     public const RESIDENT_KEY_DISCOURAGED = 'discouraged';
 
     /**
-     * Returns all user verifications flags possible.
+     * Registers a set of default WebAuthn routes.
      *
-     * @return string[]
+     * @return void
      */
-    public static function userVerifications(): array
+    public static function routes(): void
     {
-        return [
-            static::USER_VERIFICATION_REQUIRED,
-            static::USER_VERIFICATION_PREFERRED,
-            static::USER_VERIFICATION_DISCOURAGED,
-        ];
+        Route::middleware('web')->group(static function (): void {
+            Route::post('webauthn/register/options')
+                ->uses([\App\Http\Controllers\WebAuthn\WebAuthnRegisterController::class, 'options'])
+                ->name('webauthn.register.options');
+            Route::post('webauthn/register')
+                ->uses([\App\Http\Controllers\WebAuthn\WebAuthnRegisterController::class, 'register'])
+                ->name('webauthn.register');
+
+            Route::post('webauthn/login/options')
+                ->uses([\App\Http\Controllers\WebAuthn\WebAuthnLoginController::class, 'options'])
+                ->name('webauthn.login.options');
+            Route::post('webauthn/login')
+                ->uses([\App\Http\Controllers\WebAuthn\WebAuthnLoginController::class, 'login'])
+                ->name('webauthn.login');
+        });
     }
 }

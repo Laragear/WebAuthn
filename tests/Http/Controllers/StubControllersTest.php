@@ -7,6 +7,7 @@ use Laragear\WebAuthn\Http\Requests\AssertionRequest;
 use Laragear\WebAuthn\Http\Requests\AttestationRequest;
 use Laragear\WebAuthn\Http\Requests\AttestedRequest;
 use Laragear\WebAuthn\JsonTransport;
+use Laragear\WebAuthn\WebAuthn;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
 use Tests\TestCase;
 
@@ -14,7 +15,7 @@ class StubControllersTest extends TestCase
 {
     protected function defineWebRoutes($router): void
     {
-        $router->group([], __DIR__ . '/../../../routes/webauthn.php');
+        WebAuthn::routes();
     }
 
     public function test_uses_attestation_request(): void
