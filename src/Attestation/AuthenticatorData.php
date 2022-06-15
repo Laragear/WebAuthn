@@ -366,7 +366,7 @@ class AuthenticatorData
     protected static function readFlags(string $binFlag): object
     {
         $flags = (object) [
-           'bit_0' => (bool) $binFlag & 1,
+            'bit_0' => (bool) $binFlag & 1,
             'bit_1' => (bool) $binFlag & 2,
             'bit_2' => (bool) $binFlag & 4,
             'bit_3' => (bool) $binFlag & 8,
