@@ -45,7 +45,7 @@ return new class extends Migration {
     {
         $table->string('id')->primary();
 
-        $table->morphs('authenticatable');
+        $table->morphs('authenticatable', 'webauthn_user_index');
 
         // This is the user UUID that is generated automatically when a credential for the
         // given user is created. If a second credential is created, this UUID is queried
