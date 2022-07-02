@@ -7,7 +7,7 @@ use Laragear\WebAuthn\Assertion\Validator\AssertionValidation;
 use Laragear\WebAuthn\Attestation\AuthenticatorData;
 use Laragear\WebAuthn\Exceptions\AssertionException;
 use Laragear\WebAuthn\Exceptions\DataException;
-use function base64_decode;
+use function Safe\base64_decode;
 
 /**
  * @internal
@@ -26,7 +26,7 @@ class CompileAuthenticatorData
     {
         $data = base64_decode($validation->request->json('response.authenticatorData', ''));
 
-        if (!$data) {
+        if ($data === '') {
             throw AssertionException::make('Authenticator Data does not exist or is empty.');
         }
 
