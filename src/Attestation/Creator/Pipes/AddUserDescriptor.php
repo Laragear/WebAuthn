@@ -23,8 +23,8 @@ class AddUserDescriptor
         $config = $attestable->user->webAuthnData();
 
         // Create a new User UUID if it doesn't existe already in the credentials.
-        $config['id'] = $attestable->user->webAuthnCredentials()->value('user_id')
-            ?: Str::uuid()->getHex()->toString();
+        $id = $attestable->user->webAuthnCredentials()->value('user_id');
+        $config['id'] = ($id !== '' && $id !== null) ? $id : Str::uuid()->getHex()->toString();
 
         $attestable->json->set('user', $config);
 

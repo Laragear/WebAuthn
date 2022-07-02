@@ -38,3 +38,4 @@ parameters:
 		# bunch of false positives from Eloquent
 		- '#Parameter \#1 .* of method .*MayRetrieveCredentialsIdForUser::parseCredentials\(\) expects .*Collection<int, .*WebAuthnCredential>, .*Collection<int, .*Model> given.#'
 		- '#Method .*::parseCredentials\(\) should .*Collection<.*> but returns .*Collection<.*>.#'
+		- '#Dynamic call to static method .*MorphMany<.*Model>::value\(\).#'
