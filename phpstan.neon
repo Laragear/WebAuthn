@@ -1,0 +1,34 @@
+includes:
+	- vendor/phpstan/phpstan-deprecation-rules/rules.neon
+	- vendor/thecodingmachine/phpstan-safe-rule/phpstan-safe-rule.neon
+	- vendor/phpstan/phpstan-strict-rules/rules.neon
+	- vendor/nunomaduro/larastan/extension.neon
+
+services:
+	-
+		class: Ergebnis\PHPStan\Rules\Expressions\NoErrorSuppressionRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: SlamPhpStan\UnusedVariableRule
+		tags:
+			- phpstan.rules.rule
+
+	-
+		class: Laragear\WebAuthn\PHPStan\Rules\DisallowedConstructs\DisallowedBooleanCastRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: Laragear\WebAuthn\PHPStan\Rules\DisallowedConstructs\DisallowedBooleanConversionRule
+		tags:
+			- phpstan.rules.rule
+
+parameters:
+	level: 7
+	reportMaybesInPropertyPhpDocTypes: false
+	checkMissingIterableValueType: false
+	featureToggles:
+		bleedingEdge: true
+	paths:
+		- src
+		- stubs
