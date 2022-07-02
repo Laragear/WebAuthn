@@ -7,7 +7,9 @@ use Illuminate\Contracts\Config\Repository;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidation;
 use Laragear\WebAuthn\Attestation\AuthenticatorData;
 use Laragear\WebAuthn\Attestation\Validator\AttestationValidation;
-use function parse_url;
+use Safe\Exceptions\UrlException;
+
+use function Safe\parse_url;
 use const PHP_URL_HOST;
 
 /**
@@ -41,7 +43,15 @@ abstract class CheckRelyingPartyHashSame
         // This way we can get the app RP ID on attestation, and the Credential RP ID
         // on assertion. The credential will have the same Relaying Party ID on both
         // the authenticator and the application so on assertion both should match.
-        $relayingParty = parse_url($this->relyingPartyId($validation), PHP_URL_HOST);
+        try {
+            $relayingParty = parse_url($this->relyingPartyId($validation), PHP_URL_HOST);
+        } catch (UrlException) {
+            static::throw($validation, 'Relying Party ID is invalid.');
+        }
+
+        if (!is_string($relayingParty)) {
+            static::throw($validation, 'Relying Party ID is not a string.');
+        }
 
         if ($this->authenticatorData($validation)->hasNotSameRPIdHash($relayingParty)) {
             static::throw($validation, 'Response has different Relying Party ID hash.');
