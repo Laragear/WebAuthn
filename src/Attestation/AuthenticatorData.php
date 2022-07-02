@@ -13,7 +13,7 @@ use function is_array;
 use function ord;
 use function strlen;
 use function substr;
-use function unpack;
+use function Safe\unpack;
 
 /**
  * MIT License
@@ -74,19 +74,18 @@ class AuthenticatorData
      * Creates a new Authenticator Data instance from a binary string.
      *
      * @param  string  $relyingPartyIdHash
-     * @param  object  $flags
+     * @param  Stubs\AttestationFlags  $flags
      * @param  int  $counter
-     * @param  object{aaguid: int|bool, credentialId: string, credentialPublicKey: string}  $attestedCredentialData
+     * @param  Stubs\AttestedCredentialData  $attestedCredentialData
      * @param  array  $extensionData
      */
     public function __construct(
         public string $relyingPartyIdHash,
         public object $flags,
         public int $counter,
-        public object $attestedCredentialData,
+        public object|null $attestedCredentialData,
         public array $extensionData,
-    )
-    {
+    ) {
         //
     }
 
@@ -305,7 +304,8 @@ class AuthenticatorData
         $len = strlen($bytes);
 
         // Remove leading zero bytes
-        for ($i = 0; $i < ($len - 1); $i++) {
+        $i = 0;
+        for (; $i < ($len - 1); $i++) {
             if (ord($bytes[$i]) !== 0) {
                 break;
             }
@@ -326,11 +326,11 @@ class AuthenticatorData
      * Create a new Authenticator data from a binary string.
      *
      * @param  string  $binary
-     * @return static
+     * @return self
      * @throws \Laragear\WebAuthn\Exceptions\DataException
      * @codeCoverageIgnore
      */
-    public static function fromBinary(string $binary): static
+    public static function fromBinary(string $binary): self
     {
         if (strlen($binary) < 37) {
             throw new DataException('Authenticator Data: Invalid input.');
@@ -348,43 +348,45 @@ class AuthenticatorData
 
         $attestedCredentialData = $flags->attestedDataIncluded
             ? static::readAttestData($binary, $offset)
-            : (object) null;
+            : null;
 
         $extensionData = $flags->extensionDataIncluded
             ? static::readExtensionData(substr($binary, $offset))
             : [];
 
-        return new static($relyingPartyIdHash, $flags, $counter, $attestedCredentialData, $extensionData);
+        return new self($relyingPartyIdHash, $flags, $counter, $attestedCredentialData, $extensionData);
     }
 
     /**
      * Reads the flags from flag byte array.
      *
      * @param  string  $binFlag
-     * @return object{userPresent: bool, userVerified: bool, attestedDataIncluded: bool, extensionDataIncluded: bool}
+     * @return Stubs\AttestationFlags
      */
     protected static function readFlags(string $binFlag): object
     {
+        $bits = (object) [
+            'bit_0' => (intval($binFlag) & 1) > 0,
+            'bit_1' => (intval($binFlag) & 2) > 0,
+            'bit_2' => (intval($binFlag) & 4) > 0,
+            'bit_3' => (intval($binFlag) & 8) > 0,
+            'bit_4' => (intval($binFlag) & 16) > 0,
+            'bit_5' => (intval($binFlag) & 32) > 0,
+            'bit_6' => (intval($binFlag) & 64) > 0,
+            'bit_7' => (intval($binFlag) & 128) > 0,
+        ];
+
+        /** @var Stubs\AttestationFlags */
         $flags = (object) [
-            'bit_0' => (bool) ($binFlag & 1),
-            'bit_1' => (bool) ($binFlag & 2),
-            'bit_2' => (bool) ($binFlag & 4),
-            'bit_3' => (bool) ($binFlag & 8),
-            'bit_4' => (bool) ($binFlag & 16),
-            'bit_5' => (bool) ($binFlag & 32),
-            'bit_6' => (bool) ($binFlag & 64),
-            'bit_7' => (bool) ($binFlag & 128),
             'userPresent' => false,
             'userVerified' => false,
             'attestedDataIncluded' => false,
             'extensionDataIncluded' => false,
         ];
-
-        // named flags
-        $flags->userPresent = $flags->bit_0;
-        $flags->userVerified = $flags->bit_2;
-        $flags->attestedDataIncluded = $flags->bit_6;
-        $flags->extensionDataIncluded = $flags->bit_7;
+        $flags->userPresent = $bits->bit_0;
+        $flags->userVerified = $bits->bit_2;
+        $flags->attestedDataIncluded = $bits->bit_6;
+        $flags->extensionDataIncluded = $bits->bit_7;
 
         return $flags;
     }
@@ -394,7 +396,7 @@ class AuthenticatorData
      *
      * @param  string  $binary
      * @param  int  $endOffset
-     * @return object{aaguid: int|bool, credentialId: string, credentialPublicKey: string}
+     * @return Stubs\AttestedCredentialData
      * @throws \Laragear\WebAuthn\Exceptions\DataException
      */
     protected static function readAttestData(string $binary, int &$endOffset): object
@@ -409,11 +411,13 @@ class AuthenticatorData
         // Set end offset
         $endOffset = 55 + $length;
 
-        return (object) [
+        /** @var Stubs\AttestedCredentialData $attestationCredentialData */
+        $attestationCredentialData = (object) [
             'aaguid' => substr($binary, 37, 16),
             'credentialId' => new ByteBuffer(substr($binary, 55, $length)),
             'credentialPublicKey' => static::readCredentialPublicKey($binary, 55 + $length, $endOffset)
         ];
+        return $attestationCredentialData;
     }
 
     /**
@@ -427,9 +431,11 @@ class AuthenticatorData
      */
     protected static function readCredentialPublicKey(string $binary, int $offset, int &$endOffset): object
     {
+        /** @var array */
         $enc = CborDecoder::decodePortion($binary, $offset, $endOffset);
 
         // COSE key-encoded elliptic curve public key in EC2 format
+        /** @var Stubs\CredentialPublicKey */
         $publicKey = (object) [
             'kty' => $enc[static::$COSE_KTY],
             'alg' => $enc[static::$COSE_ALG]
@@ -450,7 +456,7 @@ class AuthenticatorData
     /**
      * Extracts ES256 information from COSE encoding.
      *
-     * @param  object  $publicKey
+     * @param  Stubs\CredentialPublicKey  $publicKey
      * @param  array  $cose
      * @return object
      * @throws \Laragear\WebAuthn\Exceptions\DataException
@@ -487,7 +493,7 @@ class AuthenticatorData
     /**
      * Extract RS256 information from COSE.
      *
-     * @param  object  $publicKey
+     * @param  Stubs\CredentialPublicKey  $publicKey
      * @param  array  $enc
      * @return void
      * @throws \Laragear\WebAuthn\Exceptions\DataException
