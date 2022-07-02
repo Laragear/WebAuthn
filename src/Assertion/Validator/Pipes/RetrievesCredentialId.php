@@ -33,7 +33,7 @@ class RetrievesCredentialId
         // We can now find the credential.
         $validation->credential = WebAuthnCredential::whereKey($id)->first();
 
-        if (!$validation->credential) {
+        if ($validation->credential === null) {
             throw AssertionException::make('Credential ID does not exist.');
         }
 
