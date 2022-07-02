@@ -19,11 +19,6 @@ jobs:
       fail-fast: true
       matrix:
         php: [ 8.0, 8.1 ]
-        laravel: [ 9.* ]
-        dependency-version: [ prefer-stable, prefer-lowest ]
-        include:
-          - laravel: 9.*
-            testbench: 7.*
 
     name: "PHP: ${{ matrix.php }} | PHPStan"
 
