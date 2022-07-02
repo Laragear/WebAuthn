@@ -27,6 +27,7 @@ parameters:
 	level: 7
 	reportMaybesInPropertyPhpDocTypes: false
 	checkMissingIterableValueType: false
+	checkGenericClassInNonGenericObjectType: false
 	featureToggles:
 		bleedingEdge: true
 	paths:

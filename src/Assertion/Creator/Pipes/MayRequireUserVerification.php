@@ -16,7 +16,7 @@ class MayRequireUserVerification
      */
     public function handle(AssertionCreation $assertion, Closure $next): mixed
     {
-        if ($assertion->userVerification) {
+        if ($assertion->userVerification !== null) {
             $assertion->json->set('userVerification', $assertion->userVerification);
         }
 
