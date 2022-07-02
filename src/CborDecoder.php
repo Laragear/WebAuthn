@@ -249,12 +249,13 @@ class CborDecoder
      * @param $offset
      * @return \Laragear\WebAuthn\ByteBuffer|array|bool|float|int|string|null
      * @throws \Laragear\WebAuthn\Exceptions\DataException
+     * @throws InvalidArgumentException
      */
     protected static function parseItemData(
         int $type,
         int $val,
         ByteBuffer $buf,
-        &$offset
+        int &$offset
     ): ByteBuffer|array|bool|float|int|string|null {
         switch ($type) {
             case static::CBOR_MAJOR_UNSIGNED_INT: // uint
@@ -292,7 +293,7 @@ class CborDecoder
      * @param  \Laragear\WebAuthn\ByteBuffer  $buffer
      * @param  int  $offset
      * @param  int  $count
-     * @return array<string, mixed>
+     * @return array
      * @throws \Laragear\WebAuthn\Exceptions\DataException
      */
     protected static function parseMap(ByteBuffer $buffer, int &$offset, int $count): array
