@@ -39,14 +39,14 @@ class Challenge
     /**
      * Creates a new Challenge instance using a random ByteBuffer of the given length.
      *
-     * @param  int  $length
+     * @param  int<1, max>  $length
      * @param  int  $timeout
      * @param  bool  $verify
      * @param  array  $options
-     * @return static
+     * @return self
      */
-    public static function random(int $length, int $timeout, bool $verify = true, array $options = []): static
+    public static function random(int $length, int $timeout, bool $verify = true, array $options = []): self
     {
-        return new static(ByteBuffer::makeRandom($length), $timeout, $verify, $options);
+        return new self(ByteBuffer::makeRandom($length), $timeout, $verify, $options);
     }
 }
