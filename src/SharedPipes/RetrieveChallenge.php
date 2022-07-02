@@ -39,7 +39,7 @@ abstract class RetrieveChallenge
     {
         $validation->challenge = $this->retrieveChallenge($validation->request);
 
-        if (!$validation->challenge) {
+        if ($validation->challenge === null) {
             static::throw($validation, 'Challenge does not exist.');
         }
 
@@ -57,7 +57,7 @@ abstract class RetrieveChallenge
         /** @var \Laragear\WebAuthn\Challenge|null $challenge */
         $challenge = $request->session()->pull($this->config->get('webauthn.challenge.key'));
 
-        if (!$challenge || $challenge->hasExpired()) {
+        if ($challenge === null || $challenge->hasExpired()) {
             return null;
         }
 

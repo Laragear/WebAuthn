@@ -29,6 +29,6 @@ class WebAuthnLoginController
      */
     public function login(AssertedRequest $request): Response
     {
-        return response()->noContent($request->login() ? 204 : 422);
+        return response()->noContent($request->login() !== null ? 204 : 422);
     }
 }

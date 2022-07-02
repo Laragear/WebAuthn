@@ -46,3 +46,4 @@ parameters:
 		- '#Call to an undefined method Illuminate\\Contracts\\Auth\\StatefulGuard::getProvider\(\)#'
 		- '#Dynamic call to static method .*Builder<.*Model>::whereNull\(\).#'
 		- '#Dynamic call to static method .*Builder<.*Model>::whereNotNull\(\).#'
+		- '#Dynamic call to static method Laragear\\WebAuthn\\Http\\Requests\\AssertionRequest::validate\(\).#'
