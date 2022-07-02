@@ -44,3 +44,5 @@ parameters:
 		- '#Dynamic call to static method .*Builder<.*>::whereEnabled\(\).#'
 		- '#Method Laragear\\WebAuthn\\Http\\Requests\\AssertedRequest::login\(\) should return \(.*Authenticatable&.*WebAuthnAuthenticatable\)\|null but returns .*User\|null.#'
 		- '#Call to an undefined method Illuminate\\Contracts\\Auth\\StatefulGuard::getProvider\(\)#'
+		- '#Dynamic call to static method .*Builder<.*Model>::whereNull\(\).#'
+		- '#Dynamic call to static method .*Builder<.*Model>::whereNotNull\(\).#'
