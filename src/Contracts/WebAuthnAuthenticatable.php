@@ -34,14 +34,14 @@ interface WebAuthnAuthenticatable
      * Makes an instance of a WebAuthn Credential attached to this user.
      *
      * @param  array  $properties
-     * @return \Laragear\WebAuthn\Models\WebAuthnCredential
+     * @return WebAuthnCredential
      */
     public function makeWebAuthnCredential(array $properties): WebAuthnCredential;
 
     /**
      * Returns a queryable relationship for its WebAuthn Credentials.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany&\Laragear\WebAuthn\Models\WebAuthnCredential
+     * @return MorphMany
      */
     public function webAuthnCredentials(): MorphMany;
 }
