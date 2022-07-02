@@ -13,7 +13,7 @@ class AttestationException extends ValidationException implements WebAuthnExcept
      * @param  string  $message
      * @return \Laragear\WebAuthn\Exceptions\AttestationException
      */
-    public static function make(string $message): static
+    public static function make(string $message): self
     {
         return static::withMessages(['attestation' => "Attestation Error: $message"]);
     }

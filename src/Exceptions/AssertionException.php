@@ -13,7 +13,7 @@ class AssertionException extends ValidationException implements WebAuthnExceptio
      * @param  string  $message
      * @return \Laragear\WebAuthn\Exceptions\AssertionException
      */
-    public static function make(string $message): static
+    public static function make(string $message): self
     {
         return static::withMessages(['assertion' => "Assertion Error: $message"]);
     }
