@@ -13,7 +13,7 @@ use Laragear\WebAuthn\ByteBuffer;
 use Laragear\WebAuthn\CborDecoder;
 use Laragear\WebAuthn\Exceptions\AttestationException;
 use Laragear\WebAuthn\Exceptions\DataException;
-use function base64_decode;
+use function Safe\base64_decode;
 use function is_array;
 use function is_string;
 
@@ -41,6 +41,7 @@ class CompileAttestationObject
      */
     public function handle(AttestationValidation $validation, Closure $next): mixed
     {
+        /** @var array{fmt: string, attStmt: array, authData: \Laragear\WebAuthn\ByteBuffer} $data */
         $data = $this->decodeCborBase64($validation->request);
 
         // Here we would receive the attestation formats and decode them. Since we're
@@ -57,7 +58,9 @@ class CompileAttestationObject
         }
 
         $validation->attestationObject = new AttestationObject(
-            $authenticatorData, new None($data, $authenticatorData), $data['fmt']
+            $authenticatorData,
+            new None($data, $authenticatorData),
+            $data['fmt']
         );
 
         return $next($validation);
