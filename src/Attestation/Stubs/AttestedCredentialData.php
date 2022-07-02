@@ -7,7 +7,7 @@ class AttestedCredentialData
     /**
      * Create a DTO for Attested Credential Data
      *
-     * @param int|bool $aaguid
+     * @param string $aaguid
      * @param string $credentialId
      * @param CredentialPublicKey $credentialPublicKey
      * @param bool $userVerified
@@ -15,7 +15,7 @@ class AttestedCredentialData
      * @return void
      */
     public function __construct(
-        public int|bool $aaguid,
+        public string $aaguid,
         public string $credentialId,
         public CredentialPublicKey $credentialPublicKey,
         public bool $userVerified,
