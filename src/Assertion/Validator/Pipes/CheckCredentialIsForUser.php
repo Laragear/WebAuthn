@@ -35,10 +35,10 @@ class CheckCredentialIsForUser
      */
     public function handle(AssertionValidation $validation, Closure $next): mixed
     {
-        if ($validation->user) {
+        if ($validation->user !== null) {
             $this->validateUser($validation);
 
-            if ($validation->request->json('response.userHandle')) {
+            if ($validation->request->json('response.userHandle') !== null) {
                 $this->validateId($validation);
             }
         } else {
@@ -71,9 +71,8 @@ class CheckCredentialIsForUser
     {
         $handle = $validation->request->json('response.userHandle');
 
-        if (! $handle || ! hash_equals(Uuid::fromString($validation->credential->user_id)->getHex()->toString(), $handle)) {
+        if ($handle === null || ! hash_equals(Uuid::fromString($validation->credential->user_id)->getHex()->toString(), $handle)) {
             throw AssertionException::make('User ID is not owner of the stored credential.');
         }
     }
-
 }

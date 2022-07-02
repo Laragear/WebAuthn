@@ -15,7 +15,7 @@ class AssertionValidation
      * Create a new Assertion Validation.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable|null  $user
+     * @param  \Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable&\Illuminate\Database\Eloquent\Model|null  $user
      * @param  \Laragear\WebAuthn\Challenge|null  $challenge
      * @param  \Laragear\WebAuthn\Models\WebAuthnCredential|null  $credential
      * @param  \Laragear\WebAuthn\ClientDataJson|null  $clientDataJson
@@ -28,8 +28,7 @@ class AssertionValidation
         public ?WebAuthnCredential $credential = null,
         public ?ClientDataJson $clientDataJson = null,
         public ?AuthenticatorData $authenticatorData = null,
-    )
-    {
+    ) {
         //
     }
 }
