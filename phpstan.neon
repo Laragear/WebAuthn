@@ -41,3 +41,4 @@ parameters:
 		- '#Dynamic call to static method .*MorphMany<.*Model>::value\(\).#'
 		- '#Parameter \#1 \$callback of method .*Collection<.*>::map\(\) expects callable\(.*\): .*, Closure\(.*\): .* given.#'
 		- '#Dynamic call to static method .*Builder<.*WebAuthnCredential>::exists\(\).#'
+		- '#Dynamic call to static method .*Builder<.*>::whereEnabled\(\).#'

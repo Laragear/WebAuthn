@@ -3,13 +3,14 @@
 namespace Laragear\WebAuthn\Auth;
 
 use Illuminate\Auth\EloquentUserProvider;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidation;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidator;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 use Laragear\WebAuthn\Exceptions\AssertionException;
-use function class_implements;
+use function Safe\class_implements;
 use function config;
 use function logger;
 use function request;
@@ -46,8 +47,9 @@ class WebAuthnUserProvider extends EloquentUserProvider
      */
     public function retrieveByCredentials(array $credentials)
     {
-        if (class_implements($this->model, WebAuthnAuthenticatable::class) && $this->isSignedChallenge($credentials)) {
+        if (in_array(WebAuthnAuthenticatable::class, class_implements($this->model, true), true) && $this->isSignedChallenge($credentials)) {
             /** @noinspection PhpIncompatibleReturnTypeInspection */
+            // @phpstan-ignore-next-line
             return $this->newModelQuery()
                 ->whereHas('webAuthnCredentials', static function (Builder $query) use ($credentials): void {
                     $query->whereKey($credentials['id'])->whereEnabled();
@@ -84,7 +86,11 @@ class WebAuthnUserProvider extends EloquentUserProvider
         }
 
         // If the fallback is enabled, we will validate the credential password.
-        return $this->fallback && parent::validateCredentials($user, $credentials);
+        if ($user instanceof Authenticatable) {
+            return $this->fallback && parent::validateCredentials($user, $credentials);
+        }
+
+        return false;
     }
 
     /**
@@ -98,7 +104,7 @@ class WebAuthnUserProvider extends EloquentUserProvider
             $this->validator->send(new AssertionValidation(request()))->thenReturn();
         } catch (AssertionException $e) {
             // If we're debugging, like under local development, push the error to the logger.
-            if (config('app.debug')) {
+            if (config('app.debug') === true) {
                 logger($e->getMessage());
             }
 
