@@ -39,13 +39,11 @@ class MayPreventDuplicateCredentials
         return $user
             ->webAuthnCredentials()
             ->get(['id', 'transports'])
-            ->map(static function (WebAuthnCredential $credential): array {
-                return array_filter([
+            ->map(fn (WebAuthnCredential $credential) => array_filter([
                     'id'=> $credential->getKey(),
                     'type' => 'public-key',
                     'transports' => $credential->transports
-                ]);
-            })
+                ]))
             ->toArray();
     }
 }

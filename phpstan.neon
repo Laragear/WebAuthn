@@ -39,3 +39,4 @@ parameters:
 		- '#Parameter \#1 .* of method .*MayRetrieveCredentialsIdForUser::parseCredentials\(\) expects .*Collection<int, .*WebAuthnCredential>, .*Collection<int, .*Model> given.#'
 		- '#Method .*::parseCredentials\(\) should .*Collection<.*> but returns .*Collection<.*>.#'
 		- '#Dynamic call to static method .*MorphMany<.*Model>::value\(\).#'
+		- '#Parameter \#1 \$callback of method .*Collection<.*>::map\(\) expects callable\(.*\): .*, Closure\(.*\): .* given.#'
