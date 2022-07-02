@@ -33,3 +33,8 @@ parameters:
 	paths:
 		- src
 		- stubs
+
+	ignoreErrors:
+		# bunch of false positives from Eloquent
+		- '#Parameter \#1 .* of method .*MayRetrieveCredentialsIdForUser::parseCredentials\(\) expects .*Collection<int, .*WebAuthnCredential>, .*Collection<int, .*Model> given.#'
+		- '#Method .*::parseCredentials\(\) should .*Collection<.*> but returns .*Collection<.*>.#'
