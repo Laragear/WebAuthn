@@ -7,12 +7,14 @@ use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 use JsonSerializable;
 use OutOfBoundsException;
+use Safe\Exceptions\StringsException;
+use Safe\Exceptions\UrlException;
 use Stringable;
-use function base64_decode;
+use function Safe\base64_decode;
 use function base64_encode;
 use function bin2hex;
 use function hash_equals;
-use function hex2bin;
+use function Safe\hex2bin;
 use function json_decode;
 use function ord;
 use function random_bytes;
@@ -21,7 +23,7 @@ use function str_repeat;
 use function strlen;
 use function strtr;
 use function substr;
-use function unpack;
+use function Safe\unpack;
 
 /**
  * MIT License
@@ -108,7 +110,7 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
      */
     public function hasLength(): bool
     {
-        return (bool) $this->dataLength;
+        return $this->dataLength > 0;
     }
 
     /**
@@ -183,7 +185,8 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
      */
     public function getByteVal(int $offset = 0): int
     {
-        if (!$byte = $this->binaryData[$offset] ?? null) {
+        $byte = $this->binaryData[$offset] ?? null;
+        if ($byte === null) {
             throw new InvalidArgumentException('ByteBuffer: Invalid offset');
         }
 
@@ -194,7 +197,7 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
      * Returns the value of a single unsigned 16-bit integer.
      *
      * @param  int  $offset
-     * @return mixed
+     * @return int
      */
     public function getUint16Val(int $offset = 0): int
     {
@@ -209,7 +212,7 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
      * Returns the value of a single unsigned 32-bit integer.
      *
      * @param  int  $offset
-     * @return mixed
+     * @return int
      */
     public function getUint32Val(int $offset = 0): int
     {
@@ -275,7 +278,7 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
             $val = ($mant === 0) ? INF : NAN;
         }
 
-        return ($half & 0x8000) ? -$val : $val;
+        return ($half & 0x8000) > 0 ? -$val : $val;
     }
 
     /**
@@ -396,11 +399,13 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
      * Create a ByteBuffer from a BASE64 URL encoded string.
      *
      * @param  string  $base64url
-     * @return static
+     * @return self
      */
-    public static function fromBase64Url(string $base64url): static
+    public static function fromBase64Url(string $base64url): self
     {
-        if (false === $bin = self::decodeBase64Url($base64url)) {
+        try {
+            $bin = self::decodeBase64Url($base64url);
+        } catch (UrlException) {
             throw new InvalidArgumentException('ByteBuffer: Invalid base64 url string');
         }
 
@@ -411,11 +416,13 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
      * Create a ByteBuffer from a BASE64 encoded string.
      *
      * @param  string  $base64
-     * @return static
+     * @return self
      */
-    public static function fromBase64(string $base64): static
+    public static function fromBase64(string $base64): self
     {
-        if (false === $bin = base64_decode($base64)) {
+        try {
+            $bin = self::decodeBase64Url($base64);
+        } catch (UrlException) {
             throw new InvalidArgumentException('ByteBuffer: Invalid base64 string');
         }
 
@@ -426,35 +433,38 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
      * Create a ByteBuffer from a hexadecimal string.
      *
      * @param  string  $hex
-     * @return static
+     * @return self
      */
-    public static function fromHex(string $hex): static
+    public static function fromHex(string $hex): self
     {
-        if (false === $bin = hex2bin($hex)) {
+        try {
+            $bin = hex2bin($hex);
+        } catch (StringsException) {
             throw new InvalidArgumentException('ByteBuffer: Invalid hex string');
         }
 
-        return new static($bin);
+        return new self($bin);
     }
 
     /**
      * Create a random ByteBuffer
      *
-     * @param  int  $length
-     * @return static
+     * @param  int<1, max>  $length
+     * @return self
      */
-    public static function makeRandom(int $length): static
+    public static function makeRandom(int $length): self
     {
-        return new static(random_bytes($length));
+        return new self(random_bytes($length));
     }
 
     /**
      * Decodes a BASE64 URL string.
      *
      * @param  string  $data
-     * @return string|false
+     * @return string
+     * @throws \Safe\Exceptions\UrlException
      */
-    protected static function decodeBase64Url(string $data): string|false
+    protected static function decodeBase64Url(string $data): string
     {
         return base64_decode(strtr($data, '-_', '+/').str_repeat('=', 3 - (3 + strlen($data)) % 4));
     }
@@ -463,9 +473,9 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
      * Encodes a BASE64 URL string.
      *
      * @param  string  $data
-     * @return string|false
+     * @return string
      */
-    protected static function encodeBase64Url(string $data): string|false
+    protected static function encodeBase64Url(string $data): string
     {
         return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
     }
