@@ -6,10 +6,12 @@ use Closure;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidation;
 use Laragear\WebAuthn\Exceptions\AssertionException;
 use OpenSSLAsymmetricKey;
-use function base64_decode;
+use Safe\Exceptions\OpensslException;
+
+use function Safe\base64_decode;
 use function hash;
-use function openssl_pkey_get_public;
-use function openssl_verify;
+use function Safe\openssl_pkey_get_public;
+use function Safe\openssl_verify;
 use const OPENSSL_ALGO_SHA256;
 
 /**
@@ -27,15 +29,15 @@ class CheckPublicKeySignature
      */
     public function handle(AssertionValidation $validation, Closure $next): mixed
     {
-        $publicKey = openssl_pkey_get_public($validation->credential->public_key);
-
-        if (!$publicKey) {
+        try {
+            $publicKey = openssl_pkey_get_public($validation->credential->public_key);
+        } catch (OpensslException) {
             throw AssertionException::make('Stored Public Key is invalid.');
         }
 
         $signature = base64_decode($validation->request->json('response.signature', ''));
 
-        if (!$signature) {
+        if ($signature === '') {
             throw AssertionException::make('Signature is empty.');
         }
 
@@ -48,14 +50,14 @@ class CheckPublicKeySignature
      * Validate the signature from the assertion.
      *
      * @param  \Laragear\WebAuthn\Assertion\Validator\AssertionValidation  $validation
-     * @param  string  $signature
-     * @param  \OpenSSLAsymmetricKey  $publicKey
+     * @param  string    $signature
+     * @param  resource  $publicKey
      * @return void
      * @throws \Laragear\WebAuthn\Exceptions\AssertionException
      */
-    public function validateSignature(
+    private function validateSignature(
         AssertionValidation $validation,
-        OpenSSLAsymmetricKey $publicKey,
+        $publicKey,
         string $signature
     ): void {
         $verifiable = base64_decode($validation->request->json('response.authenticatorData'))
