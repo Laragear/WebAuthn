@@ -3,6 +3,7 @@
 namespace Laragear\WebAuthn\Assertion\Validator;
 
 use Illuminate\Http\Request;
+use Laragear\WebAuthn\Attestation\AttestationObject;
 use Laragear\WebAuthn\Attestation\AuthenticatorData;
 use Laragear\WebAuthn\Challenge;
 use Laragear\WebAuthn\ClientDataJson;
@@ -28,6 +29,7 @@ class AssertionValidation
         public ?WebAuthnCredential $credential = null,
         public ?ClientDataJson $clientDataJson = null,
         public ?AuthenticatorData $authenticatorData = null,
+        public ?AttestationObject $attestationObject = null,
     ) {
         //
     }

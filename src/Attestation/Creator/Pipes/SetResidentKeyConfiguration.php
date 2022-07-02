@@ -20,7 +20,7 @@ class SetResidentKeyConfiguration
      */
     public function handle(AttestationCreation $attestable, Closure $next): mixed
     {
-        if ($attestable->residentKey) {
+        if ($attestable->residentKey !== null) {
             $attestable->json->set('authenticatorSelection.residentKey', $attestable->residentKey);
 
             $verifiesUser = $attestable->residentKey === WebAuthn::RESIDENT_KEY_REQUIRED;

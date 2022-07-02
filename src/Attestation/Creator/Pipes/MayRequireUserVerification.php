@@ -19,7 +19,7 @@ class MayRequireUserVerification
      */
     public function handle(AttestationCreation $attestable, Closure $next): mixed
     {
-        if ($attestable->userVerification) {
+        if ($attestable->userVerification !== null) {
             $attestable->json->set('authenticatorSelection.userVerification', $attestable->userVerification);
         }
 

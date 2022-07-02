@@ -32,7 +32,7 @@ class AddRelyingParty
     {
         $attestable->json->set('rp.name', $this->config->get('webauthn.relying_party.name'));
 
-        if (($id = $this->config->get('webauthn.relying_party.id')) === true) {
+        if (($id = $this->config->get('webauthn.relying_party.id')) !== '') {
             $attestable->json->set('rp.id', $id);
         }
 
