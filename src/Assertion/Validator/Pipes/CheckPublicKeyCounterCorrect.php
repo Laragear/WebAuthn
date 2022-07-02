@@ -54,8 +54,8 @@ class CheckPublicKeyCounterCorrect
      */
     protected function hasCounter(AssertionValidation $validation): bool
     {
-        return $validation->credential->counter
-            || $validation->authenticatorData->counter;
+        return $validation->credential->counter > 0
+            || $validation->authenticatorData->counter > 0;
     }
 
     /**
