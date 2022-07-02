@@ -121,7 +121,7 @@ class AssertionRequest extends FormRequest
      */
     protected function findUser(WebAuthnAuthenticatable|array|int|string|null $credentials): ?WebAuthnAuthenticatable
     {
-        if (!$credentials) {
+        if ($credentials === null || $credentials === '' || $credentials === [] || $credentials === 0) {
             return null;
         }
 
@@ -136,11 +136,11 @@ class AssertionRequest extends FormRequest
             ? Auth::guard($this->guard)->getProvider()->retrieveById($credentials)
             : Auth::guard($this->guard)->getProvider()->retrieveByCredentials($credentials);
 
-        if ($user && ! $user instanceof WebAuthnAuthenticatable) {
+        if ($user !== null && !($user instanceof WebAuthnAuthenticatable)) {
             $guard = $this->guard ?? $this->container->make('config')->get('auth.defaults.guard');
 
             throw new InvalidArgumentException(
-                "The user found for the [$guard] auth guard is not an instance of [WebAuthnAuthenticatable]."
+                "The user found for the [" . $guard . "] auth guard is not an instance of [WebAuthnAuthenticatable]."
             );
         }
 

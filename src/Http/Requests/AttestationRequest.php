@@ -42,7 +42,7 @@ class AttestationRequest extends FormRequest
      */
     public function authorize(?WebAuthnAuthenticatable $user): bool
     {
-        return (bool) $user;
+        return $user !== null;
     }
 
     /**
@@ -52,6 +52,7 @@ class AttestationRequest extends FormRequest
      */
     protected function attestation(): AttestationCreation
     {
+        // @phpstan-ignore-next-line
         return $this->attestation ??= new AttestationCreation($this->user(), $this);
     }
 

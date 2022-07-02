@@ -31,7 +31,7 @@ class AttestedRequest extends FormRequest
      */
     public function authorize(?WebAuthnAuthenticatable $user): bool
     {
-        return (bool) $user;
+        return $user !== null;
     }
 
     /**
@@ -64,6 +64,7 @@ class AttestedRequest extends FormRequest
     protected function passedValidation(): void
     {
         $this->credential = $this->container->make(AttestationValidator::class)
+            // @phpstan-ignore-next-line
             ->send(new AttestationValidation($this->user(), $this))
             ->then(static function (AttestationValidation $validation): WebAuthnCredential {
                 return $validation->credential;
@@ -82,6 +83,7 @@ class AttestedRequest extends FormRequest
 
         $this->credential->save();
 
+        // @phpstan-ignore-next-line
         CredentialCreated::dispatch($this->user(), $this->credential);
 
         return $this->credential->getKey();
