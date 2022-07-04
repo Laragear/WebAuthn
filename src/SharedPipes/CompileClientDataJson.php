@@ -48,7 +48,7 @@ abstract class CompileClientDataJson
         }
 
         foreach (['type', 'origin', 'challenge'] as $key) {
-            if (!isset($object->{$key})) { // @phpstan-ignore-line
+            if (!property_exists($object, $key)) {
                 static::throw($validation, "Client Data JSON does not contain the [" . $key . "] key.");
             }
         }

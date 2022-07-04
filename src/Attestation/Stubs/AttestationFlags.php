@@ -2,6 +2,9 @@
 
 namespace Laragear\WebAuthn\Attestation\Stubs;
 
+/**
+ * @codeCoverageIgnore
+ */
 class AttestationFlags
 {
     /**

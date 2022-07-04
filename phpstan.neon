@@ -36,10 +36,8 @@ parameters:
 
 	ignoreErrors:
 		# bunch of false positives from Eloquent
-		- '#Parameter \#1 .* of method .*MayRetrieveCredentialsIdForUser::parseCredentials\(\) expects .*Collection<int, .*WebAuthnCredential>, .*Collection<int, .*Model> given.#'
 		- '#Method .*::parseCredentials\(\) should .*Collection<.*> but returns .*Collection<.*>.#'
-		- '#Dynamic call to static method .*MorphMany<.*Model>::value\(\).#'
-		- '#Parameter \#1 \$callback of method .*Collection<.*>::map\(\) expects callable\(.*\): .*, Closure\(.*\): .* given.#'
+		- '#Dynamic call to static method .*MorphMany<.*WebAuthnCredential>::value\(\).#'
 		- '#Dynamic call to static method .*Builder<.*WebAuthnCredential>::exists\(\).#'
 		- '#Dynamic call to static method .*Builder<.*>::whereEnabled\(\).#'
 		- '#Method Laragear\\WebAuthn\\Http\\Requests\\AssertedRequest::login\(\) should return \(.*Authenticatable&.*WebAuthnAuthenticatable\)\|null but returns .*User\|null.#'

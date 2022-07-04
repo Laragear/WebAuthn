@@ -98,7 +98,7 @@ class WebAuthnCredential extends Model
     protected $visible = ['id', 'origin', 'alias', 'aaguid', 'attestation_format', 'disabled_at', 'is_enabled'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo<\Illuminate\Database\Eloquent\Model,\Laragear\WebAuthn\Models\WebAuthnCredential>
      */
     public function authenticatable(): MorphTo
     {
