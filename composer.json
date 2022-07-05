@@ -32,21 +32,32 @@
         "issues": "https://github.com/Laragear/TwoFactor/issues"
     },
     "require": {
-        "php" : ">=8.0.2",
+        "php": ">=8.0.2",
         "ext-openssl": "*",
-        "ext-json" : "*",
+        "ext-json": "*",
         "illuminate/auth": "9.*",
+        "illuminate/config": "9.*",
+        "illuminate/database": "9.*",
+        "illuminate/encryption": "9.*",
         "illuminate/http": "9.*",
         "illuminate/session": "9.*",
         "illuminate/support": "9.*",
-        "illuminate/config": "9.*",
-        "illuminate/database": "9.*",
-        "illuminate/encryption": "9.*"
+        "thecodingmachine/safe": "^2.2"
     },
     "require-dev": {
+        "ergebnis/phpstan-rules": "^1.0",
+        "laravel/framework": "9.*",
+        "mockery/mockery": "^1.5",
+        "nunomaduro/larastan": "^2.0",
         "orchestra/testbench": "7.*",
+        "phpstan/phpstan": "^1.7",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
+        "phpstan/phpstan-strict-rules": "^1.3",
         "phpunit/phpunit": "^9.5",
-        "mockery/mockery": "^1.5"
+        "slam/phpstan-extensions": "^6.0",
+        "squizlabs/php_codesniffer": "^3.5",
+        "symplify/phpstan-rules": "^11.0",
+        "thecodingmachine/phpstan-safe-rule": "^1.2"
     },
     "autoload": {
         "psr-4": {
@@ -56,12 +67,14 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests",
-            "App\\Http\\Controllers\\WebAuthn\\": "stubs/controllers"
+            "App\\Http\\Controllers\\WebAuthn\\": "stubs/controllers",
+            "Laragear\\WebAuthn\\PHPStan\\": "phpstan/"
         }
     },
     "scripts": {
         "test": "vendor/bin/phpunit --coverage-clover build/logs/clover.xml",
-        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "phpstan": "vendor/bin/phpstan analyze"
     },
     "config": {
         "sort-packages": true
