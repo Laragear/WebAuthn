@@ -46,7 +46,7 @@ class WebAuthnUserProvider extends EloquentUserProvider
      */
     public function retrieveByCredentials(array $credentials)
     {
-        if (class_implements($this->model, WebAuthnAuthenticatable::class) && $this->isSignedChallenge($credentials)) {
+        if (in_array(WebAuthnAuthenticatable::class, class_implements($this->model, true), true) && $this->isSignedChallenge($credentials)) {
             /** @noinspection PhpIncompatibleReturnTypeInspection */
             return $this->newModelQuery()
                 ->whereHas('webAuthnCredentials', static function (Builder $query) use ($credentials): void {
