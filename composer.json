@@ -42,12 +42,12 @@
         "illuminate/config": "9.*",
         "illuminate/database": "9.*",
         "illuminate/encryption": "9.*",
-        "jetbrains/phpstorm-attributes": "^1.0"
     },
     "require-dev": {
         "orchestra/testbench": "7.*",
         "phpunit/phpunit": "^9.5",
-        "mockery/mockery": "^1.5"
+        "mockery/mockery": "^1.5",
+        "jetbrains/phpstorm-attributes": "^1.0"
     },
     "autoload": {
         "psr-4": {
