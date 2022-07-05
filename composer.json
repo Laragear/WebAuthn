@@ -32,16 +32,17 @@
         "issues": "https://github.com/Laragear/TwoFactor/issues"
     },
     "require": {
-        "php" : ">=8.0.2",
+        "php": ">=8.0.2",
         "ext-openssl": "*",
-        "ext-json" : "*",
+        "ext-json": "*",
         "illuminate/auth": "9.*",
         "illuminate/http": "9.*",
         "illuminate/session": "9.*",
         "illuminate/support": "9.*",
         "illuminate/config": "9.*",
         "illuminate/database": "9.*",
-        "illuminate/encryption": "9.*"
+        "illuminate/encryption": "9.*",
+        "jetbrains/phpstorm-attributes": "^1.0"
     },
     "require-dev": {
         "orchestra/testbench": "7.*",
