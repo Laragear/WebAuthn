@@ -41,7 +41,7 @@
         "illuminate/support": "9.*",
         "illuminate/config": "9.*",
         "illuminate/database": "9.*",
-        "illuminate/encryption": "9.*",
+        "illuminate/encryption": "9.*"
     },
     "require-dev": {
         "orchestra/testbench": "7.*",
