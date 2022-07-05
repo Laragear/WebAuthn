@@ -1,0 +1,45 @@
+includes:
+	- vendor/phpstan/phpstan-deprecation-rules/rules.neon
+	- vendor/thecodingmachine/phpstan-safe-rule/phpstan-safe-rule.neon
+	- vendor/phpstan/phpstan-strict-rules/rules.neon
+	- vendor/nunomaduro/larastan/extension.neon
+
+services:
+	-
+		class: Ergebnis\PHPStan\Rules\Expressions\NoErrorSuppressionRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: SlamPhpStan\UnusedVariableRule
+		tags:
+			- phpstan.rules.rule
+
+	-
+		class: Laragear\WebAuthn\PHPStan\Rules\DisallowedConstructs\DisallowedBooleanCastRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: Laragear\WebAuthn\PHPStan\Rules\DisallowedConstructs\DisallowedBooleanConversionRule
+		tags:
+			- phpstan.rules.rule
+
+parameters:
+	level: 7
+	reportMaybesInPropertyPhpDocTypes: false
+	checkMissingIterableValueType: false
+	checkGenericClassInNonGenericObjectType: false
+	featureToggles:
+		bleedingEdge: true
+	paths:
+		- src
+		- stubs
+
+	ignoreErrors:
+		# bunch of false positives from Eloquent
+		- '#Method .*::parseCredentials\(\) should .*Collection<.*> but returns .*Collection<.*>.#'
+		- '#Dynamic call to static method .*Builder<.*WebAuthnCredential>::exists\(\).#'
+		- '#Dynamic call to static method .*Builder<.*>::whereEnabled\(\).#'
+		- '#Call to an undefined method Illuminate\\Contracts\\Auth\\StatefulGuard::getProvider\(\)#'
+		- '#Dynamic call to static method .*Builder<.*Model>::whereNull\(\).#'
+		- '#Dynamic call to static method .*Builder<.*Model>::whereNotNull\(\).#'
+		- '#Dynamic call to static method Laragear\\WebAuthn\\Http\\Requests\\AssertionRequest::validate\(\).#'
