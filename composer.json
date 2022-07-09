@@ -45,7 +45,6 @@
     },
     "require-dev": {
         "orchestra/testbench": "7.*",
-        "laravel/framework": "9.*",
         "phpunit/phpunit": "^9.5",
         "mockery/mockery": "^1.5",
         "jetbrains/phpstorm-attributes": "^1.0"
