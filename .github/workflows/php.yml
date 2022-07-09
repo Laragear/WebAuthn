@@ -12,7 +12,10 @@ jobs:
       fail-fast: true
       matrix:
         php: [ 8.0, 8.1 ]
-        dependencies: ['locked', 'lowest', 'highest']
+        dependencies: [ 'lowest', 'highest' ]
+        include:
+          - php: 8.2
+            composer-options: '--ignore-platform-reqs'
 
     name: PHP ${{ matrix.php }} -  ${{ matrix.dependencies }}
 
@@ -34,6 +37,18 @@ jobs:
         uses: "ramsey/composer-install@v2"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
+          composer-options: "${{ matrix.composer-options }}"
+
+      # - name: Cache dependencies
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: ~/.composer/cache/files
+      #     key: ${{ runner.os }}-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+      #     restore-keys: ${{ runner.os }}-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-
+
+      # - name: Install dependencies
+      #   run: |
+      #     composer update --${{ matrix.dependencies }} --prefer-dist --no-progress ${{ matrix.composer-options }}
 
       - name: Run Tests
         run: composer run-script test
