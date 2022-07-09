@@ -35,24 +35,12 @@ jobs:
           coverage: xdebug
 
       # Install dependencies and handle caching in one go.
-      # Dependencies need to be installed to make sure the PHPUnit classes are recognized.
-      # @link https://github.com/marketplace/actions/install-composer-dependencies
+      # @link https://github.com/ramsey/composer-install
       - name: Install Composer dependencies
         uses: "ramsey/composer-install@v2"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
           composer-options: "${{ matrix.composer-options }}"
-
-      # - name: Cache dependencies
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: ~/.composer/cache/files
-      #     key: ${{ runner.os }}-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
-      #     restore-keys: ${{ runner.os }}-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-
-
-      # - name: Install dependencies
-      #   run: |
-      #     composer update --${{ matrix.dependencies }} --prefer-dist --no-progress ${{ matrix.composer-options }}
 
       - name: Run Tests
         run: composer run-script test
