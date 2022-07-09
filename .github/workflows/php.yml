@@ -16,6 +16,7 @@ jobs:
         include:
           - php: 8.2
             composer-options: '--ignore-platform-reqs'
+            dependencies: ['lowest', 'highest']
 
     name: PHP ${{ matrix.php }} -  ${{ matrix.dependencies }}
 
