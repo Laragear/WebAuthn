@@ -12,13 +12,16 @@ jobs:
       fail-fast: true
       matrix:
         php: [ 8.0, 8.1 ]
-        laravel: [ 9.* ]
-        dependency-version: [ prefer-stable, prefer-lowest ]
+        dependencies: [ 'lowest', 'highest' ]
         include:
-          - laravel: 9.*
-            testbench: 7.*
+          - php: 8.2
+            composer-options: '--ignore-platform-reqs'
+            dependencies: 'lowest'
+          - php: 8.2
+            composer-options: '--ignore-platform-reqs'
+            dependencies: 'highest'
 
-    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }} - ${{ matrix.dependency-version }}
+    name: PHP ${{ matrix.php }} -  ${{ matrix.dependencies }}
 
     steps:
       - name: Checkout
@@ -31,20 +34,16 @@ jobs:
           extensions: mbstring, intl
           coverage: xdebug
 
-      - name: Cache dependencies
-        uses: actions/cache@v2
+      # Install dependencies and handle caching in one go.
+      # @link https://github.com/ramsey/composer-install
+      - name: Install Composer dependencies
+        uses: "ramsey/composer-install@v2"
         with:
-          path: ~/.composer/cache/files
-          key: ${{ runner.os }}-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
-          restore-keys: ${{ runner.os }}-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-
+          dependency-versions: "${{ matrix.dependencies }}"
+          composer-options: "${{ matrix.composer-options }}"
 
-      - name: Install dependencies
-        run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-progress --no-update
-          composer update --${{ matrix.dependency-version }} --prefer-dist --no-progress
       - name: Run Tests
         run: composer run-script test
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
-
