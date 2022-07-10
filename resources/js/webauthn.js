@@ -61,25 +61,50 @@ class WebAuthn {
      * @param routes {{registerOptions: string, register: string, loginOptions: string, login: string}}
      * @param headers {{string}}
      * @param includeCredentials {boolean}
-     * @param xsrfToken {string|null}
+     * @param xcsrfToken {string|null} Either a csrf token (40 chars) or xsrfToken (224 chars)
      */
-    constructor(routes = {}, headers = {}, includeCredentials = false, xsrfToken = null) {
+    constructor(routes = {}, headers = {}, includeCredentials = false, xcsrfToken = null) {
         Object.assign(this.#routes, routes);
         Object.assign(this.#headers, headers);
 
         this.#includeCredentials = includeCredentials;
 
-        // If the developer didn't issue an XSRF token, we will find it ourselves.
-        this.#headers["X-CSRF-TOKEN"] ??= xsrfToken ?? WebAuthn.#firstInputWithXsrfToken;
+        let xsrfToken;
+        let csrfToken;
+
+        // If xcsrfToken is not set, we try to fetch it.
+        if (xcsrfToken === null) {
+            xsrfToken = WebAuthn.#XsrfToken;
+            csrfToken = WebAuthn.#firstInputWithCsrfToken;
+        } else{
+            // Check if it is a CSRF or XSRF token
+            if (xcsrfToken.length === 40) {
+                csrfToken = xcsrfToken;
+            } else if (xcsrfToken.length === 224) {
+                xsrfToken = xcsrfToken;
+            } else {
+                throw new TypeError('CSRF token or XSRF token provided does not match requirements. Must be 40 or 224 characters.');
+            }
+        }
+
+        if (xsrfToken !== null) {
+            this.#headers["X-XSRF-TOKEN"] ??= xsrfToken;
+        } else if (csrfToken !== null) {
+            // If the developer didn't issue an XSRF token, we will find it ourselves.
+            this.#headers["X-CSRF-TOKEN"] ??= csrfToken;
+        } else {
+            // We didn't find it, and since is required, we will bail out.
+            throw new TypeError('Ensure a CSRF/XSRF token is manually set, or provided in a cookie "XSRF-TOKEN" or or there is meta tag named "csrf-token".');
+        }
     }
 
     /**
-     * Returns the XSRF token if it exists as a form input tag.
+     * Returns the CSRF token if it exists as a form input tag.
      *
      * @returns string
      * @throws TypeError
      */
-    static get #firstInputWithXsrfToken() {
+    static get #firstInputWithCsrfToken() {
         // First, try finding an CSRF Token in the head.
         let token = Array.from(document.head.getElementsByTagName("meta"))
             .find(element => element.name === "csrf-token");
@@ -96,9 +121,32 @@ class WebAuthn {
             return token.value;
         }
 
-        // We didn't find it, and since is required, we will bail out.
-        throw new TypeError('Ensure a CSRF token is manually set, or there is meta tag named "csrf-token".');
+        return null;
     }
+
+    /**
+     * Returns the value of the XSRF token if it exists in a cookie.
+     *
+     * Inspired by https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie#example_2_get_a_sample_cookie_named_test2
+     *
+     * @returns {?string}
+     */
+     static get #XsrfToken() {
+        const cookie = document.cookie.split(";").find((row) => /^\s*(X-)?[XC]SRF-TOKEN\s*=/.test(row));
+        // We must remove all '%3D' from the end of the string.
+        // Background:
+        // The actual binary value of the CSFR value is encoded in Base64.
+        // If the length of original, binary value is not a multiple of 3 bytes,
+        // the encoding gets padded with `=` on the right; i.e. there might be
+        // zero, one or two `=` at the end of the encoded value.
+        // If the value is sent from the server to the client as part of a cookie,
+        // the `=` character is URL-encoded as `%3D`, because `=` is already used
+        // to separate a cookie key from its value.
+        // When we send back the value to the server as part of an AJAX request,
+        // Laravel expects an unpadded value.
+        // Hence, we must remove the `%3D`.
+        return cookie ? cookie.split("=")[1].trim().replaceAll("%3D", "") : null;
+    };
 
     /**
      * Returns a fetch promise to resolve later.
