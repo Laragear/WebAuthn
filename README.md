@@ -123,7 +123,7 @@ From here you're ready to work with WebAuthn Authentication. The following steps
 
 ### 4. Register the routes and controllers
 
-WebAuthn uses exclusive routes to register and authenticate users. Creating these routes and controller may be cumbersome, specially if it's your first time in the WebAuthn real.
+WebAuthn uses exclusive routes to register and authenticate users. Creating these routes and controller may be cumbersome, specially if it's your first time in the WebAuthn realm.
 
 Instead, go for a quick start and publish the controllers included in Laragear WebAuthn. These controllers will be located at `app\Http\Controllers\WebAuthn`.
 
@@ -152,7 +152,7 @@ This package includes a simple but convenient script to handle WebAuthn Attestat
 php artisan vendor:publish --provider="Laragear\WebAuthn\WebAuthnServiceProvider" --tag="js"
 ```
 
-You will receive the `resources/js/vendor/webauthn/webauthn.js` file which you can include into your authentication views and use it programmatically, anyway you want. For example, [compiling it through Vite](https://laravel.com/docs/9.x/vite#loading-your-scripts-and-styles) into your application global Javascript.
+You will receive the `resources/js/vendor/webauthn/webauthn.js` file which you can include into your authentication views and use it programmatically, anyway you want. For example, [compiling it through Vite](https://laravel.com/docs/9.x/vite#loading-your-scripts-and-styles) into your application global JavaScript.
 
 ```html
 <!doctype html>
@@ -163,7 +163,7 @@ You will receive the `resources/js/vendor/webauthn/webauthn.js` file which you c
 </head>
 ```
 
-Once done, you can easily start registering and login in users. For example, for a logged in user, you may show a registration view in HTML with the following code:
+Once done, you can easily start registering and login in users. For example, for a logged-in user, you may show a registration view in HTML with the following code:
 
 ```html
 <form id="register-form">
@@ -603,7 +603,7 @@ If you think WebAuthn is critical for these packages, [consider supporting this 
 
 * **Does this work with any browser?**
 
-[Yes](https://caniuse.com/#feat=webauthn). In the case of old browsers, you should have a fallback detection script. This can be asked with [the included Javascript helper](#5-use-the-javascript-helper) in a breeze:
+[Yes](https://caniuse.com/#feat=webauthn). In the case of old browsers, you should have a fallback detection script. This can be asked with [the included JavaScript helper](#5-use-the-javascript-helper) in a breeze:
 
 ```javascript
 if (WebAuthn.doesntSupportWebAuthn()) {
@@ -655,7 +655,7 @@ Extremely secure since it works only on HTTPS (or `localhost`), no password or c
 
 [Yes](#password-fallback). Just be sure to create recovery helpers to avoid locking out your users.
 
-* **Does this includes Javascript to handle WebAuthn in the frontend?**
+* **Does this include JavaScript to handle WebAuthn in the frontend?**
 
 [Yes](#5-use-the-javascript-helper), but it's very _basic_.
 
@@ -663,11 +663,11 @@ Extremely secure since it works only on HTTPS (or `localhost`), no password or c
 
 No, you still need to use [captcha](https://github.com/Laragear/ReCaptcha), honeypots, or other mechanisms to stop bots.
 
-* **Does this encodes/decode the WebAuthn data automatically in the frontend?**
+* **Does this encode/decode the WebAuthn data automatically in the frontend?**
 
 Yes, the included [WebAuthn Helper](#5-use-the-javascript-helper) does it automatically for you.
 
-* **Does this encrypts the public keys?**
+* **Does this encrypt the public keys?**
 
 Yes, public keys are encrypted when saved into the database.
 
