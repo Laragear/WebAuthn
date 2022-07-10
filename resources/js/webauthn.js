@@ -72,8 +72,8 @@ class WebAuthn {
         let xsrfToken;
         let csrfToken;
 
-        // If xcsrfToken is not set, we try to fetch it.
         if (xcsrfToken === null) {
+            // If the developer didn't issue an XSRF token, we will find it ourselves.
             xsrfToken = WebAuthn.#XsrfToken;
             csrfToken = WebAuthn.#firstInputWithCsrfToken;
         } else{
@@ -90,7 +90,6 @@ class WebAuthn {
         if (xsrfToken !== null) {
             this.#headers["X-XSRF-TOKEN"] ??= xsrfToken;
         } else if (csrfToken !== null) {
-            // If the developer didn't issue an XSRF token, we will find it ourselves.
             this.#headers["X-CSRF-TOKEN"] ??= csrfToken;
         } else {
             // We didn't find it, and since is required, we will bail out.
