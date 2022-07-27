@@ -98,11 +98,11 @@ class WebAuthnCredential extends Model
     protected $visible = ['id', 'origin', 'alias', 'aaguid', 'attestation_format', 'disabled_at', 'is_enabled'];
 
     /**
+     * @phpstan-ignore-next-line
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo|\Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable
      */
     public function authenticatable(): MorphTo
     {
-        // @phpstan-ignore-next-line
         return $this->morphTo('authenticatable');
     }
 
