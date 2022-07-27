@@ -41,7 +41,7 @@ interface WebAuthnAuthenticatable
     /**
      * Returns a queryable relationship for its WebAuthn Credentials.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany&\Laragear\WebAuthn\Models\WebAuthnCredential
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany|\Laragear\WebAuthn\Models\WebAuthnCredential
      */
     public function webAuthnCredentials(): MorphMany;
 }

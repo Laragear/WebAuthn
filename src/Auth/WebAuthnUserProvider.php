@@ -50,6 +50,7 @@ class WebAuthnUserProvider extends EloquentUserProvider
             /** @noinspection PhpIncompatibleReturnTypeInspection */
             return $this->newModelQuery()
                 ->whereHas('webAuthnCredentials', static function (Builder $query) use ($credentials): void {
+                    // @phpstan-ignore-next-line
                     $query->whereKey($credentials['id'])->whereEnabled();
                 })
                 ->first();

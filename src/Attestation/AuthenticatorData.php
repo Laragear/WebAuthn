@@ -366,13 +366,21 @@ class AuthenticatorData
     protected static function readFlags(string $binFlag): object
     {
         $flags = (object) [
+            // @phpstan-ignore-next-line
             'bit_0' => (bool) ($binFlag & 1),
+            // @phpstan-ignore-next-line
             'bit_1' => (bool) ($binFlag & 2),
+            // @phpstan-ignore-next-line
             'bit_2' => (bool) ($binFlag & 4),
+            // @phpstan-ignore-next-line
             'bit_3' => (bool) ($binFlag & 8),
+            // @phpstan-ignore-next-line
             'bit_4' => (bool) ($binFlag & 16),
+            // @phpstan-ignore-next-line
             'bit_5' => (bool) ($binFlag & 32),
+            // @phpstan-ignore-next-line
             'bit_6' => (bool) ($binFlag & 64),
+            // @phpstan-ignore-next-line
             'bit_7' => (bool) ($binFlag & 128),
             'userPresent' => false,
             'userVerified' => false,

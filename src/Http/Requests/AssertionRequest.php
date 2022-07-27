@@ -133,7 +133,9 @@ class AssertionRequest extends FormRequest
         // retrieve by its ID, otherwise we will fall back to credentials. Once done, we
         // will check it uses WebAuthn if is not null, otherwise we'll fail miserably.
         $user = is_string($credentials) || is_int($credentials)
+            // @phpstan-ignore-next-line
             ? Auth::guard($this->guard)->getProvider()->retrieveById($credentials)
+            // @phpstan-ignore-next-line
             : Auth::guard($this->guard)->getProvider()->retrieveByCredentials($credentials);
 
         if ($user && ! $user instanceof WebAuthnAuthenticatable) {

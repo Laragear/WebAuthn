@@ -17,7 +17,7 @@ class Challenge
      * @param  bool  $verify
      * @param  array  $properties
      */
-    public function __construct(
+    final public function __construct(
         public ByteBuffer $data,
         public int $timeout,
         public bool $verify = true,
