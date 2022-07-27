@@ -18,7 +18,7 @@ use function unpack;
 /**
  * MIT License
  *
- * Copyright © 2021 Lukas Buchs
+ * Copyright (c) 2021 Lukas Buchs
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -76,10 +76,10 @@ class AuthenticatorData
      * @param  string  $relyingPartyIdHash
      * @param  object  $flags
      * @param  int  $counter
-     * @param  object{aaguid: int|bool, credentialId: string, credentialPublicKey: string}  $attestedCredentialData
+     * @param  object  $attestedCredentialData
      * @param  array  $extensionData
      */
-    public function __construct(
+    final public function __construct(
         public string $relyingPartyIdHash,
         public object $flags,
         public int $counter,
@@ -366,13 +366,21 @@ class AuthenticatorData
     protected static function readFlags(string $binFlag): object
     {
         $flags = (object) [
+            // @phpstan-ignore-next-line
             'bit_0' => (bool) ($binFlag & 1),
+            // @phpstan-ignore-next-line
             'bit_1' => (bool) ($binFlag & 2),
+            // @phpstan-ignore-next-line
             'bit_2' => (bool) ($binFlag & 4),
+            // @phpstan-ignore-next-line
             'bit_3' => (bool) ($binFlag & 8),
+            // @phpstan-ignore-next-line
             'bit_4' => (bool) ($binFlag & 16),
+            // @phpstan-ignore-next-line
             'bit_5' => (bool) ($binFlag & 32),
+            // @phpstan-ignore-next-line
             'bit_6' => (bool) ($binFlag & 64),
+            // @phpstan-ignore-next-line
             'bit_7' => (bool) ($binFlag & 128),
             'userPresent' => false,
             'userVerified' => false,

@@ -49,8 +49,8 @@ use function unpack;
  * ---
  * MIT License
  *
- * Copyright © 2021 Lukas Buchs
- * Copyright © 2018 Thomas Bleeker (CBOR & ByteBuffer part)
+ * Copyright (c) 2021 Lukas Buchs
+ * Copyright (c) 2018 Thomas Bleeker (CBOR & ByteBuffer part)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -86,7 +86,7 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
      * @param  string  $binaryData
      * @param  int  $dataLength
      */
-    public function __construct(protected string $binaryData, protected int $dataLength = 0)
+    final public function __construct(protected string $binaryData, protected int $dataLength = 0)
     {
         $this->dataLength = strlen($binaryData);
     }
@@ -194,7 +194,7 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
      * Returns the value of a single unsigned 16-bit integer.
      *
      * @param  int  $offset
-     * @return mixed
+     * @return int
      */
     public function getUint16Val(int $offset = 0): int
     {
@@ -209,7 +209,7 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
      * Returns the value of a single unsigned 32-bit integer.
      *
      * @param  int  $offset
-     * @return mixed
+     * @return int
      */
     public function getUint32Val(int $offset = 0): int
     {
@@ -404,7 +404,7 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
             throw new InvalidArgumentException('ByteBuffer: Invalid base64 url string');
         }
 
-        return new ByteBuffer($bin);
+        return new static($bin);
     }
 
     /**
@@ -415,11 +415,14 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
      */
     public static function fromBase64(string $base64): static
     {
-        if (false === $bin = base64_decode($base64)) {
+        /** @var string|false $bin */
+        $bin = base64_decode($base64);
+
+        if (false === $bin) {
             throw new InvalidArgumentException('ByteBuffer: Invalid base64 string');
         }
 
-        return new ByteBuffer($bin);
+        return new static($bin);
     }
 
     /**

@@ -39,6 +39,7 @@ class MayPreventDuplicateCredentials
         return $user
             ->webAuthnCredentials()
             ->get(['id', 'transports'])
+            // @phpstan-ignore-next-line
             ->map(static function (WebAuthnCredential $credential): array {
                 return array_filter([
                     'id'=> $credential->getKey(),

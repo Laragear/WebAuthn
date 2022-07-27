@@ -56,6 +56,7 @@ class CheckCredentialIsForUser
      */
     protected function validateUser(AssertionValidation $validation): void
     {
+        // @phpstan-ignore-next-line
         if ($validation->credential->authenticatable()->isNot($validation->user)) {
             throw AssertionException::make('User is not owner of the stored credential.');
         }

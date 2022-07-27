@@ -25,7 +25,7 @@ public function login(AssertedRequest $request)
 
 ## Keep this package free
 
-[![Patreon](.assets/patreon.png)](https://patreon.com/packagesforlaravel)[![Ko-fi](.assets/ko-fi.png)](https://ko-fi.com/DarkGhostHunter)[![Buymeacoffee](.assets/buymeacoffee.png)](https://www.buymeacoffee.com/darkghosthunter)[![PayPal](.assets/paypal.png)](https://www.paypal.com/paypalme/darkghosthunter)
+[![Patreon](.github/assets/patreon.png)](https://patreon.com/packagesforlaravel)[![Ko-fi](.github/assets/ko-fi.png)](https://ko-fi.com/DarkGhostHunter)[![Buymeacoffee](.github/assets/buymeacoffee.png)](https://www.buymeacoffee.com/darkghosthunter)[![PayPal](.github/assets/paypal.png)](https://www.paypal.com/paypalme/darkghosthunter)
 
 Your support allows me to keep this package free, up-to-date and maintainable. Alternatively, you can **[spread the word!](http://twitter.com/share?text=I%20am%20using%20this%20cool%20PHP%20package&url=https://github.com%2FLaragear%2FWebAuthn&hashtags=PHP,Laravel)**
 

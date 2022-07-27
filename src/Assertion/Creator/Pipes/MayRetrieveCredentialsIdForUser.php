@@ -36,10 +36,11 @@ class MayRetrieveCredentialsIdForUser
      * Adapt all credentials into an `allowCredentials` digestible array.
      *
      * @param  \Illuminate\Database\Eloquent\Collection<int, \Laragear\WebAuthn\Models\WebAuthnCredential>  $credentials
-     * @return \Illuminate\Support\Collection<int, array>
+     * @return \Illuminate\Support\Collection<int, array{id?: mixed, type: string, transports?: non-empty-array<int, string>}>
      */
     protected function parseCredentials(EloquentCollection $credentials): Collection
     {
+        // @phpstan-ignore-next-line
         return $credentials->map(static function (WebAuthnCredential $credential): array {
             return array_filter([
                 'id' => $credential->getKey(),

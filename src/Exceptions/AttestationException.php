@@ -11,7 +11,7 @@ class AttestationException extends ValidationException implements WebAuthnExcept
      * Create a new Attestation Exception with the error message.
      *
      * @param  string  $message
-     * @return \Laragear\WebAuthn\Exceptions\AttestationException
+     * @return static
      */
     public static function make(string $message): static
     {
