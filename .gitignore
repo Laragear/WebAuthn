@@ -1,8 +1,7 @@
-.idea
-build
-composer.lock
-docs
-vendor
-coverage
+/build
+/vendor
+/.idea
+.php-cs-fixer.cache
 .phpunit.result.cache
-.vscode
+composer.lock
+phpunit.xml.bak

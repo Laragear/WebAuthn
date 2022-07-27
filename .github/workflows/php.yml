@@ -1,50 +1,125 @@
-name: Tests
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow
+
+name: "Tests"
 
 on:
   push:
   pull_request:
 
 jobs:
-  test:
 
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true
-      matrix:
-        php: [ 8.0, 8.1 ]
-        laravel: [ 9.* ]
-        dependency-version: [ prefer-stable, prefer-lowest ]
-        include:
-          - laravel: 9.*
-            testbench: 7.*
-
-    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }} - ${{ matrix.dependency-version }}
-
+  byte_level:
+    name: "0️⃣ Byte-level"
+    runs-on: "ubuntu-latest"
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: "Checkout code"
+        uses: "actions/checkout@v3"
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - name: "Check file permissions"
+        run: |
+          test "$(find . -type f -not -path './.git/*' -executable)" == ""
+      - name: "Find non-printable ASCII characters"
+        run: |
+          ! LC_ALL=C.UTF-8 find ./src -type f -name "*.php" -print0 | xargs -0 -- grep -PHn "[^ -~]"
+  syntax_errors:
+    name: "1️⃣ Syntax errors"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Set up PHP"
+        uses: "shivammathur/setup-php@v2"
         with:
-          php-version: ${{ matrix.php }}
+          php-version: "8.1"
+          tools: "parallel-lint"
+
+      - name: "Checkout code"
+        uses: "actions/checkout@v3"
+
+      - name: "Install dependencies"
+        uses: "ramsey/composer-install@v2"
+        with:
+          dependency-versions: "highest"
+
+      - name: "Check source code for syntax errors"
+        run: "composer exec -- parallel-lint src/"
+
+  unit_tests:
+    name: "2️⃣ Unit and Feature tests"
+    needs:
+      - "byte_level"
+      - "syntax_errors"
+    runs-on: "ubuntu-latest"
+    strategy:
+      matrix:
+        php-version:
+          - "8.1"
+        laravel-constrain:
+          - "9.*"
+        dependencies:
+          - "lowest"
+          - "highest"
+    steps:
+      - name: "Set up PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "${{ matrix.php-version }}"
           extensions: mbstring, intl
           coverage: xdebug
 
-      - name: Cache dependencies
-        uses: actions/cache@v2
+      - name: "Checkout code"
+        uses: "actions/checkout@v3"
+
+      - name: "Install dependencies"
+        uses: "ramsey/composer-install@v2"
         with:
-          path: ~/.composer/cache/files
-          key: ${{ runner.os }}-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
-          restore-keys: ${{ runner.os }}-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-
+          dependency-versions: "${{ matrix.dependencies }}"
 
-      - name: Install dependencies
+      - name: "Execute unit tests"
+        run: "composer run-script test"
+
+      - name: "Upload coverage to Codecov"
+        uses: "codecov/codecov-action@v2"
+
+  static_analysis:
+    name: "3️⃣ Static Analysis"
+    needs:
+      - "byte_level"
+      - "syntax_errors"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Set up PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "8.1"
+          tools: "phpstan"
+
+      - name: "Checkout code"
+        uses: "actions/checkout@v3"
+
+      - name: "Validate Composer configuration"
+        run: "composer validate --strict"
+
+      - name: "Install dependencies"
+        uses: "ramsey/composer-install@v2"
+        with:
+          dependency-versions: "highest"
+
+      - name: "Execute static analysis"
+        run: "composer exec -- phpstan analyze -l 5 src/"
+
+  exported_files:
+    name: "4️⃣ Exported files"
+    needs:
+      - "byte_level"
+      - "syntax_errors"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout code"
+        uses: "actions/checkout@v3"
+
+      - name: "Check exported files"
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-progress --no-update
-          composer update --${{ matrix.dependency-version }} --prefer-dist --no-progress
-      - name: Run Tests
-        run: composer run-script test
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
-
+          EXPECTED="LICENSE.md,README.md,composer.json"
+          CURRENT="$(git archive HEAD | tar --list --exclude="src" --exclude="src/*" --exclude=".stubs" --exclude=".stubs/*" --exclude="stubs" --exclude="stubs/*" --exclude="lang" --exclude="lang/*" --exclude="config" --exclude="config/*" --exclude="database" --exclude="database/*" --exclude="resources" --exclude="resources/*" --exclude="routes" --exclude="routes/*" | paste -s -d ",")"
+          echo "CURRENT =${CURRENT}"
+          echo "EXPECTED=${EXPECTED}"
+          test "${CURRENT}" == "${EXPECTED}"
