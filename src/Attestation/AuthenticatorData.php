@@ -76,10 +76,10 @@ class AuthenticatorData
      * @param  string  $relyingPartyIdHash
      * @param  object  $flags
      * @param  int  $counter
-     * @param  object{aaguid: int|bool, credentialId: string, credentialPublicKey: string}  $attestedCredentialData
+     * @param  object  $attestedCredentialData
      * @param  array  $extensionData
      */
-    public function __construct(
+    final public function __construct(
         public string $relyingPartyIdHash,
         public object $flags,
         public int $counter,

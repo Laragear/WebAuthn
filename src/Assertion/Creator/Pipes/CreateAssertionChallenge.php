@@ -33,6 +33,7 @@ class CreateAssertionChallenge
         $options = [];
 
         if ($assertion->acceptedCredentials?->isNotEmpty()) {
+            // @phpstan-ignore-next-line
             $options['credentials'] = $assertion->acceptedCredentials->map->getKey()->toArray();
         }
 
