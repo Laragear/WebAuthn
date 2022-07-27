@@ -48,11 +48,12 @@ class AssertedRequest extends FormRequest
      * Logs in the user for this assertion request.
      *
      * @param  string|null  $guard
+     * @phpstan-ignore-next-line
      * @return \Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable|\Illuminate\Contracts\Auth\Authenticatable|null
      */
     public function login(string $guard = null, bool $remember = null, bool $destroySession = false): ?WebAuthnAuthenticatable
     {
-        /** @var \Illuminate\Contracts\Auth\StatefulGuard $guard */
+        /** @var \Illuminate\Contracts\Auth\StatefulGuard $auth */
         $auth = Auth::guard($guard);
 
         if ($auth->attempt($this->validated(), $remember ?? $this->hasRemember())) {

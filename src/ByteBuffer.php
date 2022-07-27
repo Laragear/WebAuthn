@@ -415,7 +415,9 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
      */
     public static function fromBase64(string $base64): static
     {
-        if (false === $bin = base64_decode($base64)) {
+        $bin = base64_decode($base64);
+
+        if (false === $bin) {
             throw new InvalidArgumentException('ByteBuffer: Invalid base64 string');
         }
 

@@ -138,9 +138,9 @@ class CborDecoder
 
         $val = static::parseExtraLength($val, $buf, $offset);
 
+        // @phpstan-ingnore-next-line
         try {
             return static::parseItemData($type, $val, $buf, $offset);
-        // @phpstan-ingnore-next-line
         } catch (InvalidArgumentException $e) {
             throw new DataException($e->getMessage());
         }
