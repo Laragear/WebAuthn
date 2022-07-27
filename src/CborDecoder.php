@@ -34,8 +34,8 @@ use function sprintf;
  * ---
  * MIT License
  *
- * Copyright © 2021 Lukas Buchs
- * Copyright © 2018 Thomas Bleeker (CBOR & ByteBuffer part)
+ * Copyright (c) 2021 Lukas Buchs
+ * Copyright (c) 2018 Thomas Bleeker (CBOR & ByteBuffer part)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal

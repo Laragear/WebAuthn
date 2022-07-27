@@ -4,6 +4,8 @@ name: "Tests"
 
 on:
   push:
+    branch:
+      - "feat/improve-ci" ## TODO: Remove branch before PR.
   pull_request:
 
 jobs:
