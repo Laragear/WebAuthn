@@ -59,6 +59,7 @@ class AssertedRequest extends FormRequest
         if ($auth->attempt($this->validated(), $remember ?? $this->hasRemember())) {
             $this->session()->regenerate($destroySession);
 
+            // @phpstan-ignore-next-line
             return $auth->user();
         }
 

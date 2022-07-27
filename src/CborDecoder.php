@@ -138,7 +138,6 @@ class CborDecoder
 
         $val = static::parseExtraLength($val, $buf, $offset);
 
-        // @phpstan-ingnore-next-line
         try {
             return static::parseItemData($type, $val, $buf, $offset);
         } catch (InvalidArgumentException $e) {
@@ -249,7 +248,7 @@ class CborDecoder
      * @param  \Laragear\WebAuthn\ByteBuffer  $buf
      * @param $offset
      * @return \Laragear\WebAuthn\ByteBuffer|array|bool|float|int|string|null
-     * @throws \Laragear\WebAuthn\Exceptions\DataException
+     * @throws \Laragear\WebAuthn\Exceptions\DataException|\InvalidArgumentException
      */
     protected static function parseItemData(
         int $type,

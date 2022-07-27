@@ -102,6 +102,7 @@ class WebAuthnCredential extends Model
      */
     public function authenticatable(): MorphTo
     {
+        // @phpstan-ignore-next-line
         return $this->morphTo('authenticatable');
     }
 
