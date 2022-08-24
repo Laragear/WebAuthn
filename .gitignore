@@ -1,6 +1,7 @@
 /build
 /vendor
 /.idea
+/.vscode
 .php-cs-fixer.cache
 .phpunit.result.cache
 composer.lock
