@@ -121,7 +121,7 @@ class AssertionRequest extends FormRequest
      */
     protected function findUser(WebAuthnAuthenticatable|array|int|string|null $credentials): ?WebAuthnAuthenticatable
     {
-        if (!$credentials) {
+        if ($credentials === null) {
             return null;
         }
 
