@@ -23,9 +23,9 @@ public function login(AssertedRequest $request)
 
 > You want to add two-factor authentication to your app? Check out [Laragear TwoFactor](https://github.com/Laragear/TwoFactor).
 
-## Keep this package free
+## Become a sponsor
 
-[![Patreon](.github/assets/patreon.png)](https://patreon.com/packagesforlaravel)[![Ko-fi](.github/assets/ko-fi.png)](https://ko-fi.com/DarkGhostHunter)[![Buymeacoffee](.github/assets/buymeacoffee.png)](https://www.buymeacoffee.com/darkghosthunter)[![PayPal](.github/assets/paypal.png)](https://www.paypal.com/paypalme/darkghosthunter)
+[![](.github/assets/support.png)](https://github.com/sponsors/DarkGhostHunter)
 
 Your support allows me to keep this package free, up-to-date and maintainable. Alternatively, you can **[spread the word!](http://twitter.com/share?text=I%20am%20using%20this%20cool%20PHP%20package&url=https://github.com%2FLaragear%2FWebAuthn&hashtags=PHP,Laravel)**
 

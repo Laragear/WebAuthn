@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow
 
-name: "Tests"
+name: Tests
 
 on:
   push:
@@ -21,6 +21,7 @@ jobs:
       - name: "Find non-printable ASCII characters"
         run: |
           ! LC_ALL=C.UTF-8 find ./src -type f -name "*.php" -print0 | xargs -0 -- grep -PHn "[^ -~]"
+
   syntax_errors:
     name: "1️⃣ Syntax errors"
     runs-on: "ubuntu-latest"
@@ -34,10 +35,8 @@ jobs:
       - name: "Checkout code"
         uses: "actions/checkout@v3"
 
-      - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
-        with:
-          dependency-versions: "highest"
+      - name: "Validate Composer configuration"
+        run: "composer validate --strict"
 
       - name: "Check source code for syntax errors"
         run: "composer exec -- parallel-lint src/"
@@ -51,6 +50,7 @@ jobs:
     strategy:
       matrix:
         php-version:
+          - "8.0"
           - "8.1"
         laravel-constrain:
           - "9.*"
@@ -89,19 +89,14 @@ jobs:
       - name: "Set up PHP"
         uses: "shivammathur/setup-php@v2"
         with:
-          php-version: "8.1"
           tools: "phpstan"
+          php-version: "latest"
 
       - name: "Checkout code"
         uses: "actions/checkout@v3"
 
-      - name: "Validate Composer configuration"
-        run: "composer validate --strict"
-
       - name: "Install dependencies"
         uses: "ramsey/composer-install@v2"
-        with:
-          dependency-versions: "highest"
 
       - name: "Execute static analysis"
         run: "composer exec -- phpstan analyze -l 5 src/"
@@ -119,7 +114,7 @@ jobs:
       - name: "Check exported files"
         run: |
           EXPECTED="LICENSE.md,README.md,composer.json"
-          CURRENT="$(git archive HEAD | tar --list --exclude="src" --exclude="src/*" --exclude=".stubs" --exclude=".stubs/*" --exclude="stubs" --exclude="stubs/*" --exclude="lang" --exclude="lang/*" --exclude="config" --exclude="config/*" --exclude="database" --exclude="database/*" --exclude="resources" --exclude="resources/*" --exclude="routes" --exclude="routes/*" | paste -s -d ",")"
+          CURRENT="$(git archive HEAD | tar --list --exclude="src" --exclude="src/*" --exclude=".stubs" --exclude=".stubs/*"  --exclude="routes" --exclude="routes/*" --exclude="stubs" --exclude="stubs/*" --exclude="lang" --exclude="lang/*" --exclude="config" --exclude="config/*" --exclude="database" --exclude="database/*" --exclude="resources" --exclude="resources/*" | paste -s -d ",")"
           echo "CURRENT =${CURRENT}"
           echo "EXPECTED=${EXPECTED}"
           test "${CURRENT}" == "${EXPECTED}"
