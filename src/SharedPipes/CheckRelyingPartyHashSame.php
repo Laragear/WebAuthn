@@ -39,11 +39,11 @@ abstract class CheckRelyingPartyHashSame
     public function handle(AttestationValidation|AssertionValidation $validation, Closure $next): mixed
     {
         // This way we can get the app RP ID on attestation, and the Credential RP ID
-        // on assertion. The credential will have the same Relaying Party ID on both
+        // on assertion. The credential will have the same Relying Party ID on both
         // the authenticator and the application so on assertion both should match.
-        $relayingParty = parse_url($this->relyingPartyId($validation), PHP_URL_HOST);
+        $relyingParty = parse_url($this->relyingPartyId($validation), PHP_URL_HOST);
 
-        if ($this->authenticatorData($validation)->hasNotSameRPIdHash($relayingParty)) {
+        if ($this->authenticatorData($validation)->hasNotSameRPIdHash($relyingParty)) {
             static::throw($validation, 'Response has different Relying Party ID hash.');
         }
 

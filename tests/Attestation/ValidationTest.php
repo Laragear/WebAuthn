@@ -504,7 +504,7 @@ class ValidationTest extends TestCase
     public function test_rp_id_fails_if_not_equal(): void
     {
         $this->expectException(AttestationException::class);
-        $this->expectExceptionMessage('Attestation Error: Relaying Party ID not scoped to current.');
+        $this->expectExceptionMessage('Attestation Error: Relying Party ID not scoped to current.');
 
         $invalid = FakeAuthenticator::attestationResponse();
 
@@ -524,7 +524,7 @@ class ValidationTest extends TestCase
     public function test_rp_id_fails_if_not_contained(): void
     {
         $this->expectException(AttestationException::class);
-        $this->expectExceptionMessage('Attestation Error: Relaying Party ID not scoped to current.');
+        $this->expectExceptionMessage('Attestation Error: Relying Party ID not scoped to current.');
 
         $invalid = FakeAuthenticator::attestationResponse();
 
@@ -546,7 +546,7 @@ class ValidationTest extends TestCase
         $this->app->when(CheckRelyingPartyHashSame::class)
             ->needs(ConfigContract::class)
             ->give(static function (): Repository {
-                return tap(new Repository())->set('webauthn.relaying_party.id', 'https://otherhost.com');
+                return tap(new Repository())->set('webauthn.relying_party.id', 'https://otherhost.com');
             });
 
         $this->expectException(AttestationException::class);

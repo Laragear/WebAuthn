@@ -457,7 +457,7 @@ class ValidationTest extends TestCase
         $this->request->setJson(new ParameterBag($invalid));
 
         $this->expectException(AssertionException::class);
-        $this->expectExceptionMessage('Assertion Error: Relaying Party ID not scoped to current.');
+        $this->expectExceptionMessage('Assertion Error: Relying Party ID not scoped to current.');
 
         $this->validate();
     }
@@ -477,7 +477,7 @@ class ValidationTest extends TestCase
         $this->request->setJson(new ParameterBag($invalid));
 
         $this->expectException(AssertionException::class);
-        $this->expectExceptionMessage('Assertion Error: Relaying Party ID not scoped to current.');
+        $this->expectExceptionMessage('Assertion Error: Relying Party ID not scoped to current.');
 
         $this->validate();
     }

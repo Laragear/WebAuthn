@@ -40,11 +40,11 @@ abstract class CheckRelyingPartyIdContained
     public function handle(AttestationValidation|AssertionValidation $validation, Closure $next): mixed
     {
         if (!$host = parse_url($validation->clientDataJson->origin, PHP_URL_HOST)) {
-            static::throw($validation, 'Relaying Party ID is invalid.');
+            static::throw($validation, 'Relying Party ID is invalid.');
         }
 
         $current = parse_url(
-            $this->config->get('webauthn.relaying_party.id') ?? $this->config->get('app.url'), PHP_URL_HOST
+            $this->config->get('webauthn.relying_party.id') ?? $this->config->get('app.url'), PHP_URL_HOST
         );
 
         // Check the host is the same or is a subdomain of the current config domain.
@@ -52,6 +52,6 @@ abstract class CheckRelyingPartyIdContained
             return $next($validation);
         }
 
-        static::throw($validation, 'Relaying Party ID not scoped to current.');
+        static::throw($validation, 'Relying Party ID not scoped to current.');
     }
 }

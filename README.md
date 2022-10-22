@@ -547,7 +547,7 @@ After that, you will receive the `config/webauthn.php` config file with an array
 <?php
 
 return [
-    'relaying_party' => [
+    'relying_party' => [
         'name' => env('WEBAUTHN_NAME', env('APP_NAME')),
         'id'   => env('WEBAUTHN_ID'),
     ],
@@ -559,18 +559,18 @@ return [
 ];
 ```
 
-### Relaying Party Information
+### Relying Party Information
 
 ```php
 return [
-    'relaying_party' => [
+    'relying_party' => [
         'name' => env('WEBAUTHN_NAME', env('APP_NAME')),
         'id'   => env('WEBAUTHN_ID'),
     ],
 ];
 ```
 
-The _Relaying Party_ is just a way to uniquely identify your application in the user device:
+The _Relying Party_ is just a way to uniquely identify your application in the user device:
 
 * `name`: The name of the application. Defaults to the application name.
 * `id`: An unique ID the application, like the site domain. If `null`, the device may fill it internally, usually as the full domain.
