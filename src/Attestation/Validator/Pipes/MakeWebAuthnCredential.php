@@ -41,7 +41,7 @@ class MakeWebAuthnCredential
             'alias' => $validation->request->json('response.alias'),
 
             'counter' => $validation->attestationObject->authenticatorData->counter,
-            'rp_id' => $this->config->get('webauthn.relaying_party.id') ?? $this->config->get('app.url'),
+            'rp_id' => $this->config->get('webauthn.relying_party.id') ?? $this->config->get('app.url'),
             'origin' => $validation->clientDataJson->origin,
             'transports' => $validation->request->json('response.transports'),
             'aaguid' => Uuid::fromBytes($validation->attestationObject->authenticatorData->attestedCredentialData->aaguid),

@@ -80,7 +80,7 @@ class CreatorTest extends TestCase
             ]);
     }
 
-    public function test_uses_relaying_party_config(): void
+    public function test_uses_relying_party_config(): void
     {
         config(['webauthn.relying_party' => [
             'id' => 'https://foo.bar',

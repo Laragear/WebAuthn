@@ -4,11 +4,11 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Relaying Party
+    | Relying Party
     |--------------------------------------------------------------------------
     |
     | We will use your application information to inform the device who is the
-    | relaying party. While only the name is enough, you can further set the
+    | relying party. While only the name is enough, you can further set the
     | a custom domain as ID and even an icon image data encoded as BASE64.
     |
     */
