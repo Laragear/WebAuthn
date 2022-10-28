@@ -46,6 +46,7 @@ class WebAuthnServiceProvider extends ServiceProvider
             $this->publishesMigrations(static::MIGRATIONS);
             $this->publishes([static::ROUTES => $this->app->basePath('routes/webauthn.php')], 'routes');
             // @phpstan-ignore-next-line
+            $this->publishes([static::CONFIG => $this->app->configPath('webauthn.php')], 'config');
             $this->publishes([static::CONTROLLERS => $this->app->path('Http/Controllers/WebAuthn')], 'controllers');
             $this->publishes([static::JS => $this->app->resourcePath('js/vendor/webauthn')], 'js');
         }
