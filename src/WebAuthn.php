@@ -32,19 +32,19 @@ class WebAuthn
     public static function routes(): void
     {
         Route::middleware('web')->group(static function (): void {
-            Route::post('webauthn/register/options')
-                ->uses([\App\Http\Controllers\WebAuthn\WebAuthnRegisterController::class, 'options'])
-                ->name('webauthn.register.options');
-            Route::post('webauthn/register')
-                ->uses([\App\Http\Controllers\WebAuthn\WebAuthnRegisterController::class, 'register'])
-                ->name('webauthn.register');
+            Route::post(
+                'webauthn/register/options', [\App\Http\Controllers\WebAuthn\WebAuthnRegisterController::class, 'options'
+            ])->name('webauthn.register.options');
+            Route::post(
+                'webauthn/register', [\App\Http\Controllers\WebAuthn\WebAuthnRegisterController::class, 'register'
+            ])->name('webauthn.register');
 
-            Route::post('webauthn/login/options')
-                ->uses([\App\Http\Controllers\WebAuthn\WebAuthnLoginController::class, 'options'])
-                ->name('webauthn.login.options');
-            Route::post('webauthn/login')
-                ->uses([\App\Http\Controllers\WebAuthn\WebAuthnLoginController::class, 'login'])
-                ->name('webauthn.login');
+            Route::post(
+                'webauthn/login/options', [\App\Http\Controllers\WebAuthn\WebAuthnLoginController::class, 'options'
+            ])->name('webauthn.login.options');
+            Route::post(
+                'webauthn/login', [\App\Http\Controllers\WebAuthn\WebAuthnLoginController::class, 'login'
+            ])->name('webauthn.login');
         });
     }
 }
