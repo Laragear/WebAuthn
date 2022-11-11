@@ -95,7 +95,7 @@ class WebAuthnCredential extends Model
      *
      * @var array<int, string>
      */
-    protected $visible = ['id', 'origin', 'alias', 'aaguid', 'attestation_format', 'disabled_at', 'is_enabled'];
+    protected $visible = ['id', 'origin', 'alias', 'aaguid', 'attestation_format', 'disabled_at'];
 
     /**
      * @phpstan-ignore-next-line
