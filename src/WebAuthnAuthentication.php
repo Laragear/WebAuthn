@@ -4,6 +4,7 @@ namespace Laragear\WebAuthn;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Facades\Date;
 use JetBrains\PhpStorm\ArrayShape;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
 use function in_array;
@@ -70,7 +71,7 @@ trait WebAuthnAuthentication
                     }
                 });
         } else {
-            $this->webAuthnCredentials()->whereKeyNot($except)->update(['is_enabled' => false]);
+            $this->webAuthnCredentials()->whereKeyNot($except)->update(['disabled_at' => Date::now()]);
         }
     }
 
