@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Date;
 use JetBrains\PhpStorm\ArrayShape;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
-use function in_array;
 
 /**
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laragear\WebAuthn\Models\WebAuthnCredential> $webAuthnCredentials
@@ -39,20 +38,17 @@ trait WebAuthnAuthentication
      */
     public function flushCredentials(string ...$except): void
     {
-        if ($this->relationLoaded('webAuthnCredentials') && $this->webAuthnCredentials instanceof Collection) {
-            $partitioned = $this->webAuthnCredentials
-                ->partition(static function (WebAuthnCredential $credential) use ($except): bool {
-                    return in_array($credential->getKey(), $except, true);
-                });
-
-            $partitioned->first()->each->delete();
-
-            $this->setRelation('webAuthnCredentials', $partitioned->last());
+        if (! $this->relationLoaded('webAuthnCredentials')) {
+            $this->webAuthnCredentials()->whereKeyNot($except)->delete();
 
             return;
         }
 
-        $this->webAuthnCredentials()->whereKeyNot($except)->delete();
+        if ($this->webAuthnCredentials instanceof Collection && $this->webAuthnCredentials->isNotEmpty()) {
+            $this->webAuthnCredentials->whereNotIn('id', $except)->each->delete();
+
+            $this->setRelation('webAuthnCredentials', $this->webAuthnCredentials->whereIn('id', $except));
+        }
     }
 
     /**
@@ -65,13 +61,14 @@ trait WebAuthnAuthentication
     {
         if ($this->relationLoaded('webAuthnCredentials') && $this->webAuthnCredentials instanceof Collection) {
             $this->webAuthnCredentials
-                ->each(static function (WebAuthnCredential $credential) use ($except): bool {
-                    if ($credential->isEnabled() && in_array($credential->getKey(), $except, true)) {
+                ->when($except)->whereNotIn('id', $except)
+                ->each(static function (WebAuthnCredential $credential): void {
+                    if ($credential->isEnabled()) {
                         $credential->disable();
                     }
                 });
         } else {
-            $this->webAuthnCredentials()->whereKeyNot($except)->update(['disabled_at' => Date::now()]);
+            $this->webAuthnCredentials()->whereKeyNot($except)->whereEnabled()->update(['disabled_at' => Date::now()]);
         }
     }
 
