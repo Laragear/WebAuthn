@@ -43,7 +43,8 @@ abstract class CheckRelyingPartyIdContained
             static::throw($validation, 'Relying Party ID is invalid.');
         }
 
-        $current = $this->config->get('webauthn.relying_party.id') ?? parse_url($this->config->get('app.url'), PHP_URL_HOST);
+        $current = $this->config->get('webauthn.relying_party.id')
+            ?? parse_url($this->config->get('app.url'), PHP_URL_HOST);
 
         // Check the host is the same or is a subdomain of the current config domain.
         if (hash_equals($current, $host) || Str::is("*.$current", $host)) {
