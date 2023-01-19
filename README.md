@@ -258,6 +258,8 @@ const webAuthn = new WebAuthn({}, {
 
 Attestation is the _ceremony_ to create WebAuthn Credentials. To create an Attestable Response that the user device can understand, use the `AttestationRequest::toCreate()` form request.
 
+For example, we can create our own `AttestationController` to create it.
+
 ```php
 // app\Http\Controllers\WebAuthn\AttestationController.php
 use Laragear\WebAuthn\Http\Requests\AttestationRequest;
@@ -353,6 +355,8 @@ public function registerDevice(AttestationRequest $request)
 The Assertion procedure also follows a two-step procedure: the user will input its username, the server will return the IDs of the WebAuthn credentials to use, and the device pick one to sign the response. If you're using [userless login](#userlessone-touchtypeless-login), only the challenge is returned.
 
 First, use the `AssertionRequest::toVerify()` form request. It will automatically create an assertion for the user that matches the credentials, or a blank one in case you're using [userless login](#userlessone-touchtypeless-login). Otherwise, you may set stricter validation rules to always ask for credentials.
+
+For example, we can use our own `AssertionController` to handle it.
 
 ```php
 // app\Http\Controllers\WebAuthn\AssertionController.php
