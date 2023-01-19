@@ -573,9 +573,16 @@ return [
 The _Relying Party_ is just a way to uniquely identify your application in the user device:
 
 * `name`: The name of the application. Defaults to the application name.
-* `id`: An unique ID the application, like the site domain. If `null`, the device may fill it internally, usually as the full domain.
+* `id`: An unique ID the application, like the site URL. If `null`, the device _may_ fill it internally, usually as the full domain.
 
 > WebAuthn authentication only work on the top domain it was registered. 
+
+Instead of modifying the config file, you should use the environment variables to set the name and ID for WebAuthn.
+
+```dotenv
+WEBAUTHN_NAME=SecureBank
+WEBAUTHN_ID=https://auth.securebank.com
+```
 
 ### Challenge configuration
 
