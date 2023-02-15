@@ -156,7 +156,9 @@ class WebAuthn {
      * @returns {Promise<Response>}
      */
     #fetch(data, route, headers = {}) {
-        return fetch(route, {
+
+        let url = new URL(route, window.location.origin).href;
+        return fetch(url, {
             method: "POST",
             credentials: this.#includeCredentials ? "include" : "same-origin",
             redirect: "error",
