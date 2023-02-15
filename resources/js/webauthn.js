@@ -315,6 +315,7 @@ class WebAuthn {
         const publicKeyCredential = this.#parseOutgoingCredentials(credentials);
 
         Object.assign(publicKeyCredential, response);
+        Object.assign(publicKeyCredential, request);
 
         return await this.#fetch(publicKeyCredential, this.#routes.register).then(WebAuthn.#handleResponse);
     }
