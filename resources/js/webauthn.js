@@ -156,7 +156,9 @@ class WebAuthn {
      * @returns {Promise<Response>}
      */
     #fetch(data, route, headers = {}) {
-        return fetch(route, {
+        const url = new URL(route, window.location.origin).href;
+        
+        return fetch(url, {
             method: "POST",
             credentials: this.#includeCredentials ? "include" : "same-origin",
             redirect: "error",
@@ -313,6 +315,7 @@ class WebAuthn {
         const publicKeyCredential = this.#parseOutgoingCredentials(credentials);
 
         Object.assign(publicKeyCredential, response);
+        Object.assign(publicKeyCredential, request);
 
         return await this.#fetch(publicKeyCredential, this.#routes.register).then(WebAuthn.#handleResponse);
     }
