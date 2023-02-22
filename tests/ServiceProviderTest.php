@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Fluent;
 use Illuminate\Support\ServiceProvider;
@@ -28,17 +29,23 @@ class ServiceProviderTest extends TestCase
         );
     }
 
+    /**
+     * @define-env usesCustomTestTime
+     */
     public function test_publishes_migrations(): void
     {
-        $format = now()->format('Y_m_d_His');
-
         static::assertSame(
             [
                 realpath(WebAuthnServiceProvider::MIGRATIONS . '/2022_07_01_000000_create_webauthn_credentials.php') =>
-                    $this->app->databasePath("migrations/{$format}_create_webauthn_credentials.php"),
+                    $this->app->databasePath("migrations/2020_01_01_163025_create_webauthn_credentials.php"),
             ],
             ServiceProvider::pathsToPublish(WebAuthnServiceProvider::class, 'migrations')
         );
+    }
+
+    protected function usesCustomTestTime()
+    {
+        $this->travelTo(Carbon::create(2020, 01, 01, 16, 30, 25));
     }
 
     public function test_bounds_user(): void
