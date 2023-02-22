@@ -24,7 +24,7 @@
             "name": "Italo Israel Baeza Cabrera",
             "email": "DarkGhostHunter@Gmail.com",
             "role": "Developer",
-            "homepage": "https://patreon.com/packagesforlaravel"
+            "homepage": "https://github.com/sponsors/DarkGhostHunter"
         }
     ],
     "support": {
@@ -32,22 +32,20 @@
         "issues": "https://github.com/Laragear/TwoFactor/issues"
     },
     "require": {
-        "php": ">=8.0.2",
+        "php": "8.*",
         "ext-openssl": "*",
         "ext-json": "*",
-        "illuminate/auth": "9.*",
-        "illuminate/http": "9.*",
-        "illuminate/session": "9.*",
-        "illuminate/support": "9.*",
-        "illuminate/config": "9.*",
-        "illuminate/database": "9.*",
-        "illuminate/encryption": "9.*"
+        "illuminate/auth": "9.*|10.*",
+        "illuminate/http": "9.*|10.*",
+        "illuminate/session": "9.*|10.*",
+        "illuminate/support": "9.*|10.*",
+        "illuminate/config": "9.*|10.*",
+        "illuminate/database": "9.*|10.*",
+        "illuminate/encryption": "9.*|10.*"
     },
     "require-dev": {
-        "orchestra/testbench": "7.*",
-        "phpunit/phpunit": "^9.5",
-        "mockery/mockery": "^1.5",
-        "jetbrains/phpstorm-attributes": "^1.0"
+        "orchestra/testbench": "^7.22|8.*",
+        "jetbrains/phpstorm-attributes": "*"
     },
     "autoload": {
         "psr-4": {
@@ -76,16 +74,8 @@
     },
     "funding": [
         {
-            "type": "Patreon",
-            "url": "https://patreon.com/PackagesForLaravel"
-        },
-        {
-            "type": "Ko-Fi",
-            "url": "https://ko-fi.com/DarkGhostHunter"
-        },
-        {
-            "type": "Buy me a cofee",
-            "url": "https://www.buymeacoffee.com/darkghosthunter"
+            "type": "Github Sponsorship",
+            "url": "https://github.com/sponsors/DarkGhostHunter"
         },
         {
             "type": "Paypal",
