@@ -3,6 +3,7 @@
   <coverage>
     <include>
       <directory suffix=".php">src/</directory>
+      <directory suffix=".php">stubs/controllers</directory>
     </include>
     <report>
       <clover outputFile="build/logs/clover.xml"/>
@@ -11,11 +12,10 @@
   <testsuites>
     <testsuite name="Test Suite">
       <directory>tests</directory>
-      <file>stubs/controllers/WebAuthnLoginController.php</file>
-      <file>stubs/controllers/WebAuthnRegisterController.php</file>
     </testsuite>
   </testsuites>
   <php>
+    <includePath>stubs/controllers</includePath>
     <env name="APP_ENV" value="testing"/>
     <env name="APP_DEBUG" value="true"/>
     <env name="APP_KEY" value="AckfSECXIvnK5r28GVIWUAxmbBSjTsmF"/>
