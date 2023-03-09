@@ -4,9 +4,6 @@ namespace Laragear\WebAuthn;
 
 use Illuminate\Support\Facades\Route;
 
-/**
- * @internal
- */
 class WebAuthn
 {
     // Constants for user verification in Attestation and Assertion.
