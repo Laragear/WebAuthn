@@ -78,7 +78,7 @@ jobs:
         uses: "ramsey/composer-install@v2"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
-          composer-options: "--with='laravel/framework:${{ matrix.laravel-constraint }}'"
+          composer-options: "--with=laravel/framework:${{ matrix.laravel-constraint }}"
 
       - name: "Execute unit tests"
         run: "composer run-script test"
