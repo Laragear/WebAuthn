@@ -53,22 +53,22 @@ jobs:
           - "8.0"
           - "8.1"
           - "8.2"
-        laravel-constrain:
+        laravel-constraint:
           - "9.*"
           - "10.*"
         dependencies:
           - "lowest"
           - "highest"
         exclude:
-          - laravel-constrain: "10.*"
+          - laravel-constraint: "10.*"
             php-version: "8.0"
     steps:
       - name: "Set up PHP"
         uses: "shivammathur/setup-php@v2"
         with:
           php-version: "${{ matrix.php-version }}"
-          extensions: mbstring, intl
-          coverage: xdebug
+          extensions: "mbstring, intl"
+          coverage: "xdebug"
 
       - name: "Checkout code"
         uses: "actions/checkout@v3"
@@ -77,6 +77,10 @@ jobs:
         uses: "ramsey/composer-install@v2"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
+
+      - name: "Set Laravel version"
+        run: |
+          composer require --update-with-all-dependencies "laravel/framework:${{ matrix.laravel-constraint }}"
 
       - name: "Execute unit tests"
         run: "composer run-script test"
