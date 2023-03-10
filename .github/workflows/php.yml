@@ -80,7 +80,7 @@ jobs:
 
       - name: "Set Laravel version"
         run: |
-          composer update --with-all-dependencies ${{ matrix.dependencies == 'lowest' && '--prefer-lowest' || '' }} --with="laravel/framework:${{ matrix.laravel-constraint }}" --with="orchestra/testbench:^7.22 || 8.*"
+          composer update ${{ matrix.dependencies == 'lowest' && '--prefer-lowest' || '' }} --with="laravel/framework:${{ matrix.laravel-constraint }}" --with="orchestra/testbench:^7.22 || 8.*"
 
       - name: "Execute unit tests"
         run: "composer run-script test"
