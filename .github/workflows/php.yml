@@ -80,7 +80,7 @@ jobs:
 
       - name: "Set Laravel version"
         run: |
-          composer require --update-with-all-dependencies "laravel/framework:${{ matrix.laravel-constraint }}"
+          composer require --update-with-all-dependencies "laravel/framework:${{ matrix.laravel-constraint }}" orchestra/testbench
 
       - name: "Execute unit tests"
         run: "composer run-script test"
