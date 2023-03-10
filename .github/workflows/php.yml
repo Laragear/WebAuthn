@@ -60,8 +60,9 @@ jobs:
           - "lowest"
           - "highest"
         exclude:
-          - laravel-constraint: "10.*"
-            php-version: "8.0"
+          - php-version: "8.0"
+            laravel-constraint: "10.*"
+
     steps:
       - name: "Set up PHP"
         uses: "shivammathur/setup-php@v2"
@@ -77,10 +78,7 @@ jobs:
         uses: "ramsey/composer-install@v2"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
-
-      - name: "Set Laravel version"
-        run: |
-          composer update ${{ matrix.dependencies == 'lowest' && '--prefer-lowest' || '' }} --with="laravel/framework:${{ matrix.laravel-constraint }}" --with="orchestra/testbench:^7.22 || 8.*"
+          composer-options: "--with='laravel/framework:${{ matrix.laravel-constraint }}'"
 
       - name: "Execute unit tests"
         run: "composer run-script test"
