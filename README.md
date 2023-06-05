@@ -637,7 +637,9 @@ No. WebAuthn only stores a cryptographic public key generated randomly by the de
 
 * **Can a phishing site steal WebAuthn credentials and use them in my site to impersonate an user?**
 
-No. WebAuthn _kills the phishing_ because, unlike passwords, the private key never leaves the device.
+No. WebAuthn _kills the phishing_ because, unlike passwords, the private key never leaves the device, and the key-pair is bound to the top-most domain it was registered.
+
+An user bing _phished_ at `staetbank.com` won't be able to login with a key made on the legit site `statebank.com`, as the device won't be able to find it.
 
 * **Can WebAuthn data identify a particular device?**
 
@@ -661,15 +663,15 @@ Yes. If you're not using a [password fallback](#password-fallback), you may need
 
 * **What's the difference between disabling and deleting a credential?**
 
-Disabling a credential doesn't delete it, so it's useful as a blacklisting mechanism and these can also be re-enabled. When the credential is deleted, it goes away forever.
+Disabling a credential doesn't delete it, so it's useful as a blacklisting mechanism and these can also be re-enabled. When the credential is deleted, it goes away forever from the server, so the credential in the authenticator device becomes orphaned.
 
 * **Can a user delete its credentials from its device?**
 
-Yes. If it does, the other part of the credentials in your server gets virtually orphaned. You may want to show the user a list of registered credentials in the application to delete them.
+Yes. If it does, the other part of the credentials in your server gets orphaned. You may want to show the user a list of registered credentials in the application to delete them.
 
 * **How secure is this against passwords or 2FA?**
 
-Extremely secure since it works only on HTTPS (or `localhost`), no password or codes are exchanged nor visible in the screen.
+Extremely secure since it works only on HTTPS (or `localhost`). Also, no password or codes are exchanged nor visible in the screen.
 
 * **Can I deactivate the password fallback? Can I enforce only WebAuthn authentication and nothing else?**
 
@@ -679,9 +681,13 @@ Extremely secure since it works only on HTTPS (or `localhost`), no password or c
 
 [Yes](#5-use-the-javascript-helper), but it's very _basic_.
 
+If you need more complex WebAuthn management, consider using the [`navigator.credentials`](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/credentials) API directly.
+
 * **Does WebAuthn eliminate bots? Can I forget about _captchas_?**
 
-No, you still need to use [captcha](https://github.com/Laragear/ReCaptcha), honeypots, or other mechanisms to stop bots.
+Yes and no. To register users, you still need to use [captcha](https://github.com/Laragear/ReCaptcha), honeypots, or other mechanisms to stop bots.
+
+Once a user is registered, bots won't be able to login because the real user is the only one that has the private key required for WebAuthn.
 
 * **Does this encode/decode the WebAuthn data automatically in the frontend?**
 
@@ -693,11 +699,15 @@ Yes, public keys are encrypted when saved into the database.
 
 * **Does this include WebAuthn credential recovery routes?**
 
-No. You're free to create your own flow for recovery. 
+No. You're free to create your own flow for recovery.
+
+My recommendation is to send an email to the user, pointing to a route that registers a new device, and immediately redirect him to blacklist which credential was lost (or blacklist the only one he has).
 
 * **Can I use my smartphone as authenticator through my PC or Mac?**
 
-It depends. This is entirely up to hardware, OS and browser vendor themselves.
+It depends. 
+
+This is entirely up to hardware, OS and browser vendor themselves, but mostly the OS. Some OS or browsers may offer a way to sync private keys on the cloud, even letting the assertion challenge to be signed remotely instead of transmitting the private key. Please check your target platforms of choice.
 
 * **Why my device doesn't show Windows Hello/Passkey/TouchId/FaceId/pattern/fingerprint authentication?**
 
@@ -707,15 +717,17 @@ You may [check this site for authenticator support](https://webauthn.me/browser-
 
 * **Why my device doesn't work at all with this package?**
 
-This package supports WebAuthn 2.0, which is [W3C Recommendation](https://www.w3.org/TR/webauthn-2). Your device/OS/browser may be using an unsupported version. There are no plans to support older specs.
+This package supports WebAuthn 2.0, which is [W3C Recommendation](https://www.w3.org/TR/webauthn-2). Your device/OS/browser may be using an unsupported version. 
+
+There are no plans to support older WebAuthn specs. The new [WebAuthn 3.0 draft](https://www.w3.org/TR/webauthn-3) spec needs to be finished to be supported.
 
 * **I'm trying to test this in my development server, but it doesn't work**
 
-Use `localhost` exclusively, not `127.0.0.1`, or use a proxy to tunnel your site through HTTPS. WebAuthn only works on `localhost` or under `HTTPS` only.
+Use `localhost` exclusively (not `127.0.0.1` or `::1`) or use a proxy to tunnel your site through HTTPS. WebAuthn only works on `localhost` or under `HTTPS` only.
 
 * **Why this package supports only `none` attestation conveyance?**
 
-Because `direct`, `indirect` and `enterprise` attestations are mostly used on high-security high-risk scenarios, where an entity has total control on the devices used to authenticate.
+Because `direct`, `indirect` and `enterprise` attestations are mostly used on high-security high-risk scenarios, where an entity has total control on the devices used to authenticate. Imagine banks, medical, or military.
 
 If you deem this feature critical for you, [**consider supporting this package**](#keep-this-package-free).
 
@@ -725,7 +737,7 @@ No. The user can use whatever to authenticate in your app. This may be enabled o
 
 * **Everytime I make attestations or assertions, it says no challenge exists!** 
 
-Remember that your WebAuthn routes must use Sessions, because the Challenges are saved there.
+Remember that your WebAuthn routes **must use Sessions**, because the Challenges are stored there.
 
 More information can be retrieved in your [application logs](https://laravel.com/docs/9.x/logging).
 
@@ -744,11 +756,11 @@ These are some details about this WebAuthn implementation:
 
 * Registration (attestation) and Login (assertion) challenges use the current request session.
 * Only one ceremony can be done at a time. 
-* Challenges are pulled from the session on resolution, independently of their result.
+* Challenges are pulled (retrieved and deleted from source) from the session on resolution, independently of their result.
 * All challenges and ceremonies expire at 60 seconds.
 * WebAuthn User Handle is UUID v4, reusable if another credential exists.
 * Credentials can be blacklisted (enabled/disabled).
-* Public Keys are encrypted in the database automatically.
+* Public Keys are encrypted by with application key in the database automatically.
 
 If you discover any security related issues, please email darkghosthunter@gmail.com instead of using the issue tracker.
 
