@@ -298,7 +298,12 @@ public function register(AttestedRequest $request)
 {
     $request->validate(['alias' => 'nullable|string']);
 
-    $attestation->save($request->input('alias'));
+    $attestation->save($request->only('alias'));
+    
+    // Same as:
+    // $attestation->save(function ($credentials) use ($request) {
+    //    $credentials->alias = $request->input('alias');
+    // })
 }
 ```
 
