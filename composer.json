@@ -1,6 +1,6 @@
 {
     "name": "laragear/webauthn",
-    "description": "Authenticate your users with biometric data, devices or USB keys.",
+    "description": "Authenticate users with Passkeys: fingerprints, patterns and biometric data.",
     "type": "library",
     "license": "MIT",
     "minimum-stability": "stable",
