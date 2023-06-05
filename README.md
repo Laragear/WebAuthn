@@ -7,7 +7,7 @@
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=Laragear_WebAuthn&metric=alert_status)](https://sonarcloud.io/dashboard?id=Laragear_WebAuthn)
 [![Laravel Octane Compatibility](https://img.shields.io/badge/Laravel%20Octane-Compatible-success?style=flat&logo=laravel)](https://laravel.com/docs/9.x/octane#introduction)
 
-Authenticate users with fingerprints, patterns and biometric data.
+Authenticate users with Passkeys: fingerprints, patterns and biometric data.
 
 ```php
 // App\Http\Controllers\LoginController.php
