@@ -42,15 +42,15 @@ Require this package into your project using Composer:
 composer require laragear/webauthn
 ```
 
-## How does it work?
+## How Passkeys work?
 
-WebAuthn authentication process consists in two _ceremonies_: attestation, and assertion.
+Passkeys, hence WebAuthn, consists in two _ceremonies_: attestation, and assertion.
 
-Attestation is the process of asking the authenticator (a phone, laptop, USB key...) to create a private-public key pair, and **register** the public key inside the app. For that to work, the user must exist, and the browser must support WebAuthn, which is what intermediates between the authenticator (OS & device hardware) and the app.
+Attestation is the process of asking the authenticator (a phone, laptop, USB key...) to create a private-public key pair, save the private key internally, and **store** the public key inside the server. For that to work, the browser must support WebAuthn, which is what intermediates between the authenticator (OS & device hardware) and the server.
 
-Assertion is the process of pushing a cryptographic challenge to the device, which will return back _signed_ by the private key. Upon arrival, the app checks the signature is correct with the stored public key, ready to **log in**.
+Assertion is the process of pushing a cryptographic challenge to the authenticator, which will return back to the server _signed_ by the private key of the device. Upon arrival, the server checks the signature is correct with the stored public key, ready to **log in**.
 
-The private key doesn't leave the authenticator, and there are no shared passwords to save, let alone remember.
+The private key doesn't leave the authenticator, there are no shared passwords stored anywhere, and Passkeys only work on the server domain (like google.com) or subdomain (like auth.google.com).
 
 ## Set up
 
@@ -64,6 +64,10 @@ After that, you can quickly start WebAuthn with the included controllers and hel
 
 4. [Register the controllers](#4-register-the-routes-and-controllers)
 5. [Use the Javascript helper](#5-use-the-javascript-helper)
+
+> **Info**
+>
+> While you can use Passkeys without users by invoking the _ceremonies_ manually, Laragear WebAuthn is intended to be used with already existing Users.
 
 ### 1. Add the `eloquent-webauthn` driver
 
@@ -85,7 +89,7 @@ return [
 ];
 ```
 
-The `password_fallback` indicates the User Provider should fall back to validate the password when the request is not a WebAuthn Assertion. It's enabled to seamlessly use both classic and WebAuthn authentication procedures.
+The `password_fallback` indicates the User Provider should fall back to validate the password when the request is not a WebAuthn Assertion. It's enabled to seamlessly use both classic (password) and WebAuthn authentication procedures.
 
 ### 2. Create the `webauthn_credentials` table
 
