@@ -105,7 +105,8 @@ class CreatorTest extends TestCase
             })
             ->assertJsonFragment([
                 'authenticatorSelection' => [
-                    'userVerification' => 'required'
+                    'userVerification' => 'required',
+                    'authenticatorAttachment' => null,
                 ]
             ]);
     }
@@ -120,7 +121,8 @@ class CreatorTest extends TestCase
             })
             ->assertJsonFragment([
                 'authenticatorSelection' => [
-                    'userVerification' => 'discouraged'
+                    'userVerification' => 'discouraged',
+                    'authenticatorAttachment' => null,
                 ]
             ]);
     }
@@ -137,7 +139,8 @@ class CreatorTest extends TestCase
                 'authenticatorSelection' => [
                     'residentKey' => 'required',
                     'requireResidentKey' => true,
-                    'userVerification' => 'required'
+                    'userVerification' => 'required',
+                    'authenticatorAttachment' => null,
                 ],
             ]);
     }

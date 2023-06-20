@@ -120,7 +120,8 @@ class AttestationRequestTest extends TestCase
                 'authenticatorSelection' => [
                     'residentKey' => 'required',
                     'requireResidentKey' => true,
-                    'userVerification' => 'required'
+                    'userVerification' => 'required',
+                    'authenticatorAttachment' => null,
                 ],
             ]);
     }

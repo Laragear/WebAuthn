@@ -32,6 +32,10 @@ class SetResidentKeyConfiguration
             }
         }
 
+        // This should make the browser accept any device. If we don't set it as `null`, some
+        // Android devices will default to cross-platform (FIDO, USB) or platform (Android
+        // Safenet, Windows Hello, Apple ID), instead of allowing for all device types.
+        $attestable->json->set('authenticatorSelection.authenticatorAttachment', null);
 
         return $next($attestable);
     }
