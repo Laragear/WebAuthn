@@ -76,7 +76,7 @@ class AuthenticatorData
      * @param  string  $relyingPartyIdHash
      * @param  object  $flags
      * @param  int  $counter
-     * @param  object{aaguid: string, credentialId: string, credentialPublicKey: string}&\stdClass  $attestedCredentialData
+     * @param  object  $attestedCredentialData
      * @param  array  $extensionData
      */
     final public function __construct(
@@ -402,7 +402,7 @@ class AuthenticatorData
      *
      * @param  string  $binary
      * @param  int  $endOffset
-     * @return object{aaguid: string, credentialId: string, credentialPublicKey: string}&\stdClass
+     * @return object
      * @throws \Laragear\WebAuthn\Exceptions\DataException
      */
     protected static function readAttestData(string $binary, int &$endOffset): object
