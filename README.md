@@ -156,14 +156,15 @@ This package includes a simple but convenient script to handle WebAuthn Attestat
 php artisan vendor:publish --provider="Laragear\WebAuthn\WebAuthnServiceProvider" --tag="js"
 ```
 
-You will receive the `resources/js/vendor/webauthn/webauthn.js` file which you can include into your authentication views and use it programmatically, anyway you want. For example, [compiling it through Vite](https://laravel.com/docs/9.x/vite#loading-your-scripts-and-styles) into your application global JavaScript.
+You will receive the `resources/js/vendor/webauthn/webauthn.js` file which you can include into your authentication views and use it programmatically.
 
 ```html
 <!doctype html>
 <head>
     {{-- ... --}}
- 
-    @vite(['resources/js/app.js', 'resources/js/vendor/webauthn/webauthn.js'])
+
+    <script src="{{ Vite::asset('resources/js/vendor/webauthn/webauthn.js') }}"></script>
+    @vite(['resources/js/app.js'])
 </head>
 ```
 
