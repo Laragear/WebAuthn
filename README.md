@@ -156,25 +156,37 @@ This package includes a simple but convenient script to handle WebAuthn Attestat
 php artisan vendor:publish --provider="Laragear\WebAuthn\WebAuthnServiceProvider" --tag="js"
 ```
 
-You will receive the `resources/js/vendor/webauthn/webauthn.js` file which you can include into your authentication views and use it programmatically, anyway you want. For example, [compiling it through Vite](https://laravel.com/docs/9.x/vite#loading-your-scripts-and-styles) into your application global JavaScript.
+You will receive the `resources/js/vendor/webauthn/webauthn.js` file which you can include into your authentication views and use it programmatically
 
 ```html
 <!doctype html>
 <head>
     {{-- ... --}}
- 
-    @vite(['resources/js/app.js', 'resources/js/vendor/webauthn/webauthn.js'])
+
+    <script src="{{ Vite::asset('resources/js/vendor/webauthn/webauthn.js') }}"></script>
+
+    @vite(['resources/js/app.js'])
 </head>
 ```
 
-Once done, you can easily start registering and login in users. For example, for a logged-in user, you may show a registration view in HTML with the following code:
+> **Note**
+>
+> You can also edit the script file to transform it into a module so it can be bundled in your Vite frontend, exporting the class as `export default class WebAuthn { ... }`, and add it to the `@vite` assets.
+>
+> ```html
+> @vite(['resources/js/vendor/webauthn/webauthn.js', 'resources/js/app.js'])
+> ```
+
+Once done, you can easily start registering an user device, and login in users that registered a device previusly.
+
+For example, let's imagine an user logs in normally, and enters its profile view. You may show a WebAuthn registration HTML with the following code:
 
 ```html
 <form id="register-form">
     <button type="submit" value="Register authenticator">
 </form>
 
-<!-- Registering credentials -->
+<!-- Registering authenticator -->
 <script>
     const register = event => {
         event.preventDefault()
@@ -188,7 +200,7 @@ Once done, you can easily start registering and login in users. For example, for
 </script>
 ```
 
-On the other hand, consider a login HTML view with the following code:
+In our Login view, we can use the WebAuthn credentials to log in the user.
 
 ```html
 <form id="login-form">
@@ -214,7 +226,7 @@ On the other hand, consider a login HTML view with the following code:
 </script>
 ```
 
-You can copy-paste this helper into your authentication routes, or import it into a bundler like [Laravel Vite](https://laravel.com/docs/9.x/vite), [Webpack](https://webpack.js.org/), [parcel](https://parceljs.org/), or many more. If the script doesn't suit your needs, you're free to create your own.
+You can copy-paste this helper into your authentication routes, or import it into a bundler like [Laravel Vite](https://laravel.com/docs/9.x/vite), [Webpack](https://webpack.js.org/), [parcel](https://parceljs.org/), or many more, as long you adjust the script to the bundler needs. If the script doesn't suit your needs, you're free to modify it or create your own.
 
 ### Requests and Responses parameters
 
