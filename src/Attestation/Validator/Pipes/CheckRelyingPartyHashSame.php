@@ -35,6 +35,6 @@ class CheckRelyingPartyHashSame extends BaseCheckRelyingPartyHashSame
      */
     protected function relyingPartyId(AssertionValidation|AttestationValidation $validation): string
     {
-        return $this->config->get('webauthn.relying_party.id') ?? $this->config->get('app.url');
+        return $this->config->get('webauthn.relying_party.http_scheme') . '' . $this->config->get('webauthn.relying_party.id') ?? $this->config->get('app.url');
     }
 }
