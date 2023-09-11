@@ -72,6 +72,12 @@ class CheckCredentialIsForUser
     {
         $handle = $validation->request->json('response.userHandle');
 
+        $userId = $validation->request->json('response.userId');
+
+        if(! $handle && $userId) {
+            return;
+        }
+
         if (! $handle || ! hash_equals(Uuid::fromString($validation->credential->user_id)->getHex()->toString(), $handle)) {
             throw AssertionException::make('User ID is not owner of the stored credential.');
         }
