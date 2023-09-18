@@ -44,7 +44,7 @@ abstract class CheckRelyingPartyIdContained
         }
 
         $current = parse_url(
-            $this->config->get('webauthn.relying_party.http_scheme') . '' . $this->config->get('webauthn.relying_party.id') ?? $this->config->get('app.url'), PHP_URL_HOST
+            $this->config->get('webauthn.relying_party.http_scheme') . '' . $this->config->get('webauthn.relying_party.id') ?: $this->config->get('app.url'), PHP_URL_HOST
         );
 
         // Check the host is the same or is a subdomain of the current config domain.
