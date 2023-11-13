@@ -270,6 +270,8 @@ class WebAuthn {
             .filter(key => key in credentials.response)
             .forEach(key => parseCredentials.response[key] = WebAuthn.#arrayToBase64String(credentials.response[key]));
 
+        parseCredentials.response['userId'] = credentials.id;
+
         return parseCredentials;
     }
 

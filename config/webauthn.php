@@ -16,6 +16,7 @@ return [
     'relying_party' => [
         'name' => env('WEBAUTHN_NAME', config('app.name')),
         'id'   => env('WEBAUTHN_ID'),
+        'http_scheme' => env('WEBAUTHN_HTTP_SCHEME', 'http://'),
     ],
 
     /*
