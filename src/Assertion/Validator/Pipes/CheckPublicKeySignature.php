@@ -62,6 +62,7 @@ class CheckPublicKeySignature
             .hash('sha256', base64_decode($validation->request->json('response.clientDataJSON')), true);
 
         if (openssl_verify($verifiable, $signature, $publicKey, OPENSSL_ALGO_SHA256) !== 1) {
+            dd(openssl_error_string());
             throw AssertionException::make('Signature is invalid.');
         }
     }

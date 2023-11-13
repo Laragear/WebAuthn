@@ -402,7 +402,7 @@ class AuthenticatorData
      *
      * @param  string  $binary
      * @param  int  $endOffset
-     * @return object{aaguid: string, credentialId: Laragear\WebAuthn\ByteBuffer, credentialPublicKey: object}
+     * @return object{aaguid: int|bool, credentialId: string, credentialPublicKey: string}
      * @throws \Laragear\WebAuthn\Exceptions\DataException
      */
     protected static function readAttestData(string $binary, int &$endOffset): object

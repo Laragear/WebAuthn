@@ -56,6 +56,7 @@ class AssertedRequest extends FormRequest
         /** @var \Illuminate\Contracts\Auth\StatefulGuard $auth */
         $auth = Auth::guard($guard);
 
+
         if ($auth->attempt($this->validated(), $remember ?? $this->hasRemember())) {
             $this->session()->regenerate($destroySession);
 

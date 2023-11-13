@@ -39,7 +39,13 @@ abstract class CheckRelyingPartyIdContained
      */
     public function handle(AttestationValidation|AssertionValidation $validation, Closure $next): mixed
     {
-        if (!$host = parse_url($validation->clientDataJson->origin, PHP_URL_HOST)) {
+        $hostOrValid = $this->isValidHost($validation->clientDataJson->origin);
+
+        if($hostOrValid === true) {
+            return $next($validation);
+        }
+
+        if ($hostOrValid === false) {
             static::throw($validation, 'Relying Party ID is invalid.');
         }
 
@@ -48,10 +54,24 @@ abstract class CheckRelyingPartyIdContained
         );
 
         // Check the host is the same or is a subdomain of the current config domain.
-        if (hash_equals($current, $host) || Str::is("*.$current", $host)) {
+        if (hash_equals($current, $hostOrValid) || Str::is("*.$current", $hostOrValid)) {
             return $next($validation);
         }
 
         static::throw($validation, 'Relying Party ID not scoped to current.');
+    }
+
+    private function isValidHost($origin) {
+        // Check if it's a valid host
+        if ($host = parse_url($origin, PHP_URL_HOST)) {
+            return $host;
+        }
+
+        // Check if it matches the android:apk-key-hash format
+        if (preg_match('/^android:apk-key-hash:[a-zA-Z0-9_-]+$/', $origin)) {
+            return true;
+        }
+
+        return false;
     }
 }

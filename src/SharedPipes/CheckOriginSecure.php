@@ -37,6 +37,25 @@ abstract class CheckOriginSecure
 
         $origin = parse_url($validation->clientDataJson->origin);
 
+        if (!$origin) {
+            static::throw($validation, 'Response origin is invalid.');
+        }
+
+        if($origin['scheme'] === 'android') {
+            $fingerprint = config('webauthn.paths.android');
+            $fingerprint = str_replace(':', '', $fingerprint);
+            $binaryData = hex2bin($fingerprint);
+            $base64Url = base64_encode($binaryData);
+            $base64Url = str_replace(['+', '/', '='], ['-', '_', ''], $base64Url);
+            $path = "apk-key-hash:" . $base64Url;
+
+            if($path !== $origin['path']) {
+                static::throw($validation, 'Response path doesn\'t match.');
+            }
+
+            return $next($validation);
+        }
+
         if (!$origin || !isset($origin['host'], $origin['scheme'])) {
             static::throw($validation, 'Response origin is invalid.');
         }

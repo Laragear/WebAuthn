@@ -40,6 +40,7 @@ class MayRetrieveCredentialsIdForUser
      */
     protected function parseCredentials(EloquentCollection $credentials): Collection
     {
+        // @phpstan-ignore-next-line
         return $credentials->map(static function (WebAuthnCredential $credential): array {
             return array_filter([
                 'id' => $credential->getKey(),
