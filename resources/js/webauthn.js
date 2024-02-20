@@ -157,7 +157,7 @@ class WebAuthn {
      */
     #fetch(data, route, headers = {}) {
         const url = new URL(route, window.location.origin).href;
-        
+
         return fetch(url, {
             method: "POST",
             credentials: this.#includeCredentials ? "include" : "same-origin",
@@ -257,8 +257,10 @@ class WebAuthn {
             id: credentials.id,
             type: credentials.type,
             rawId: WebAuthn.#arrayToBase64String(credentials.rawId),
-            response: {}
-        };
+            authenticatorAttachment: credentials.authenticatorAttachment,
+            clientExtensionResults: credentials.getClientExtensionResults(),
+            response: {},
+        }
 
         [
             "clientDataJSON",

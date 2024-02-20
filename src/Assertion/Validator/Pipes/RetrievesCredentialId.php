@@ -25,7 +25,8 @@ class RetrievesCredentialId
     {
         $id = $validation->request->json('id');
 
-        // First, always check the challenge credentials before finding the real one.
+        // First, always check if the credential is on the list of accepted credentials IDs
+        // before going to the database to retrieve the complete credential in question.
         if ($this->credentialNotInChallenge($id, $validation->challenge->properties)) {
             throw AssertionException::make('Credential is not on accepted list.');
         }

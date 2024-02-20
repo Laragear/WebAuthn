@@ -11,6 +11,7 @@ use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 use Laragear\WebAuthn\Exceptions\AssertionException;
 use function class_implements;
 use function config;
+use function in_array;
 use function logger;
 use function request;
 
@@ -46,7 +47,10 @@ class WebAuthnUserProvider extends EloquentUserProvider
      */
     public function retrieveByCredentials(array $credentials)
     {
-        if (in_array(WebAuthnAuthenticatable::class, class_implements($this->model, true), true) && $this->isSignedChallenge($credentials)) {
+        // If the user is WebAuthnAuthenticatable and the credentials are a signed Assertion
+        // Challenge response, we wil find the user that has this Credential ID. Otherwise,
+        // we will pass the credentials as-is to Laravel's vanilla Eloquent User Provider.
+        if ($this->userIsWebAuthnAuthenticatable() && $this->isSignedChallenge($credentials)) {
             /** @noinspection PhpIncompatibleReturnTypeInspection */
             return $this->newModelQuery()
                 ->whereHas('webAuthnCredentials', static function (Builder $query) use ($credentials): void {
@@ -57,6 +61,16 @@ class WebAuthnUserProvider extends EloquentUserProvider
         }
 
         return parent::retrieveByCredentials($credentials);
+    }
+
+    /**
+     * Check if the user model implements the WebAuthnAuthenticatable interface.
+     *
+     * @return bool
+     */
+    protected function userIsWebAuthnAuthenticatable(): bool
+    {
+        return in_array(WebAuthnAuthenticatable::class, class_implements($this->model), true);
     }
 
     /**
@@ -81,7 +95,7 @@ class WebAuthnUserProvider extends EloquentUserProvider
     public function validateCredentials($user, array $credentials): bool
     {
         if ($user instanceof WebAuthnAuthenticatable && $this->isSignedChallenge($credentials)) {
-            return $this->validateWebAuthn();
+            return $this->validateWebAuthn($user);
         }
 
         // If the fallback is enabled, we will validate the credential password.
@@ -91,12 +105,15 @@ class WebAuthnUserProvider extends EloquentUserProvider
     /**
      * Validate the WebAuthn assertion.
      *
+     * @param  \Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable  $user
      * @return bool
      */
-    protected function validateWebAuthn(): bool
+    protected function validateWebAuthn(WebAuthnAuthenticatable $user): bool
     {
         try {
-            $this->validator->send(new AssertionValidation(request()))->thenReturn();
+            // When we hit this method, we already have the user for the credential, so we will
+            // pass it to the Assertion Validation data, thus avoiding fetching it again.
+            $this->validator->send(new AssertionValidation(request(), user: $user))->thenReturn();
         } catch (AssertionException $e) {
             // If we're debugging, like under local development, push the error to the logger.
             if (config('app.debug')) {
