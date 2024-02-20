@@ -76,5 +76,4 @@ class CheckCredentialIsForUser
             throw AssertionException::make('User ID is not owner of the stored credential.');
         }
     }
-
 }
