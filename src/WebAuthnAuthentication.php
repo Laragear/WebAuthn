@@ -5,7 +5,6 @@ namespace Laragear\WebAuthn;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Date;
-use JetBrains\PhpStorm\ArrayShape;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
 
 /**
@@ -21,7 +20,6 @@ trait WebAuthnAuthentication
      *
      * @return array{name: string, displayName: string}
      */
-    #[ArrayShape(['name' => "string", 'displayName' => "string"])]
     public function webAuthnData(): array
     {
         return [

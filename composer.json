@@ -44,8 +44,7 @@
         "illuminate/encryption": "9.*|10.*"
     },
     "require-dev": {
-        "orchestra/testbench": "^7.22|8.*",
-        "jetbrains/phpstorm-attributes": "*"
+        "orchestra/testbench": "^7.22|8.*"
     },
     "autoload": {
         "psr-4": {
