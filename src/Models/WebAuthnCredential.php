@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Laragear\WebAuthn\Events\CredentialDisabled;
 use Laragear\WebAuthn\Events\CredentialEnabled;
+use function parse_url;
+use const PHP_URL_HOST;
 
 /**
  * @mixin \Illuminate\Database\Eloquent\Builder
@@ -194,5 +196,17 @@ class WebAuthnCredential extends Model
         $this->attributes['counter'] = $counter;
 
         $this->save();
+    }
+
+    /**
+     * Returns the RP ID attribute
+     *
+     * @param  string  $rpId
+     * @return string
+     */
+    protected function getRpIdAttribute(string $rpId): string
+    {
+        // If the Relying Party is a URL, we will return the domain, otherwise, verbatim.
+        return ($domain = parse_url($rpId, PHP_URL_HOST)) ? $domain : $rpId;
     }
 }

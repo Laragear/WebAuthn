@@ -39,7 +39,7 @@ class AssertedRequestTest extends TestCase
             'authenticatable_id' => 1,
             'user_id' => 'e8af6f703f8042aa91c30cf72289aa07',
             'counter' => 0,
-            'rp_id' => 'http://localhost',
+            'rp_id' => 'localhost',
             'origin' => 'http://localhost',
             'aaguid' => Uuid::NIL,
             'attestation_format' => 'none',

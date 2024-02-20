@@ -6,6 +6,8 @@ use Laragear\WebAuthn\Assertion\Validator\AssertionValidation;
 use Laragear\WebAuthn\Attestation\AuthenticatorData;
 use Laragear\WebAuthn\Attestation\Validator\AttestationValidation;
 use Laragear\WebAuthn\SharedPipes\CheckRelyingPartyHashSame as BaseCheckRelyingPartyHashSame;
+use function parse_url;
+use const PHP_URL_HOST;
 
 /**
  * 13. Verify that the rpIdHash in authData is the SHA-256 hash of the RP ID expected by the Relying Party.
@@ -35,6 +37,7 @@ class CheckRelyingPartyHashSame extends BaseCheckRelyingPartyHashSame
      */
     protected function relyingPartyId(AssertionValidation|AttestationValidation $validation): string
     {
-        return $this->config->get('webauthn.relying_party.id') ?? $this->config->get('app.url');
+        return $this->config->get('webauthn.relying_party.id')
+            ?? parse_url($this->config->get('app.url'), PHP_URL_HOST);
     }
 }

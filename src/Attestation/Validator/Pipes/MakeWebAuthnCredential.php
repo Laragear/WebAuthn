@@ -8,6 +8,8 @@ use Laragear\WebAuthn\Attestation\Validator\AttestationValidation;
 use Laragear\WebAuthn\Exceptions\AttestationException;
 use Laragear\WebAuthn\Exceptions\DataException;
 use Ramsey\Uuid\Uuid;
+use function parse_url;
+use const PHP_URL_HOST;
 
 /**
  * @internal
@@ -41,7 +43,7 @@ class MakeWebAuthnCredential
             'alias' => $validation->request->json('response.alias'),
 
             'counter' => $validation->attestationObject->authenticatorData->counter,
-            'rp_id' => $this->config->get('webauthn.relying_party.id') ?? $this->config->get('app.url'),
+            'rp_id' => $this->config->get('webauthn.relying_party.id') ?? parse_url($this->config->get('app.url'), PHP_URL_HOST),
             'origin' => $validation->clientDataJson->origin,
             'transports' => $validation->request->json('response.transports'),
             'aaguid' => Uuid::fromBytes($validation->attestationObject->authenticatorData->attestedCredentialData->aaguid),
