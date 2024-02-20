@@ -36,7 +36,7 @@ class AttestedRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array{id: string, rawId: string, response: array{clientDataJSON: string, attestationObject: string}, type: string}
+     * @return array<string, string>
      */
     public function rules(): array
     {

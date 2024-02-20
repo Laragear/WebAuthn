@@ -11,7 +11,7 @@ class AssertedRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array{id: string, rawId: string, response: array{authenticatorData: string, clientDataJSON: string, signature: string, userHandle: string}, type: string}
+     * @return array<string, string>
      */
     public function rules(): array
     {
