@@ -3,7 +3,6 @@
 namespace Laragear\WebAuthn\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use JetBrains\PhpStorm\ArrayShape;
 use Laragear\WebAuthn\Attestation\Validator\AttestationValidation;
 use Laragear\WebAuthn\Attestation\Validator\AttestationValidator;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
@@ -37,12 +36,8 @@ class AttestedRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array{id: string, rawId: string, response: array{clientDataJSON: string, attestationObject: string}, type: string}
      */
-    #[ArrayShape([
-        'id' => "string", 'rawId' => "string", 'response' => "string", 'response.clientDataJSON' => "string",
-        'response.attestationObject' => "string", 'type' => "string"
-    ])]
     public function rules(): array
     {
         return [

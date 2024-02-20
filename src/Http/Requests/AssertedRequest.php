@@ -4,7 +4,6 @@ namespace Laragear\WebAuthn\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use JetBrains\PhpStorm\ArrayShape;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 
 class AssertedRequest extends FormRequest
@@ -12,13 +11,8 @@ class AssertedRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array{id: string, rawId: string, response: array{authenticatorData: string, clientDataJSON: string, signature: string, userHandle: string}, type: string}
      */
-    #[ArrayShape([
-        'id' => "string", 'rawId' => "string", 'response.authenticatorData' => "string",
-        'response.clientDataJSON' => "string", 'response.signature' => "string", 'response.userHandle' => "string",
-        'type' => "string"
-    ])]
     public function rules(): array
     {
         return [

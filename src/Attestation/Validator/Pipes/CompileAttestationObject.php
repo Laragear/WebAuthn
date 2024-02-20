@@ -4,7 +4,6 @@ namespace Laragear\WebAuthn\Attestation\Validator\Pipes;
 
 use Closure;
 use Illuminate\Http\Request;
-use JetBrains\PhpStorm\ArrayShape;
 use Laragear\WebAuthn\Attestation\AttestationObject;
 use Laragear\WebAuthn\Attestation\AuthenticatorData;
 use Laragear\WebAuthn\Attestation\Formats\None;
@@ -67,10 +66,9 @@ class CompileAttestationObject
      * Returns an array map from a BASE64 encoded CBOR string.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return array
+     * @return array{fmt: string, attStmt: array, authData: \Laragear\WebAuthn\ByteBuffer}
      * @throws \Laragear\WebAuthn\Exceptions\AttestationException
      */
-    #[ArrayShape(["fmt" => "string", "attStmt" => "array", "authData" => ByteBuffer::class])]
     protected function decodeCborBase64(Request $request): array
     {
         try {

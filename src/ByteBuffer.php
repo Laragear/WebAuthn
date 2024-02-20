@@ -4,7 +4,6 @@ namespace Laragear\WebAuthn;
 
 use Illuminate\Contracts\Support\Jsonable;
 use InvalidArgumentException;
-use JetBrains\PhpStorm\ArrayShape;
 use JsonSerializable;
 use OutOfBoundsException;
 use Stringable;
@@ -373,9 +372,8 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
     /**
      * Returns an array of data for serialization.
      *
-     * @return array
+     * @return array{binaryData: string}
      */
-    #[ArrayShape(['binaryData' => "string"])]
     public function __serialize(): array
     {
         return ['binaryData' => static::encodeBase64Url($this->binaryData)];

@@ -2,8 +2,6 @@
 
 namespace Tests;
 
-use JetBrains\PhpStorm\ArrayShape;
-
 class FakeAuthenticator
 {
     public const CREDENTIAL_ID = 'owBYu_waGLhAOCg4EFzi6Lr55x51G2dR5yhJi8q2C3tgZQQL2aEi-nK3I54J6ILj70pJzR_6QxvA5XER17d7NA9EFe2QH3VoJYQGpO8G5yDoFQvsdkxNhioyMyhyQHNrAgTMGyfigIMCfhjk9te7LNYl9K5GbWRc4TGeQl1vROjBtTNm3GdpEOqp9RijWd-ShQZ95eHoc8SA_-8vzCyfmy-wI_K4ZqlQNNl85Fzg2GIBcC2zvcJhLYy1A2kw6JoBTAmz1ZCCgkTKWhzUvAJQpMpu40M67FqE0WkGZfSJ9A';
@@ -23,7 +21,6 @@ class FakeAuthenticator
      *
      * @return array
      */
-    #[ArrayShape(['id' => "string", 'type' => "string", 'rawId' => "string", 'response' => "string[]"])]
     public static function attestationResponse(): array
     {
         return [
@@ -42,7 +39,6 @@ class FakeAuthenticator
      *
      * @return array
      */
-    #[ArrayShape(['id' => "string", 'type' => "string", 'rawId' => "string", 'response' => "string[]"])]
     public static function assertionResponse(): array
     {
         return [
