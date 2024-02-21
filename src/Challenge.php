@@ -3,12 +3,9 @@
 namespace Laragear\WebAuthn;
 
 use Illuminate\Support\Facades\Date;
-use Illuminate\Support\InteractsWithTime;
 
 class Challenge
 {
-    use InteractsWithTime;
-
     /**
      * Create a new Challenge instance.
      *
