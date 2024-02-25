@@ -22,6 +22,10 @@
  * SOFTWARE.
  */
 
+/**
+ * @deprecated Use Webpass instead
+ * @see https://github.com/Laragear/webpass
+ */
 class WebAuthn {
     /**
      * Routes for WebAuthn assertion (login) and attestation (register).
