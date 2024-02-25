@@ -31,7 +31,7 @@ Your support allows me to keep this package free, up-to-date and maintainable. A
 
 ## Requirements
 
-* PHP 8.0 or later, with `ext-openssl`.
+* PHP 8.1 or later, with `ext-openssl`.
 * Laravel 9.x or later.
 
 ## Installation
@@ -46,7 +46,7 @@ composer require laragear/webauthn
 
 Passkeys, hence WebAuthn, consists in two _ceremonies_: attestation, and assertion.
 
-Attestation is the process of asking the authenticator (a phone, laptop, USB key...) to create a private-public key pair, save the private key internally, and **store** the public key inside the server. For that to work, the browser must support WebAuthn, which is what intermediates between the authenticator (OS & device hardware) and the server.
+Attestation is the process of asking the authenticator (a phone, laptop, USB key...) to create a private-public key pair, save the private key internally, and **store** the public key inside your app. For that to work, the browser must support WebAuthn, which is what intermediates between the authenticator (OS & device hardware) and the server.
 
 Assertion is the process of pushing a cryptographic challenge to the authenticator, which will return back to the server _signed_ by the private key of the device. Upon arrival, the server checks the signature is correct with the stored public key, ready to **log in**.
 
@@ -60,7 +60,7 @@ We need to make sure your users can register their devices and authenticate with
 2. [Create the `webauthn_credentials` table](#2-create-the-webauthn_credentials-table)
 3. [Implement the contract and trait](#3-implement-the-contract-and-trait)
 
-After that, you can quickly start WebAuthn with the included controllers and helpers to make your life easier.
+After that, you can quickly start WebAuthn with the included controllers and install the JavaScript helper to make your life easier.
 
 4. [Register the controllers](#4-register-the-routes-and-controllers)
 5. [Use the Javascript helper](#5-use-the-javascript-helper)
@@ -150,125 +150,43 @@ WebAuthn::routes();
 
 ### 5. Use the Javascript helper
 
-This package includes a simple but convenient script to handle WebAuthn Attestation and Assertion. To use it, just publish the `webauthn.js` asset into your application public resources.
+If you're using simple HTML packages, you may use the `laragear-webpass` Javascript file directly setting it in your HTML document header.
+
+```html
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/laragear-webpass@1/dist/webpass.js" defer></script>
+</head>
+
+<body>
+    <script>
+        const { success } = await Webpass.attest('/auth/register/options', '/auth/register')
+    </script>
+</body>
+```
+
+Alternatively, you may want to include it in your project packages:
 
 ```shell
-php artisan vendor:publish --provider="Laragear\WebAuthn\WebAuthnServiceProvider" --tag="js"
+npm i laragear-webpass
 ```
 
-You will receive the `resources/js/vendor/webauthn/webauthn.js` file which you can include into your authentication views and use it programmatically
-
-```html
-<!doctype html>
-<head>
-    {{-- ... --}}
-
-    <script src="{{ Vite::asset('resources/js/vendor/webauthn/webauthn.js') }}"></script>
-
-    @vite(['resources/js/app.js'])
-</head>
-```
-
-> **Note**
->
-> You can also edit the script file to transform it into a module so it can be bundled in your Vite frontend, exporting the class as `export default class WebAuthn { ... }`, and add it to the `@vite` assets.
->
-> ```html
-> @vite(['resources/js/vendor/webauthn/webauthn.js', 'resources/js/app.js'])
-> ```
-
-Once done, you can easily start registering an user device, and login in users that registered a device previusly.
-
-For example, let's imagine an user logs in normally, and enters its profile view. You may show a WebAuthn registration HTML with the following code:
-
-```html
-<form id="register-form">
-    <button type="submit" value="Register authenticator">
-</form>
-
-<!-- Registering authenticator -->
-<script>
-    const register = event => {
-        event.preventDefault()
-        
-        new WebAuthn().register()
-          .then(response => alert('Registration successful!'))
-          .catch(error => alert('Something went wrong, try again!'))
-    }
-
-    document.getElementById('register-form').addEventListener('submit', register)
-</script>
-```
-
-In our Login view, we can use the WebAuthn credentials to log in the user.
-
-```html
-<form id="login-form">
-    <input id="email" type="email" value="my@email.com">
-    
-    <button type="submit" value="Log in with your device">
-</form>
-
-<!-- Login users -->
-<script>
-    const login = event => {
-        event.preventDefault()
-        
-        new WebAuthn().login({
-            email: document.getElementById('email').value,
-        }, {
-            remember: document.getElementById('remember').checked ? 'on' : null,
-        }).then(response => alert('Authentication successful!'))
-          .catch(error => alert('Something went wrong, try again!'))
-    }
-
-    document.getElementById('login-form').addEventListener('submit', login)
-</script>
-```
-
-You can copy-paste this helper into your authentication routes, or import it into a bundler like [Laravel Vite](https://laravel.com/docs/9.x/vite), [Webpack](https://webpack.js.org/), [parcel](https://parceljs.org/), or many more, as long you adjust the script to the bundler needs. If the script doesn't suit your needs, you're free to modify it or create your own.
-
-### Requests and Responses parameters
-
-Both `register()` and `login()` accept different parameters for the initial request to the server, and the subsequent response to the server. For example, you can use this to _remember_ the user being authenticated.
+Once done, you may attest and assert the authenticator using the `Webpass` object:
 
 ```javascript
-new WebAuthn().login({
-    // Initial request to the server
-    email: document.getElementById('email').value,
-}, {
-    // Response from the authenticator to the server
-    remember: document.getElementById('remember').checked ? 'on' : null, 
-})
+import Webpass from "laragear-webpass"
+
+if (Webpass.isUnsupported()) {
+    return alert("Your browser doesn't support WebAuthn.")
+}
+
+// Create new credentials for a logged in user
+const { credential, success, error } = await Webpass.attest("/auth/register/options", "/auth/register")
+
+// Check the credentials for a guest user
+const { user, success, error } = await Webpass.assert("/auth/login/options", "/auth/login")
 ```
 
-### Custom routes
-
-By default, the helper assumes you're using the [default WebAuthn routes](#4-register-the-routes-and-controllers). If you're using different routes for WebAuthn, you can set them at runtime.
-
-```javascript
-const webAuthn = new WebAuthn({
-    registerOptions: 'webauthn/register/options',
-    register: 'webauthn/register',
-    
-    loginOptions: 'webauthn/login/options',
-    login: 'webauthn/login',
-});
-```
-
-> Here is good place to use [ziggy](https://github.com/tighten/ziggy) if it's in your project.
-
-### Headers
-
-You may add headers to all WebAuthn authentication requests using the second parameter of the `WebAuthn` constructor. These headers will be present on all requests made by the instance. 
-
-```javascript
-const webAuthn = new WebAuthn({}, {
-    'X-Colors': 'red',
-});
-```
-
-> You may use a different `WebAuthn` instances with different headers for both Attestation and Assertion.
+The Webpass helper offers more flexibility than just adjusting the WebAuthn path. For more information, check [the documentation of `laragear-webpass`](https://github.com/Laragear/webpass).
 
 ## Attestation
 
@@ -410,8 +328,6 @@ public function createChallenge(AssertedRequest $request)
 ```
 
 If you need greater control on the Assertion procedure, you may want to [Assert manually](#manually-attesting-and-asserting).
-
-> If you have [debugging enabled](https://laravel.com/docs/9.x/configuration#debug-mode) the assertion error during authentication will be logged in your application logs, which by default is `storage/logs/laravel.log`.
 
 ### Assertion User Verification
 
@@ -693,29 +609,29 @@ Extremely secure since it works only on HTTPS (or `localhost`). Also, no passwor
 
 * **Does this include JavaScript to handle WebAuthn in the frontend?**
 
-[Yes](#5-use-the-javascript-helper), but it's very _basic_.
+It's encouraged to [use Webpass package](#5-use-the-javascript-helper).
 
-If you need more complex WebAuthn management, consider using the [`navigator.credentials`](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/credentials) API directly.
+Alternatively, for complex WebAuthn management, consider using the [`navigator.credentials`](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/credentials) API directly.
 
 * **Does WebAuthn eliminate bots? Can I forget about _captchas_?**
 
-Yes and no. To register users, you still need to use [captcha](https://github.com/Laragear/ReCaptcha), honeypots, or other mechanisms to stop bots.
+Yes and no. To register users, you still need to use [captcha](https://github.com/Laragear/ReCaptcha), honeypots, or other mechanisms to stop bots from filling forms.
 
-Once a user is registered, bots won't be able to login because the real user is the only one that has the private key required for WebAuthn.
+Once a user is registered, bots won't be able to log in because the real user is the only one that has the private key required for WebAuthn.
 
 * **Does this encode/decode the WebAuthn data automatically in the frontend?**
 
-Yes, the included [WebAuthn Helper](#5-use-the-javascript-helper) does it automatically for you.
+Yes, the [Webpass helper](#5-use-the-javascript-helper) does it automatically for you.
 
 * **Does this encrypt the public keys?**
 
-Yes, public keys are encrypted when saved into the database.
+Yes, public keys are encrypted when saved into the database with your app key.
 
 * **Does this include WebAuthn credential recovery routes?**
 
 No. You're free to create your own flow for recovery.
 
-My recommendation is to send an email to the user, pointing to a route that registers a new device, and immediately redirect him to blacklist which credential was lost (or blacklist the only one he has).
+My recommendation is to email the user, pointing to a route that registers a new device, and immediately redirect him to blacklist which credential was lost (or blacklist the only one he has).
 
 * **Can I use my smartphone as authenticator through my PC or Mac?**
 
@@ -723,9 +639,9 @@ It depends.
 
 This is entirely up to hardware, OS and browser vendor themselves, but mostly the OS. Some OS or browsers may offer a way to sync private keys on the cloud, even letting the assertion challenge to be signed remotely instead of transmitting the private key. Please check your target platforms of choice.
 
-* **Why my device doesn't show Windows Hello/Passkey/TouchId/FaceId/pattern/fingerprint authentication?**
+* **Why my device doesn't show Windows Hello/Passkey/TouchID/FaceID/OpticID/pattern/fingerprint authentication?**
 
-By default, this WebAuthn implementation accepts _almost_ everything. Some combinations of devices, OS and Web browsers may differ on what to make available for WebAuthn authentication. 
+By default, this WebAuthn works on _almost_ everything. Some combinations of devices, OS and Web browsers may differ on what to make available for WebAuthn authentication. 
 
 You may [check this site for authenticator support](https://webauthn.me/browser-support).
 
@@ -753,7 +669,13 @@ No. The user can use whatever to authenticate in your app. This may be enabled o
 
 Remember that your WebAuthn routes **must use Sessions**, because the Challenges are stored there.
 
-More information can be retrieved in your [application logs](https://laravel.com/docs/9.x/logging).
+Session are automatically started on the `web` route group, or using the `StartSession` middleware directly. You can check this on your [HTTP Kernel Middleware](https://laravel.com/docs/9.x/middleware#middleware-groups).
+
+* **My ceremonies always fail. How I can debug this package?**
+
+If you have [debugging enabled](https://laravel.com/docs/9.x/configuration#debug-mode), like on development environments, the assertion data is logged in your [application logs](https://laravel.com/docs/9.x/logging).
+
+The rest of errors are thrown as-is. You may want to log them manually using [Laravel's Error Handler](https://laravel.com/docs/10.x/errors) depending on the case. 
 
 ## Laravel Octane Compatibility
 
