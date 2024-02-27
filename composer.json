@@ -32,7 +32,7 @@
         "issues": "https://github.com/Laragear/WebAuthn/issues"
     },
     "require": {
-        "php": "^8.1",
+        "php": "8.*",
         "ext-openssl": "*",
         "ext-json": "*",
         "illuminate/auth": "9.*|10.*",
