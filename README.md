@@ -150,11 +150,11 @@ WebAuthn::routes();
 
 ### 5. Use the Javascript helper
 
-If you're using simple HTML packages, you may use the `laragear-webpass` Javascript file directly setting it in your HTML document header.
+If you're using simple HTML packages, you may use the `@laragear/webpass` Javascript file directly setting it in your HTML document header.
 
 ```html
 <head>
-    <script src="https://cdn.jsdelivr.net/npm/laragear-webpass@1/dist/webpass.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@laragear/webpass@1/dist/webpass.js" defer></script>
 </head>
 
 <body>
@@ -167,13 +167,13 @@ If you're using simple HTML packages, you may use the `laragear-webpass` Javascr
 Alternatively, you may want to include it in your project packages:
 
 ```shell
-npm i laragear-webpass
+npm i @laragear/webpass
 ```
 
 Once done, you may attest and assert the authenticator using the `Webpass` object:
 
 ```javascript
-import Webpass from "laragear-webpass"
+import Webpass from "@laragear/webpass"
 
 if (Webpass.isUnsupported()) {
     return alert("Your browser doesn't support WebAuthn.")
@@ -186,7 +186,7 @@ const { credential, success, error } = await Webpass.attest("/auth/register/opti
 const { user, success, error } = await Webpass.assert("/auth/login/options", "/auth/login")
 ```
 
-The Webpass helper offers more flexibility than just adjusting the WebAuthn path. For more information, check [the documentation of `laragear-webpass`](https://github.com/Laragear/webpass).
+The Webpass helper offers more flexibility than just adjusting the WebAuthn path. For more information, check [the documentation of `@laragear/webpass`](https://github.com/Laragear/webpass).
 
 ## Attestation
 
