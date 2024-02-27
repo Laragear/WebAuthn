@@ -9,9 +9,6 @@ class AssertionException extends ValidationException implements WebAuthnExceptio
 {
     /**
      * Create a new Assertion Exception with the error message.
-     *
-     * @param  string  $message
-     * @return static
      */
     public static function make(string $message): static
     {

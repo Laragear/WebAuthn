@@ -77,8 +77,6 @@ class CborDecoder
     /**
      * Decodes the binary data.
      *
-     * @param  \Laragear\WebAuthn\ByteBuffer|string  $encoded
-     * @return \Laragear\WebAuthn\ByteBuffer|array|bool|float|int|string|null
      * @throws \Laragear\WebAuthn\Exceptions\DataException
      */
     public static function decode(ByteBuffer|string $encoded): ByteBuffer|array|bool|float|int|string|null
@@ -101,10 +99,6 @@ class CborDecoder
     /**
      * Decodes a portion of the Byte Buffer.
      *
-     * @param  ByteBuffer|string  $bufOrBin
-     * @param  int  $startOffset
-     * @param  int|null  $endOffset
-     * @return \Laragear\WebAuthn\ByteBuffer|array|bool|float|int|string|null
      * @throws \Laragear\WebAuthn\Exceptions\DataException
      */
     public static function decodePortion(ByteBuffer|string $bufOrBin, int $startOffset, ?int &$endOffset = null): ByteBuffer|array|bool|float|int|string|null
@@ -121,9 +115,6 @@ class CborDecoder
     /**
      * Parses a single item of the Byte Buffer.
      *
-     * @param  ByteBuffer  $buf
-     * @param  int  $offset
-     * @return \Laragear\WebAuthn\ByteBuffer|array|bool|float|int|string|null
      * @throws \Laragear\WebAuthn\Exceptions\DataException
      */
     protected static function parseItem(ByteBuffer $buf, int &$offset): ByteBuffer|array|bool|float|int|string|null
@@ -148,10 +139,6 @@ class CborDecoder
     /**
      * Parses a simple float value.
      *
-     * @param  int  $val
-     * @param  \Laragear\WebAuthn\ByteBuffer  $buf
-     * @param  int  $offset
-     * @return bool|float|null
      * @throws \Laragear\WebAuthn\Exceptions\DataException
      */
     protected static function parseFloatSimple(int $val, ByteBuffer $buf, int &$offset): bool|float|null
@@ -187,8 +174,6 @@ class CborDecoder
     /**
      * Parses a simple value from CBOR.
      *
-     * @param  int  $val
-     * @return bool|null
      * @throws \Laragear\WebAuthn\Exceptions\DataException
      */
     protected static function parseSimpleValue(int $val): ?bool
@@ -204,10 +189,6 @@ class CborDecoder
     /**
      * Parses the CBOR extra length.
      *
-     * @param  int  $val
-     * @param  \Laragear\WebAuthn\ByteBuffer  $buf
-     * @param  int  $offset
-     * @return int
      * @throws \Laragear\WebAuthn\Exceptions\DataException
      */
     protected static function parseExtraLength(int $val, ByteBuffer $buf, int &$offset): int
@@ -243,11 +224,6 @@ class CborDecoder
     /**
      * Parses the data inside a Byte Buffer.
      *
-     * @param  int  $type
-     * @param  int  $val
-     * @param  \Laragear\WebAuthn\ByteBuffer  $buf
-     * @param $offset
-     * @return \Laragear\WebAuthn\ByteBuffer|array|bool|float|int|string|null
      * @throws \Laragear\WebAuthn\Exceptions\DataException|\InvalidArgumentException
      */
     protected static function parseItemData(
@@ -289,10 +265,6 @@ class CborDecoder
     /**
      * Parses an array with string keys.
      *
-     * @param  \Laragear\WebAuthn\ByteBuffer  $buffer
-     * @param  int  $offset
-     * @param  int  $count
-     * @return array<string, mixed>
      * @throws \Laragear\WebAuthn\Exceptions\DataException
      */
     protected static function parseMap(ByteBuffer $buffer, int &$offset, int $count): array
@@ -316,10 +288,6 @@ class CborDecoder
     /**
      * Parses an array from the byte buffer.
      *
-     * @param  \Laragear\WebAuthn\ByteBuffer  $buf
-     * @param  int  $offset
-     * @param  int  $count
-     * @return array
      * @throws \Laragear\WebAuthn\Exceptions\DataException
      */
     protected static function parseArray(ByteBuffer $buf, int &$offset, int $count): array

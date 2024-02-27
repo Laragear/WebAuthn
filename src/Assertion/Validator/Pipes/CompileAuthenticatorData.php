@@ -17,9 +17,6 @@ class CompileAuthenticatorData
     /**
      * Handle the incoming Assertion Validation.
      *
-     * @param  \Laragear\WebAuthn\Assertion\Validator\AssertionValidation  $validation
-     * @param  \Closure  $next
-     * @return mixed
      * @throws \Laragear\WebAuthn\Exceptions\AssertionException
      */
     public function handle(AssertionValidation $validation, Closure $next): mixed

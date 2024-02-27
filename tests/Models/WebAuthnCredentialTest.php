@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Event;
 use Laragear\WebAuthn\Events\CredentialDisabled;
 use Laragear\WebAuthn\Events\CredentialEnabled;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
+use Orchestra\Testbench\Attributes\WithMigration;
 use Ramsey\Uuid\Uuid;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
@@ -15,6 +16,7 @@ use function array_merge;
 use function json_encode;
 use function now;
 
+#[WithMigration]
 class WebAuthnCredentialTest extends TestCase
 {
     protected function afterRefreshingDatabase(): void

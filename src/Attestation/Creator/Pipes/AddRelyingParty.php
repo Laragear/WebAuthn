@@ -13,8 +13,6 @@ class AddRelyingParty
 {
     /**
      * Create a new pipe instance.
-     *
-     * @param  \Illuminate\Config\Repository  $config
      */
     public function __construct(protected Repository $config)
     {
@@ -23,10 +21,6 @@ class AddRelyingParty
 
     /**
      * Handle the Attestation creation
-     *
-     * @param  \Laragear\WebAuthn\Attestation\Creator\AttestationCreation  $attestable
-     * @param  \Closure  $next
-     * @return mixed
      */
     public function handle(AttestationCreation $attestable, Closure $next): mixed
     {

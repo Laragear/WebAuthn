@@ -3,7 +3,6 @@
 namespace Laragear\WebAuthn\Attestation\Creator\Pipes;
 
 use Closure;
-use Illuminate\Support\Str;
 use Laragear\WebAuthn\Attestation\Creator\AttestationCreation;
 
 /**
@@ -13,21 +12,16 @@ class AddUserDescriptor
 {
     /**
      * Handle the Attestation creation
-     *
-     * @param  \Laragear\WebAuthn\Attestation\Creator\AttestationCreation  $attestable
-     * @param  \Closure  $next
-     * @return mixed
      */
     public function handle(AttestationCreation $attestable, Closure $next): mixed
     {
-        $config = $attestable->user->webAuthnData();
+        // Try to find the User Handle (user_id) to reuse it on the new credential.
+        $existingId = $attestable->user->webAuthnCredentials()->getQuery()->value('user_id');
 
-        // Create a new User UUID if it doesn't existe already in the credentials.
-        // @phpstan-ignore-next-line
-        $config['id'] = $attestable->user->webAuthnCredentials()->value('user_id')
-            ?: Str::uuid()->getHex()->toString();
-
-        $attestable->json->set('user', $config);
+        $attestable->json->set('user', [
+            'id' => $existingId ?: $attestable->user->webAuthnId()->getHex()->toString(),
+            ...$attestable->user->webAuthnData(),
+        ]);
 
         return $next($attestable);
     }

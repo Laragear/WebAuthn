@@ -9,15 +9,11 @@ class MayRequireUserVerification
 {
     /**
      * Handle the incoming Assertion.
-     *
-     * @param  \Laragear\WebAuthn\Assertion\Creator\AssertionCreation  $assertion
-     * @param  \Closure  $next
-     * @return mixed
      */
     public function handle(AssertionCreation $assertion, Closure $next): mixed
     {
         if ($assertion->userVerification) {
-            $assertion->json->set('userVerification', $assertion->userVerification);
+            $assertion->json->set('userVerification', $assertion->userVerification->value);
         }
 
         return $next($assertion);

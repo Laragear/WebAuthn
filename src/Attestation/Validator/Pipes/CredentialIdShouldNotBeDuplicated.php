@@ -15,9 +15,6 @@ class CredentialIdShouldNotBeDuplicated
     /**
      * Handle the incoming Attestation Validation.
      *
-     * @param  \Laragear\WebAuthn\Attestation\Validator\AttestationValidation  $validation
-     * @param  \Closure  $next
-     * @return mixed
      * @throws \Laragear\WebAuthn\Exceptions\AttestationException
      */
     public function handle(AttestationValidation $validation, Closure $next): mixed
@@ -31,9 +28,6 @@ class CredentialIdShouldNotBeDuplicated
 
     /**
      * Finds a WebAuthn Credential by the issued ID.
-     *
-     * @param  \Laragear\WebAuthn\Attestation\Validator\AttestationValidation  $validation
-     * @return bool
      */
     protected function credentialAlreadyExists(AttestationValidation $validation): bool
     {

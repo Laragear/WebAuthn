@@ -14,10 +14,6 @@ class MayPreventDuplicateCredentials
 {
     /**
      * Handle the Attestation creation
-     *
-     * @param  \Laragear\WebAuthn\Attestation\Creator\AttestationCreation  $attestable
-     * @param  \Closure  $next
-     * @return mixed
      */
     public function handle(AttestationCreation $attestable, Closure $next): mixed
     {
@@ -30,9 +26,6 @@ class MayPreventDuplicateCredentials
 
     /**
      * Returns a collection of credentials ready to be inserted into the Attestable JSON.
-     *
-     * @param  \Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable  $user
-     * @return array
      */
     protected function credentials(WebAuthnAuthenticatable $user): array
     {

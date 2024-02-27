@@ -18,7 +18,9 @@ use Laragear\WebAuthn\Events\CredentialDisabled;
 use Laragear\WebAuthn\Exceptions\AssertionException;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
 use Mockery;
+use Orchestra\Testbench\Attributes\WithMigration;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
@@ -30,6 +32,7 @@ use function json_encode;
 use function now;
 use function session;
 
+#[WithMigration]
 class ValidationTest extends TestCase
 {
     protected Request $request;
@@ -41,6 +44,9 @@ class ValidationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        // Force booting the model if not booted previously.
+        WebAuthnCredential::make();
 
         $this->request = Request::create(
             'https://test.app/webauthn/create', 'POST', content: json_encode(FakeAuthenticator::assertionResponse())
@@ -102,6 +108,44 @@ class ValidationTest extends TestCase
         unset($response['response']['userHandle']);
 
         $this->request->setJson(new ParameterBag($response));
+
+        static::assertInstanceOf(AssertionValidation::class, $this->validator->send($this->validation)->thenReturn());
+    }
+
+    public function test_assertion_supports_ed25519_public_key(): void
+    {
+        $assertionResponse = FakeAuthenticator::assertionResponse();
+
+        $assertionResponse['response']['signature'] = 'YCUMdR3mSYZl+f1/pb24wr8VYOC01A8rJ++38QFXuGl92GfwnLwdaldCuuWdIUsqOeTz5o8ucJsQqaxwFFsZAQ==';
+
+        $publicKey = 'txSZLg1bc1ndhdq5tjlsbplNwm4wsKd4/IwCuEuSfPw=';
+
+        DB::table('webauthn_credentials')->where('id', FakeAuthenticator::CREDENTIAL_ID)->update([
+            'public_key' => Crypt::encryptString("-----BEGIN PUBLIC KEY-----\n$publicKey\n-----END PUBLIC KEY-----\n")
+        ]);
+
+        $this->validation->request->setJson(new InputBag($assertionResponse));
+
+        $this->validation->user = WebAuthnAuthenticatableUser::query()->first();
+
+        static::assertInstanceOf(AssertionValidation::class, $this->validator->send($this->validation)->thenReturn());
+    }
+
+    public function test_assertion_supports_ed25519_public_key_with_16_byte_eddsa_header(): void
+    {
+        $assertionResponse = FakeAuthenticator::assertionResponse();
+
+        $assertionResponse['response']['signature'] = 'YCUMdR3mSYZl+f1/pb24wr8VYOC01A8rJ++38QFXuGl92GfwnLwdaldCuuWdIUsqOeTz5o8ucJsQqaxwFFsZAQ==';
+
+        $publicKey = 'MCowBQYDK2VwAyEAtxSZLg1bc1ndhdq5tjlsbplNwm4wsKd4/IwCuEuSfPw=';
+
+        DB::table('webauthn_credentials')->where('id', FakeAuthenticator::CREDENTIAL_ID)->update([
+            'public_key' => Crypt::encryptString("-----BEGIN PUBLIC KEY-----\n$publicKey\n-----END PUBLIC KEY-----\n")
+        ]);
+
+        $this->validation->request->setJson(new InputBag($assertionResponse));
+
+        $this->validation->user = WebAuthnAuthenticatableUser::query()->first();
 
         static::assertInstanceOf(AssertionValidation::class, $this->validator->send($this->validation)->thenReturn());
     }
@@ -532,7 +576,7 @@ class ValidationTest extends TestCase
         ]);
 
         $this->expectException(AssertionException::class);
-        $this->expectExceptionMessage('Assertion Error: Stored Public Key is invalid.');
+        $this->expectExceptionMessageMatches("/^Assertion Error: Public key is invalid.*/m");
 
         $this->validate();
     }
@@ -566,7 +610,8 @@ hQIDAQAB
         ]);
 
         $this->expectException(AssertionException::class);
-        $this->expectExceptionMessage('Assertion Error: Signature is invalid.');
+
+        $this->expectExceptionMessageMatches("/^Assertion Error: Signature is invalid.*/m");
 
         $this->validate();
     }

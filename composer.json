@@ -3,7 +3,7 @@
     "description": "Authenticate users with Passkeys: fingerprints, patterns and biometric data.",
     "type": "library",
     "license": "MIT",
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true,
     "keywords": [
         "laravel",
@@ -32,19 +32,24 @@
         "issues": "https://github.com/Laragear/WebAuthn/issues"
     },
     "require": {
-        "php": "8.*",
-        "ext-openssl": "*",
+        "php": "^8.1",
         "ext-json": "*",
-        "illuminate/auth": "9.*|10.*",
-        "illuminate/http": "9.*|10.*",
-        "illuminate/session": "9.*|10.*",
-        "illuminate/support": "9.*|10.*",
-        "illuminate/config": "9.*|10.*",
-        "illuminate/database": "9.*|10.*",
-        "illuminate/encryption": "9.*|10.*"
+        "ext-openssl": "*",
+        "illuminate/auth": "10.*|11.*",
+        "illuminate/config": "10.*|11.*",
+        "illuminate/database": "10.*|11.*",
+        "illuminate/encryption": "10.*|11.*",
+        "illuminate/http": "10.*|11.*",
+        "illuminate/session": "10.*|11.*",
+        "illuminate/support": "10.*|11.*",
+        "laragear/meta-model": "1.*"
     },
     "require-dev": {
-        "orchestra/testbench": "^7.22|8.*"
+        "ext-sodium": "*",
+        "orchestra/testbench": "8.*|9.*"
+    },
+    "suggest": {
+        "paragonie/sodium_compat": "To enable EdDSA 25519 keys from authenticators, if `ext-sodium` is unavailable."
     },
     "autoload": {
         "psr-4": {

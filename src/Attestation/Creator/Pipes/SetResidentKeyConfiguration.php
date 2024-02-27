@@ -4,7 +4,8 @@ namespace Laragear\WebAuthn\Attestation\Creator\Pipes;
 
 use Closure;
 use Laragear\WebAuthn\Attestation\Creator\AttestationCreation;
-use Laragear\WebAuthn\WebAuthn;
+use Laragear\WebAuthn\Enums\ResidentKey;
+use Laragear\WebAuthn\Enums\UserVerification;
 
 /**
  * @internal
@@ -13,22 +14,18 @@ class SetResidentKeyConfiguration
 {
     /**
      * Handle the Attestation creation
-     *
-     * @param  \Laragear\WebAuthn\Attestation\Creator\AttestationCreation  $attestable
-     * @param  \Closure  $next
-     * @return mixed
      */
     public function handle(AttestationCreation $attestable, Closure $next): mixed
     {
         if ($attestable->residentKey) {
-            $attestable->json->set('authenticatorSelection.residentKey', $attestable->residentKey);
+            $attestable->json->set('authenticatorSelection.residentKey', $attestable->residentKey->value);
 
-            $verifiesUser = $attestable->residentKey === WebAuthn::RESIDENT_KEY_REQUIRED;
+            $verifiesUser = $attestable->residentKey === ResidentKey::REQUIRED;
 
             $attestable->json->set('authenticatorSelection.requireResidentKey', $verifiesUser);
 
             if ($verifiesUser) {
-                $attestable->userVerification = WebAuthn::USER_VERIFICATION_REQUIRED;
+                $attestable->userVerification = UserVerification::REQUIRED;
             }
         }
 

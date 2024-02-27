@@ -5,7 +5,9 @@ namespace Laragear\WebAuthn;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Str;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laragear\WebAuthn\Models\WebAuthnCredential> $webAuthnCredentials
@@ -29,10 +31,17 @@ trait WebAuthnAuthentication
     }
 
     /**
-     * Removes all credentials previously registered.
+     * An anonymized user identity string, as a UUID.
      *
-     * @param  string  ...$except
-     * @return void
+     * @see https://www.w3.org/TR/webauthn-2/#dom-publickeycredentialuserentity-id
+     */
+    public function webAuthnId(): UuidInterface
+    {
+        return Str::uuid();
+    }
+
+    /**
+     * Removes all credentials previously registered.
      */
     public function flushCredentials(string ...$except): void
     {
@@ -51,9 +60,6 @@ trait WebAuthnAuthentication
 
     /**
      * Disables all credentials for the user.
-     *
-     * @param  string  ...$except
-     * @return void
      */
     public function disableAllCredentials(string ...$except): void
     {
@@ -72,9 +78,6 @@ trait WebAuthnAuthentication
 
     /**
      * Makes an instance of a WebAuthn Credential attached to this user.
-     *
-     * @param  array  $properties
-     * @return \Laragear\WebAuthn\Models\WebAuthnCredential
      */
     public function makeWebAuthnCredential(array $properties): Models\WebAuthnCredential
     {
@@ -84,7 +87,8 @@ trait WebAuthnAuthentication
     /**
      * Returns a queryable relationship for its WebAuthn Credentials.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany&\Laragear\WebAuthn\Models\WebAuthnCredential
+     * @phpstan-ignore-next-line
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany|\Laragear\WebAuthn\Models\WebAuthnCredential
      */
     public function webAuthnCredentials(): MorphMany
     {

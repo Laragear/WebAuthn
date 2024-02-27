@@ -13,8 +13,6 @@ class CreateAssertionChallenge
 
     /**
      * Create a new pipe instance.
-     *
-     * @param  \Illuminate\Contracts\Config\Repository  $config
      */
     public function __construct(protected Repository $config)
     {
@@ -24,9 +22,7 @@ class CreateAssertionChallenge
     /**
      * Handle the incoming Assertion.
      *
-     * @param  \Laragear\WebAuthn\Assertion\Creator\AssertionCreation  $assertion
-     * @param  \Closure  $next
-     * @return mixed
+     * @throws \Random\RandomException
      */
     public function handle(AssertionCreation $assertion, Closure $next): mixed
     {

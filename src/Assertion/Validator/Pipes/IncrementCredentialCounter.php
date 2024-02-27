@@ -25,10 +25,6 @@ class IncrementCredentialCounter
 {
     /**
      * Handle the incoming Assertion Validation.
-     *
-     * @param  \Laragear\WebAuthn\Assertion\Validator\AssertionValidation  $validation
-     * @param  \Closure  $next
-     * @return mixed
      */
     public function handle(AssertionValidation $validation, Closure $next): mixed
     {

@@ -51,33 +51,34 @@ use function unpack;
 class AuthenticatorData
 {
     // COSE encoded keys
-    protected static int $COSE_KTY = 1;
-    protected static int $COSE_ALG = 3;
+    protected const COSE_KTY = 1;
+    protected const COSE_ALG = 3;
 
     // COSE EC2 ES256 P-256 curve
-    protected static int $COSE_CRV = -1;
-    protected static int $COSE_X = -2;
-    protected static int $COSE_Y = -3;
+    protected const COSE_CRV = -1;
+    protected const COSE_X = -2;
+    protected const COSE_Y = -3;
 
     // COSE RSA PS256
-    protected static int $COSE_N = -1;
-    protected static int $COSE_E = -2;
+    protected const COSE_N = -1;
+    protected const COSE_E = -2;
 
-    protected static int $EC2_TYPE = 2;
-    protected static int $EC2_ES256 = -7;
-    protected static int $EC2_P256 = 1;
+    // EC2
+    protected const EC2_TYPE = 2;
+    protected const EC2_P256 = 1;
+    public const EC2_ES256 = -7;
 
-    protected static int $RSA_TYPE = 3;
-    protected static int $RSA_RS256 = -257;
+    // RSA
+    protected const RSA_TYPE = 3;
+    public const RSA_RS256 = -257;
+
+    // OKP
+    protected const OKP_TYPE = 1;
+    protected const OKP_ED25519 = 6;
+    public const OKP_EDDSA = -8;
 
     /**
      * Creates a new Authenticator Data instance from a binary string.
-     *
-     * @param  string  $relyingPartyIdHash
-     * @param  object  $flags
-     * @param  int  $counter
-     * @param  object  $attestedCredentialData
-     * @param  array  $extensionData
      */
     final public function __construct(
         public string $relyingPartyIdHash,
@@ -93,10 +94,6 @@ class AuthenticatorData
 
     /**
      * Checks if the Relying Party ID hash is the same as the one issued.
-     *
-     * @param  string  $relyingPartyId
-     * @param  bool  $hash
-     * @return bool
      */
     public function hasSameRPIdHash(string $relyingPartyId, bool $hash = true): bool
     {
@@ -109,10 +106,6 @@ class AuthenticatorData
 
     /**
      * Checks if the Relying Party ID hash is not the same as the one issued.
-     *
-     * @param  string  $relyingPartyId
-     * @param  bool  $hash
-     * @return bool
      */
     public function hasNotSameRPIdHash(string $relyingPartyId, bool $hash = true): bool
     {
@@ -121,8 +114,6 @@ class AuthenticatorData
 
     /**
      * Check if the user was present during the authentication.
-     *
-     * @return bool
      */
     public function wasUserPresent(): bool
     {
@@ -131,8 +122,6 @@ class AuthenticatorData
 
     /**
      * Check if the user was absent during the authentication.
-     *
-     * @return bool
      */
     public function wasUserAbsent(): bool
     {
@@ -141,8 +130,6 @@ class AuthenticatorData
 
     /**
      * Check if the user was actively verified by the authenticator.
-     *
-     * @return bool
      */
     public function wasUserVerified(): bool
     {
@@ -151,8 +138,6 @@ class AuthenticatorData
 
     /**
      * Check if the user was not actively verified by the authenticator.
-     *
-     * @return bool
      */
     public function wasUserNotVerified(): bool
     {
@@ -161,29 +146,25 @@ class AuthenticatorData
 
     /**
      * Returns the public key in PEM format.
-     *
-     * @return string
-     * @throws \Laragear\WebAuthn\Exceptions\DataException
      */
     public function getPublicKeyPem(): string
     {
         $der = match ($this->attestedCredentialData->credentialPublicKey->kty) {
-            self::$EC2_TYPE => $this->getEc2Der(),
-            self::$RSA_TYPE => $this->getRsaDer(),
+            static::EC2_TYPE => $this->getEc2Der(),
+            static::RSA_TYPE => $this->getRsaDer(),
+            static::OKP_TYPE => $this->getOkpDer(),
             default => throw new DataException('Invalid credential public key type [kty].'),
         };
 
-        $pem = '-----BEGIN PUBLIC KEY-----'."\n";
-        $pem .= chunk_split(base64_encode($der), 64, "\n");
-        $pem .= '-----END PUBLIC KEY-----'."\n";
-
-        return $pem;
+        return
+            '-----BEGIN PUBLIC KEY-----'.
+            "\n".chunk_split(base64_encode($der), 64, "\n").
+            '-----END PUBLIC KEY-----'.
+            "\n";
     }
 
     /**
      * Returns the public key in U2F format.
-     *
-     * @return string
      */
     public function getPublicKeyU2F(): string
     {
@@ -193,9 +174,7 @@ class AuthenticatorData
     }
 
     /**
-     * Returns DER encoded EC2 key
-     *
-     * @return string
+     * Returns DER encoded EC2 key.
      */
     protected function getEc2Der(): string
     {
@@ -210,8 +189,6 @@ class AuthenticatorData
 
     /**
      * Returns DER encoded RSA key.
-     *
-     * @return string
      */
     protected function getRsaDer(): string
     {
@@ -230,10 +207,20 @@ class AuthenticatorData
     }
 
     /**
+     * Returns KPE encoded EdDSA key.
+     */
+    protected function getOkpDer(): string
+    {
+        return $this->derSequence(
+            $this->derSequence(
+                $this->derOid("\x2B\x65\x70") // OID 1.3.101.112 curveEd25519 (EdDSA 25519 signature algorithm)
+            ).
+            $this->derBitString($this->attestedCredentialData->credentialPublicKey->x)
+        );
+    }
+
+    /**
      * Returns the length of a DER encoded string.
-     *
-     * @param  int  $der
-     * @return string
      */
     protected function derLength(int $der): string
     {
@@ -253,9 +240,6 @@ class AuthenticatorData
 
     /**
      * Encode a string as DER.
-     *
-     * @param  string  $contents
-     * @return string
      */
     protected function derSequence(string $contents): string
     {
@@ -264,9 +248,6 @@ class AuthenticatorData
 
     /**
      * Encode something an ID of zero as DER.
-     *
-     * @param  string  $encoded
-     * @return string
      */
     protected function derOid(string $encoded): string
     {
@@ -275,9 +256,6 @@ class AuthenticatorData
 
     /**
      * Encode the bit string as DER.
-     *
-     * @param  string  $bytes
-     * @return string
      */
     protected function derBitString(string $bytes): string
     {
@@ -286,8 +264,6 @@ class AuthenticatorData
 
     /**
      * Encode a null value as DER.
-     *
-     * @return string
      */
     protected function derNullValue(): string
     {
@@ -296,9 +272,6 @@ class AuthenticatorData
 
     /**
      * Encode a unsigned integer as DER.
-     *
-     * @param  string  $bytes
-     * @return string
      */
     protected function derUnsignedInteger(string $bytes): string
     {
@@ -325,9 +298,6 @@ class AuthenticatorData
     /**
      * Create a new Authenticator data from a binary string.
      *
-     * @param  string  $binary
-     * @return static
-     * @throws \Laragear\WebAuthn\Exceptions\DataException
      * @codeCoverageIgnore
      */
     public static function fromBinary(string $binary): static
@@ -360,7 +330,6 @@ class AuthenticatorData
     /**
      * Reads the flags from flag byte array.
      *
-     * @param  string  $binFlag
      * @return object{userPresent: bool, userVerified: bool, attestedDataIncluded: bool, extensionDataIncluded: bool}
      */
     protected static function readFlags(string $binFlag): object
@@ -400,10 +369,7 @@ class AuthenticatorData
     /**
      * Reads the attestation data.
      *
-     * @param  string  $binary
-     * @param  int  $endOffset
      * @return object{aaguid: string, credentialId: \Laragear\WebAuthn\ByteBuffer, credentialPublicKey: object}&\stdClass
-     * @throws \Laragear\WebAuthn\Exceptions\DataException
      */
     protected static function readAttestData(string $binary, int &$endOffset): object
     {
@@ -414,7 +380,7 @@ class AuthenticatorData
         // Byte length L of Credential ID, 16-bit unsigned big-endian integer.
         $length = unpack('nlength', substr($binary, 53, 2))['length'];
 
-        // Set end offset
+        // Set end offset.
         $endOffset = 55 + $length;
 
         return (object) [
@@ -426,12 +392,6 @@ class AuthenticatorData
 
     /**
      * Read COSE key-encoded elliptic curve public key in EC2 format.
-     *
-     * @param  string  $binary
-     * @param  int  $offset
-     * @param  int  $endOffset
-     * @return object
-     * @throws \Laragear\WebAuthn\Exceptions\DataException
      */
     protected static function readCredentialPublicKey(string $binary, int $offset, int &$endOffset): object
     {
@@ -439,45 +399,38 @@ class AuthenticatorData
 
         // COSE key-encoded elliptic curve public key in EC2 format
         $publicKey = (object) [
-            'kty' => $enc[static::$COSE_KTY],
-            'alg' => $enc[static::$COSE_ALG]
+            'kty' => $enc[static::COSE_KTY],
+            'alg' => $enc[static::COSE_ALG]
         ];
 
-        switch ($publicKey->alg) {
-            case static::$EC2_ES256:
-                static::readCredentialPublicKeyES256($publicKey, $enc);
-                break;
-            case static::$RSA_RS256:
-                static::readCredentialPublicKeyRS256($publicKey, $enc);
-                break;
-        }
+        match ($publicKey->alg) {
+            static::EC2_ES256 => static::readCredentialPublicKeyES256($publicKey, $enc),
+            static::RSA_RS256 => static::readCredentialPublicKeyRS256($publicKey, $enc),
+            static::OKP_EDDSA => static::readCredentialPublicKeyEDDSA($publicKey, $enc),
+            default => throw new DataException("The $publicKey->alg algorithm is not supported.")
+        };
 
         return $publicKey;
     }
 
     /**
      * Extracts ES256 information from COSE encoding.
-     *
-     * @param  object  $publicKey
-     * @param  array  $cose
-     * @return object
-     * @throws \Laragear\WebAuthn\Exceptions\DataException
      */
     protected static function readCredentialPublicKeyES256(object $publicKey, array $cose): object
     {
-        $publicKey->crv = $cose[self::$COSE_CRV];
-        $publicKey->x = $cose[self::$COSE_X] instanceof ByteBuffer ? $cose[self::$COSE_X]->getBinaryString() : null;
-        $publicKey->y = $cose[self::$COSE_Y] instanceof ByteBuffer ? $cose[self::$COSE_Y]->getBinaryString() : null;
+        $publicKey->crv = $cose[static::COSE_CRV];
+        $publicKey->x = $cose[static::COSE_X] instanceof ByteBuffer ? $cose[static::COSE_X]->getBinaryString() : null;
+        $publicKey->y = $cose[static::COSE_Y] instanceof ByteBuffer ? $cose[static::COSE_Y]->getBinaryString() : null;
 
-        if ($publicKey->kty !== self::$EC2_TYPE) {
+        if ($publicKey->kty !== static::EC2_TYPE) {
             throw new DataException('Public key not in EC2 format');
         }
 
-        if ($publicKey->alg !== self::$EC2_ES256) {
+        if ($publicKey->alg !== static::EC2_ES256) {
             throw new DataException('Signature algorithm not ES256');
         }
 
-        if ($publicKey->crv !== self::$EC2_P256) {
+        if ($publicKey->crv !== static::EC2_P256) {
             throw new DataException('Curve not P-256');
         }
 
@@ -494,22 +447,17 @@ class AuthenticatorData
 
     /**
      * Extract RS256 information from COSE.
-     *
-     * @param  object  $publicKey
-     * @param  array  $enc
-     * @return void
-     * @throws \Laragear\WebAuthn\Exceptions\DataException
      */
     protected static function readCredentialPublicKeyRS256(object $publicKey, array $enc): void
     {
-        $publicKey->n = $enc[self::$COSE_N] instanceof ByteBuffer ? $enc[self::$COSE_N]->getBinaryString() : null;
-        $publicKey->e = $enc[self::$COSE_E] instanceof ByteBuffer ? $enc[self::$COSE_E]->getBinaryString() : null;
+        $publicKey->n = $enc[static::COSE_N] instanceof ByteBuffer ? $enc[static::COSE_N]->getBinaryString() : null;
+        $publicKey->e = $enc[static::COSE_E] instanceof ByteBuffer ? $enc[static::COSE_E]->getBinaryString() : null;
 
-        if ($publicKey->kty !== self::$RSA_TYPE) {
+        if ($publicKey->kty !== static::RSA_TYPE) {
             throw new DataException('Public key not in RSA format');
         }
 
-        if ($publicKey->alg !== self::$RSA_RS256) {
+        if ($publicKey->alg !== static::RSA_RS256) {
             throw new DataException('Signature algorithm not ES256');
         }
 
@@ -523,11 +471,32 @@ class AuthenticatorData
     }
 
     /**
+     * Extract EdDSA information from COSE.
+     */
+    protected static function readCredentialPublicKeyEDDSA(object $publicKey, array $enc): void
+    {
+        $publicKey->crv = $enc[static::COSE_CRV];
+        $publicKey->x = $enc[static::COSE_X] instanceof ByteBuffer ? $enc[static::COSE_X]->getBinaryString() : null;
+
+        if ($publicKey->kty !== static::OKP_TYPE) {
+            throw new DataException('Public key not in OKP format');
+        }
+
+        if ($publicKey->alg !== static::OKP_EDDSA) {
+            throw new DataException('Signature algorithm not EdDSA');
+        }
+
+        if ($publicKey->crv !== static::OKP_ED25519) {
+            throw new DataException('Curve not Ed25519');
+        }
+
+        if (strlen($publicKey->x) !== 32) {
+            throw new DataException('Invalid X coordinate for Ed25519 curve.');
+        }
+    }
+
+    /**
      * Reads CBOR encoded extension data.
-     *
-     * @param  string  $binary
-     * @return array<int, string>
-     * @throws \Laragear\WebAuthn\Exceptions\DataException
      */
     protected static function readExtensionData(string $binary): array
     {

@@ -20,8 +20,6 @@ abstract class CheckRelyingPartyIdContained
 
     /**
      * Create a new pipe instance.
-     *
-     * @param  \Illuminate\Contracts\Config\Repository  $config
      */
     public function __construct(protected Repository $config)
     {
@@ -31,9 +29,6 @@ abstract class CheckRelyingPartyIdContained
     /**
      * Handle the incoming WebAuthn Ceremony Validation.
      *
-     * @param  \Laragear\WebAuthn\Attestation\Validator\AttestationValidation|\Laragear\WebAuthn\Assertion\Validator\AssertionValidation  $validation
-     * @param  \Closure  $next
-     * @return mixed
      * @throws \Laragear\WebAuthn\Exceptions\AssertionException
      * @throws \Laragear\WebAuthn\Exceptions\AttestationException
      */

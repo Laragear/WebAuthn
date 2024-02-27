@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Fluent;
@@ -10,7 +11,11 @@ use Illuminate\Support\ServiceProvider;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 use Laragear\WebAuthn\WebAuthnAuthentication;
 use Laragear\WebAuthn\WebAuthnServiceProvider;
+use Orchestra\Testbench\Attributes\DefineEnvironment;
+use Orchestra\Testbench\Attributes\WithMigration;
+use function version_compare;
 
+#[WithMigration]
 class ServiceProviderTest extends TestCase
 {
     public function test_merges_config(): void
@@ -32,11 +37,16 @@ class ServiceProviderTest extends TestCase
     /**
      * @define-env usesCustomTestTime
      */
+    #[DefineEnvironment('usesCustomTestTime')]
     public function test_publishes_migrations(): void
     {
+        if (version_compare(Application::VERSION, '11', '>=')) {
+            $this->markTestSkipped('Laravel handles migration internally');
+        }
+
         static::assertSame(
             [
-                realpath(WebAuthnServiceProvider::MIGRATIONS . '/2022_07_01_000000_create_webauthn_credentials.php') =>
+                realpath(WebAuthnServiceProvider::MIGRATIONS . '/0000_00_00_000000_create_webauthn_credentials.php') =>
                     $this->app->databasePath("migrations/2020_01_01_163025_create_webauthn_credentials.php"),
             ],
             ServiceProvider::pathsToPublish(WebAuthnServiceProvider::class, 'migrations')
@@ -59,13 +69,5 @@ class ServiceProviderTest extends TestCase
         $this->app->instance(Authenticatable::class, $user);
 
         static::assertSame($user, $this->app->make(WebAuthnAuthenticatable::class));
-    }
-
-    public function test_publishes_routes_file(): void
-    {
-        static::assertSame(
-            [WebAuthnServiceProvider::ROUTES => $this->app->basePath('routes/webauthn.php')],
-            ServiceProvider::$publishGroups['routes']
-        );
     }
 }

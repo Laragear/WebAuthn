@@ -68,6 +68,8 @@ class WebAuthn {
      * @param xcsrfToken {string|null} Either a csrf token (40 chars) or xsrfToken (224 chars)
      */
     constructor(routes = {}, headers = {}, includeCredentials = false, xcsrfToken = null) {
+        console.warn('This WebAuthn Helper is deprecated and will be removed in the future. Consider migrating to @laragear/webpass')
+
         Object.assign(this.#routes, routes);
         Object.assign(this.#headers, headers);
 

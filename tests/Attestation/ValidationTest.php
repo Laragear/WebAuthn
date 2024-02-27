@@ -20,6 +20,7 @@ use Laragear\WebAuthn\Challenge;
 use Laragear\WebAuthn\Exceptions\AttestationException;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
 use Mockery;
+use Orchestra\Testbench\Attributes\WithMigration;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Tests\FakeAuthenticator;
@@ -38,6 +39,7 @@ use function tap;
  *
  * @see https://cbor.me
  */
+#[WithMigration]
 class ValidationTest extends TestCase
 {
     protected Request $request;

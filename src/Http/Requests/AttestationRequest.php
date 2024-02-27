@@ -7,7 +7,8 @@ use Illuminate\Foundation\Http\FormRequest;
 use Laragear\WebAuthn\Attestation\Creator\AttestationCreation;
 use Laragear\WebAuthn\Attestation\Creator\AttestationCreator;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
-use Laragear\WebAuthn\WebAuthn;
+use Laragear\WebAuthn\Enums\ResidentKey;
+use Laragear\WebAuthn\Enums\UserVerification;
 
 /**
  * @method \Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable user($guard = null)
@@ -62,7 +63,7 @@ class AttestationRequest extends FormRequest
      */
     public function fastRegistration(): static
     {
-        $this->attestation()->userVerification = WebAuthn::USER_VERIFICATION_DISCOURAGED;
+        $this->attestation()->userVerification = UserVerification::DISCOURAGED;
 
         return $this;
     }
@@ -74,7 +75,7 @@ class AttestationRequest extends FormRequest
      */
     public function secureRegistration(): static
     {
-        $this->attestation()->userVerification = WebAuthn::USER_VERIFICATION_REQUIRED;
+        $this->attestation()->userVerification = UserVerification::REQUIRED;
 
         return $this;
     }
@@ -86,7 +87,7 @@ class AttestationRequest extends FormRequest
      */
     public function userless(): static
     {
-        $this->attestation()->residentKey = WebAuthn::RESIDENT_KEY_REQUIRED;
+        $this->attestation()->residentKey = ResidentKey::REQUIRED;
 
         return $this;
     }

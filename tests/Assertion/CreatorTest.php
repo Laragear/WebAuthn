@@ -7,7 +7,8 @@ use Illuminate\Testing\TestResponse;
 use Laragear\WebAuthn\Assertion\Creator\AssertionCreation;
 use Laragear\WebAuthn\Assertion\Creator\AssertionCreator;
 use Laragear\WebAuthn\Challenge;
-use Laragear\WebAuthn\WebAuthn;
+use Laragear\WebAuthn\Enums\UserVerification;
+use Orchestra\Testbench\Attributes\WithMigration;
 use Ramsey\Uuid\Uuid;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
 use Tests\TestCase;
@@ -16,6 +17,7 @@ use function in_array;
 use function now;
 use function session;
 
+#[WithMigration]
 class CreatorTest extends TestCase
 {
     protected Request $request;
@@ -44,7 +46,7 @@ class CreatorTest extends TestCase
     protected function response(): TestResponse
     {
         return $this->createTestResponse(
-            $this->creator->send($this->creation)->thenReturn()->json->toResponse($this->request)
+            $this->creator->send($this->creation)->thenReturn()->json->toResponse($this->request), null
         );
     }
 
@@ -151,7 +153,7 @@ class CreatorTest extends TestCase
 
     public function test_forces_user_verification(): void
     {
-        $this->creation->userVerification = WebAuthn::USER_VERIFICATION_REQUIRED;
+        $this->creation->userVerification = UserVerification::REQUIRED;
 
         $this->response()
             ->assertSessionHas('_webauthn', function (Challenge $challenge): bool {
@@ -160,7 +162,7 @@ class CreatorTest extends TestCase
             ->assertJson([
                 'timeout' => 60000,
                 'challenge' => session('_webauthn')->data->toBase64Url(),
-                'userVerification' => WebAuthn::USER_VERIFICATION_REQUIRED,
+                'userVerification' => UserVerification::REQUIRED->value,
             ]);
     }
 

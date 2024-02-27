@@ -28,9 +28,6 @@ class CheckCredentialIsForUser
     /**
      * Handle the incoming Assertion Validation.
      *
-     * @param  \Laragear\WebAuthn\Assertion\Validator\AssertionValidation  $validation
-     * @param  \Closure  $next
-     * @return mixed
      * @throws \Laragear\WebAuthn\Exceptions\AssertionException
      */
     public function handle(AssertionValidation $validation, Closure $next): mixed
@@ -50,9 +47,6 @@ class CheckCredentialIsForUser
 
     /**
      * Validate the user owns the Credential if it already exists in the validation procedure.
-     *
-     * @param  \Laragear\WebAuthn\Assertion\Validator\AssertionValidation  $validation
-     * @return void
      */
     protected function validateUser(AssertionValidation $validation): void
     {
@@ -64,9 +58,6 @@ class CheckCredentialIsForUser
 
     /**
      * Validate the user ID of the response.
-     *
-     * @param  \Laragear\WebAuthn\Assertion\Validator\AssertionValidation  $validation
-     * @return void
      */
     protected function validateId(AssertionValidation $validation): void
     {

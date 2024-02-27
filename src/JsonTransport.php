@@ -20,8 +20,6 @@ class JsonTransport implements Arrayable, Jsonable, JsonSerializable, Stringable
 {
     /**
      * Create a new JSON transport.
-     *
-     * @param  array  $json
      */
     public function __construct(public array $json = [])
     {
@@ -30,10 +28,6 @@ class JsonTransport implements Arrayable, Jsonable, JsonSerializable, Stringable
 
     /**
      * Adds a value to the underlying JSON array.
-     *
-     * @param  string  $key
-     * @param  mixed  $value
-     * @return void
      */
     public function set(string $key, mixed $value): void
     {
@@ -42,10 +36,6 @@ class JsonTransport implements Arrayable, Jsonable, JsonSerializable, Stringable
 
     /**
      * Retrieves a value from the underlying JSON array.
-     *
-     * @param  string  $key
-     * @param  string|int|null  $default
-     * @return string|int|null
      */
     public function get(string $key, string|int $default = null): string|int|null
     {
@@ -55,8 +45,7 @@ class JsonTransport implements Arrayable, Jsonable, JsonSerializable, Stringable
     /**
      * Convert the object to its JSON representation.
      *
-     * @param  int  $options
-     * @return string
+     * @throws \JsonException
      */
     public function toJson($options = 0): string
     {
@@ -68,15 +57,13 @@ class JsonTransport implements Arrayable, Jsonable, JsonSerializable, Stringable
      *
      * @return array<string, int|string|\Laragear\WebAuthn\ByteBuffer>
      */
-    public function toArray()
+    public function toArray(): array
     {
         return $this->json;
     }
 
     /**
      * Specify data which should be serialized to JSON.
-     *
-     * @return array
      */
     public function jsonSerialize(): array
     {
@@ -86,7 +73,7 @@ class JsonTransport implements Arrayable, Jsonable, JsonSerializable, Stringable
     /**
      * Returns a string representation of the object.
      *
-     * @return string
+     * @throws \JsonException
      */
     public function __toString(): string
     {
@@ -95,9 +82,6 @@ class JsonTransport implements Arrayable, Jsonable, JsonSerializable, Stringable
 
     /**
      * Create an HTTP response that represents the object.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
      */
     public function toResponse($request): JsonResponse
     {

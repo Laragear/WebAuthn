@@ -14,9 +14,6 @@ class CheckRelyingPartyHashSame extends BaseCheckRelyingPartyHashSame
 {
     /**
      * Return the Attestation data to check the RP ID Hash.
-     *
-     * @param  \Laragear\WebAuthn\Attestation\Validator\AttestationValidation|\Laragear\WebAuthn\Assertion\Validator\AssertionValidation  $validation
-     * @return \Laragear\WebAuthn\Attestation\AuthenticatorData
      */
     protected function authenticatorData(AssertionValidation|AttestationValidation $validation): AuthenticatorData
     {
@@ -25,9 +22,6 @@ class CheckRelyingPartyHashSame extends BaseCheckRelyingPartyHashSame
 
     /**
      * Return the Relying Party ID from the config or credential.
-     *
-     * @param  \Laragear\WebAuthn\Assertion\Validator\AssertionValidation|\Laragear\WebAuthn\Attestation\Validator\AttestationValidation  $validation
-     * @return string
      */
     protected function relyingPartyId(AssertionValidation|AttestationValidation $validation): string
     {

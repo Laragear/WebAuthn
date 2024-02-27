@@ -13,13 +13,6 @@ class AttestationValidation
 {
     /**
      * Create a new Attestation Validation procedure
-     *
-     * @param  \Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable  $user
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Laragear\WebAuthn\Challenge|null  $challenge
-     * @param  \Laragear\WebAuthn\Attestation\AttestationObject|null  $attestationObject
-     * @param  \Laragear\WebAuthn\ClientDataJson|null  $clientDataJson
-     * @param  \Laragear\WebAuthn\Models\WebAuthnCredential|null  $credential
      */
     public function __construct(
         public WebAuthnAuthenticatable $user,

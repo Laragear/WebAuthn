@@ -33,18 +33,15 @@ class CompileAttestationObject
     /**
      * Handle the incoming Attestation Validation.
      *
-     * @param  \Laragear\WebAuthn\Attestation\Validator\AttestationValidation  $validation
-     * @param  \Closure  $next
-     * @return mixed
      * @throws \Laragear\WebAuthn\Exceptions\AttestationException
      */
     public function handle(AttestationValidation $validation, Closure $next): mixed
     {
         $data = $this->decodeCborBase64($validation->request);
 
-        // Here we would receive the attestation formats and decode them. Since we're
-        // only support the universal "none" we can just check if it's equal or not.
-        // Later we may support multiple authenticator formats through a PHP match.
+        // Here we would receive the attestation formats and decode them. Since we are only
+        // supporting the universal "none" format, we can just check if it's equal or not.
+        // Who knows if later we may support multiple formats through a simple PHP match.
         if ($data['fmt'] !== 'none') {
             throw AttestationException::make("Format name [{$data['fmt']}] is invalid.");
         }
@@ -65,7 +62,6 @@ class CompileAttestationObject
     /**
      * Returns an array map from a BASE64 encoded CBOR string.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return array{fmt: string, attStmt: array, authData: \Laragear\WebAuthn\ByteBuffer}
      * @throws \Laragear\WebAuthn\Exceptions\AttestationException
      */

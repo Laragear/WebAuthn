@@ -10,8 +10,6 @@ class AddConfiguration
 {
     /**
      * Create a new pipe instance.
-     *
-     * @param  \Illuminate\Contracts\Config\Repository  $config
      */
     public function __construct(protected Repository $config)
     {
@@ -20,10 +18,6 @@ class AddConfiguration
 
     /**
      * Handle the incoming Assertion.
-     *
-     * @param  \Laragear\WebAuthn\Assertion\Creator\AssertionCreation  $assertion
-     * @param  \Closure  $next
-     * @return mixed
      */
     public function handle(AssertionCreation $assertion, Closure $next): mixed
     {

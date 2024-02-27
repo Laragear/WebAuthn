@@ -8,12 +8,14 @@ use Illuminate\Support\Facades\Route;
 use Laragear\WebAuthn\Challenge;
 use Laragear\WebAuthn\Http\Requests\AttestationRequest;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
+use Orchestra\Testbench\Attributes\WithMigration;
 use Ramsey\Uuid\Uuid;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
 use Tests\TestCase;
 use function config;
 
+#[WithMigration]
 class AttestationRequestTest extends TestCase
 {
     protected function afterRefreshingDatabase(): void

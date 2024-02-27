@@ -27,6 +27,8 @@ return [
     | of randomness. Since we need to later check them, we'll also store the
     | bytes for a small amount of time inside this current request session.
     |
+    | @see https://www.w3.org/TR/webauthn-2/#sctn-cryptographic-challenges
+    |
     */
 
     'challenge' => [

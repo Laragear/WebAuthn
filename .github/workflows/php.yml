@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://json.schemastore.org/github-workflow
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 
 name: Tests
 
@@ -9,120 +9,120 @@ on:
 jobs:
 
   byte_level:
-    name: "0️⃣ Byte-level"
-    runs-on: "ubuntu-latest"
+    name: 0️⃣ Byte-level
+    runs-on: ubuntu-latest
     steps:
-      - name: "Checkout code"
-        uses: "actions/checkout@v3"
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: "Check file permissions"
+      - name: Check file permissions
         run: |
-          test "$(find . -type f -not -path './.git/*' -executable)" == ""
-      - name: "Find non-printable ASCII characters"
+          test $(find . -type f -not -path './.git/*' -executable) ==
+      - name: Find non-printable ASCII characters
         run: |
-          ! LC_ALL=C.UTF-8 find ./src -type f -name "*.php" -print0 | xargs -0 -- grep -PHn "[^ -~]"
+          ! LC_ALL=C.UTF-8 find ./src -type f -name *.php -print0 | xargs -0 -- grep -PHn [^ -~]
 
   syntax_errors:
-    name: "1️⃣ Syntax errors"
-    runs-on: "ubuntu-latest"
+    name: 1️⃣ Syntax errors
+    runs-on: ubuntu-latest
     steps:
-      - name: "Set up PHP"
-        uses: "shivammathur/setup-php@v2"
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.3"
-          tools: "parallel-lint"
+          php-version: 8.3
+          tools: parallel-lint
 
-      - name: "Checkout code"
-        uses: "actions/checkout@v3"
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: "Validate Composer configuration"
-        run: "composer validate --strict"
+      - name: Validate Composer configuration
+        run: composer validate --strict
 
-      - name: "Check source code for syntax errors"
-        run: "composer exec -- parallel-lint src/"
+      - name: Check source code for syntax errors
+        run: composer exec -- parallel-lint src/
 
   unit_tests:
-    name: "2️⃣ Unit and Feature tests"
+    name: 2️⃣ Unit and Feature tests
     needs:
-      - "byte_level"
-      - "syntax_errors"
-    runs-on: "ubuntu-latest"
+      - byte_level
+      - syntax_errors
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         php-version:
-          - "8.0"
-          - "8.1"
-          - "8.2"
+          - 8.1
+          - 8.2
+          - 8.3
         laravel-constraint:
-          - "9.*"
-          - "10.*"
+          - 10.*
+          - 11.*
         dependencies:
-          - "lowest"
-          - "highest"
+          - lowest
+          - highest
         exclude:
-          - php-version: "8.0"
-            laravel-constraint: "10.*"
+          - laravel-constraint: 11.*
+            php-version: 8.1
 
     steps:
-      - name: "Set up PHP"
-        uses: "shivammathur/setup-php@v2"
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
         with:
-          php-version: "${{ matrix.php-version }}"
-          extensions: "mbstring, intl"
-          coverage: "xdebug"
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, intl
+          coverage: xdebug
 
-      - name: "Checkout code"
-        uses: "actions/checkout@v3"
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
+      - name: Install dependencies
+        uses: ramsey/composer-install@v3
         with:
-          dependency-versions: "${{ matrix.dependencies }}"
-          composer-options: "--with=laravel/framework:${{ matrix.laravel-constraint }}"
+          dependency-versions: ${{ matrix.dependencies }}
+          composer-options: --with=laravel/framework:${{ matrix.laravel-constraint }}
 
-      - name: "Execute unit tests"
-        run: "composer run-script test"
+      - name: Execute unit tests
+        run: composer run-script test
 
-      - name: "Upload coverage to Codecov"
-        uses: "codecov/codecov-action@v3"
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
 
   static_analysis:
-    name: "3️⃣ Static Analysis"
+    name: 3️⃣ Static Analysis
     needs:
-      - "byte_level"
-      - "syntax_errors"
-    runs-on: "ubuntu-latest"
+      - byte_level
+      - syntax_errors
+    runs-on: ubuntu-latest
     steps:
-      - name: "Set up PHP"
-        uses: "shivammathur/setup-php@v2"
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
         with:
-          tools: "phpstan"
-          php-version: "latest"
-          coverage: "none"
+          tools: phpstan
+          php-version: latest
+          coverage: none
 
-      - name: "Checkout code"
-        uses: "actions/checkout@v3"
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
+      - name: Install dependencies
+        uses: ramsey/composer-install@v3
 
-      - name: "Execute static analysis"
-        run: "composer exec -- phpstan analyze -l 5 src/"
+      - name: Execute static analysis
+        run: composer exec -- phpstan analyze -l 5 src/
 
   exported_files:
-    name: "4️⃣ Exported files"
+    name: 4️⃣ Exported files
     needs:
-      - "byte_level"
-      - "syntax_errors"
-    runs-on: "ubuntu-latest"
+      - byte_level
+      - syntax_errors
+    runs-on: ubuntu-latest
     steps:
-      - name: "Checkout code"
-        uses: "actions/checkout@v3"
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: "Check exported files"
+      - name: Check exported files
         run: |
-          EXPECTED="LICENSE.md,README.md,composer.json"
-          CURRENT="$(git archive HEAD | tar --list --exclude="src" --exclude="src/*" --exclude=".stubs" --exclude=".stubs/*"  --exclude="routes" --exclude="routes/*" --exclude="stubs" --exclude="stubs/*" --exclude="lang" --exclude="lang/*" --exclude="config" --exclude="config/*" --exclude="database" --exclude="database/*" --exclude="resources" --exclude="resources/*" | paste -s -d ",")"
-          echo "CURRENT =${CURRENT}"
-          echo "EXPECTED=${EXPECTED}"
-          test "${CURRENT}" == "${EXPECTED}"
+          EXPECTED=LICENSE.md,MIGRATIONS.md,README.md,composer.json
+          CURRENT=$(git archive HEAD | tar --list --exclude=src --exclude=src/* --exclude=.stubs --exclude=.stubs/*  --exclude=routes --exclude=routes/* --exclude=stubs --exclude=stubs/* --exclude=lang --exclude=lang/* --exclude=config --exclude=config/* --exclude=database --exclude=database/* --exclude=resources --exclude=resources/* | paste -s -d ,)
+          echo CURRENT =${CURRENT}
+          echo EXPECTED=${EXPECTED}
+          test ${CURRENT} == ${EXPECTED}

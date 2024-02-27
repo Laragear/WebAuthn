@@ -1,7 +1,7 @@
 MIT License
 
 Copyright (c) Italo Israel Baeza Cabrera
-Copyright (c) 2021 Lukas Buchs (Attestation Object & Formats, Authenticator Data parts)
+Copyright (c) 2022 Lukas Buchs (Attestation Object & Formats, Assertion, Authenticator Data parts)
 Copyright (c) 2018 Thomas Bleeker (CBOR & ByteBuffer part)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

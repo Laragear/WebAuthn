@@ -3,8 +3,8 @@
 namespace Laragear\WebAuthn\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
+use function auth;
 
 class AssertedRequest extends FormRequest
 {
@@ -28,8 +28,6 @@ class AssertedRequest extends FormRequest
 
     /**
      * Check if the login request wants to remember the user as stateful.
-     *
-     * @return bool
      */
     public function hasRemember(): bool
     {
@@ -45,10 +43,13 @@ class AssertedRequest extends FormRequest
      * @phpstan-ignore-next-line
      * @return \Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable|\Illuminate\Contracts\Auth\Authenticatable|null
      */
-    public function login(string $guard = null, bool $remember = null, bool $destroySession = false): ?WebAuthnAuthenticatable
-    {
+    public function login(
+        string $guard = null,
+        bool $remember = null,
+        bool $destroySession = false
+    ): ?WebAuthnAuthenticatable {
         /** @var \Illuminate\Contracts\Auth\StatefulGuard $auth */
-        $auth = Auth::guard($guard);
+        $auth = auth()->guard($guard);
 
         if ($auth->attempt($this->validated(), $remember ?? $this->hasRemember())) {
             $this->session()->regenerate($destroySession);

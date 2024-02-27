@@ -44,7 +44,6 @@ abstract class Format
      * Create a new Attestation Format.
      *
      * @param  array{fmt: string, attStmt: array, authData: \Laragear\WebAuthn\ByteBuffer}  $attestationObject
-     * @param  \Laragear\WebAuthn\Attestation\AuthenticatorData  $authenticatorData
      */
     public function __construct(public array $attestationObject, public AuthenticatorData $authenticatorData)
     {

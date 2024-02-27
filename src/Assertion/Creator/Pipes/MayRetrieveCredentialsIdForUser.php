@@ -13,14 +13,10 @@ class MayRetrieveCredentialsIdForUser
 {
     /**
      * Handle the incoming Assertion.
-     *
-     * @param  \Laragear\WebAuthn\Assertion\Creator\AssertionCreation  $assertion
-     * @param  \Closure  $next
-     * @return mixed
      */
     public function handle(AssertionCreation $assertion, Closure $next): mixed
     {
-        // If there is a user found, we will pluck the IDS and add them as a binary buffer.
+        // If there is a user found, we will pluck the IDs and add them as a binary buffer.
         if ($assertion->user) {
             $assertion->acceptedCredentials = $assertion->user->webAuthnCredentials()->get(['id', 'transports']);
 

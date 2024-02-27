@@ -11,8 +11,6 @@ class CredentialEnabled
 
     /**
      * Create a new event instance.
-     *
-     * @param  \Laragear\WebAuthn\Models\WebAuthnCredential  $credential
      */
     public function __construct(public WebAuthnCredential $credential)
     {

@@ -8,5 +8,5 @@ namespace Laragear\WebAuthn\Attestation\Formats;
  */
 class None extends Format
 {
-
+    //
 }

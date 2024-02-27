@@ -16,9 +16,6 @@ class RetrievesCredentialId
     /**
      * Handle the incoming Assertion Validation.
      *
-     * @param  \Laragear\WebAuthn\Assertion\Validator\AssertionValidation  $validation
-     * @param  \Closure  $next
-     * @return mixed
      * @throws \Laragear\WebAuthn\Exceptions\AssertionException
      */
     public function handle(AssertionValidation $validation, Closure $next): mixed
@@ -47,10 +44,6 @@ class RetrievesCredentialId
 
     /**
      * Check if the previous Assertion request specified a credentials list to accept.
-     *
-     * @param  string  $id
-     * @param  array  $properties
-     * @return bool
      */
     protected function credentialNotInChallenge(string $id, array $properties): bool
     {

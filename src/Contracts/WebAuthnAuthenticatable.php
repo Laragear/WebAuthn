@@ -4,6 +4,7 @@ namespace Laragear\WebAuthn\Contracts;
 
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
+use Ramsey\Uuid\UuidInterface;
 
 interface WebAuthnAuthenticatable
 {
@@ -15,26 +16,24 @@ interface WebAuthnAuthenticatable
     public function webAuthnData(): array;
 
     /**
-     * Removes all credentials previously registered.
+     * An anonymized user identity string, as a UUID.
      *
-     * @param  string  ...$except
-     * @return void
+     * @see https://www.w3.org/TR/webauthn-2/#dom-publickeycredentialuserentity-id
+     */
+    public function webAuthnId(): UuidInterface;
+
+    /**
+     * Removes all credentials previously registered.
      */
     public function flushCredentials(string ...$except): void;
 
     /**
      * Disables all credentials for the user.
-     *
-     * @param  string  ...$except
-     * @return void
      */
     public function disableAllCredentials(string ...$except): void;
 
     /**
      * Makes an instance of a WebAuthn Credential attached to this user.
-     *
-     * @param  array  $properties
-     * @return \Laragear\WebAuthn\Models\WebAuthnCredential
      */
     public function makeWebAuthnCredential(array $properties): WebAuthnCredential;
 

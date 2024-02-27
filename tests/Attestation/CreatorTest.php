@@ -8,7 +8,9 @@ use Illuminate\Testing\TestResponse;
 use Laragear\WebAuthn\Attestation\Creator\AttestationCreation;
 use Laragear\WebAuthn\Attestation\Creator\AttestationCreator;
 use Laragear\WebAuthn\Challenge;
-use Laragear\WebAuthn\WebAuthn;
+use Laragear\WebAuthn\Enums\ResidentKey;
+use Laragear\WebAuthn\Enums\UserVerification;
+use Orchestra\Testbench\Attributes\WithMigration;
 use Ramsey\Uuid\Uuid;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
 use Tests\TestCase;
@@ -16,6 +18,7 @@ use function config;
 use function now;
 use function session;
 
+#[WithMigration]
 class CreatorTest extends TestCase
 {
     protected Request $request;
@@ -44,7 +47,7 @@ class CreatorTest extends TestCase
     protected function response(): TestResponse
     {
         return $this->createTestResponse(
-            $this->creator->send($this->creation)->thenReturn()->json->toResponse($this->request)
+            $this->creator->send($this->creation)->thenReturn()->json->toResponse($this->request), null
         );
     }
 
@@ -97,7 +100,7 @@ class CreatorTest extends TestCase
 
     public function test_asks_for_user_verification(): void
     {
-        $this->creation->userVerification = WebAuthn::USER_VERIFICATION_REQUIRED;
+        $this->creation->userVerification = UserVerification::REQUIRED;
 
         $this->response()
             ->assertSessionHas('_webauthn', static function (Challenge $challenge): bool {
@@ -112,7 +115,7 @@ class CreatorTest extends TestCase
 
     public function test_asks_for_user_presence(): void
     {
-        $this->creation->userVerification = WebAuthn::USER_VERIFICATION_DISCOURAGED;
+        $this->creation->userVerification = UserVerification::DISCOURAGED;
 
         $this->response()
             ->assertSessionHas('_webauthn', static function (Challenge $challenge): bool {
@@ -127,7 +130,7 @@ class CreatorTest extends TestCase
 
     public function test_asks_for_resident_key(): void
     {
-        $this->creation->residentKey = WebAuthn::RESIDENT_KEY_REQUIRED;
+        $this->creation->residentKey = ResidentKey::REQUIRED;
 
         $this->response()
             ->assertSessionHas('_webauthn', static function (Challenge $challenge): bool {

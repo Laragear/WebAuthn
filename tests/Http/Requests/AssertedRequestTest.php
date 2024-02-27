@@ -13,6 +13,7 @@ use Laragear\WebAuthn\ByteBuffer;
 use Laragear\WebAuthn\Challenge;
 use Laragear\WebAuthn\Http\Requests\AssertedRequest;
 use Mockery;
+use Orchestra\Testbench\Attributes\WithMigration;
 use Ramsey\Uuid\Uuid;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
@@ -23,6 +24,7 @@ use function config;
 use function now;
 use function session;
 
+#[WithMigration]
 class AssertedRequestTest extends TestCase
 {
     protected function afterRefreshingDatabase(): void

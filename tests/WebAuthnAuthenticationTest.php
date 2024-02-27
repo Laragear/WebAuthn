@@ -4,9 +4,11 @@ namespace Tests;
 
 use Illuminate\Support\Carbon;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
+use Orchestra\Testbench\Attributes\WithMigration;
 use Ramsey\Uuid\Uuid;
 use function now;
 
+#[WithMigration]
 class WebAuthnAuthenticationTest extends TestCase
 {
     protected Stubs\WebAuthnAuthenticatableUser $user;

@@ -17,8 +17,6 @@ abstract class CheckRelyingPartyHashSame
 
     /**
      * Create a new pipe instance.
-     *
-     * @param  \Illuminate\Contracts\Config\Repository  $config
      */
     public function __construct(protected Repository $config)
     {
@@ -28,9 +26,6 @@ abstract class CheckRelyingPartyHashSame
     /**
      * Handle the incoming WebAuthn Ceremony Validation.
      *
-     * @param  \Laragear\WebAuthn\Attestation\Validator\AttestationValidation|\Laragear\WebAuthn\Assertion\Validator\AssertionValidation  $validation
-     * @param  \Closure  $next
-     * @return mixed
      * @throws \Laragear\WebAuthn\Exceptions\AssertionException
      * @throws \Laragear\WebAuthn\Exceptions\AttestationException
      */
@@ -48,9 +43,6 @@ abstract class CheckRelyingPartyHashSame
 
     /**
      * Return the Attestation data to check the RP ID Hash.
-     *
-     * @param  \Laragear\WebAuthn\Attestation\Validator\AttestationValidation|\Laragear\WebAuthn\Assertion\Validator\AssertionValidation  $validation
-     * @return \Laragear\WebAuthn\Attestation\AuthenticatorData
      */
     abstract protected function authenticatorData(
         AttestationValidation|AssertionValidation $validation
@@ -58,9 +50,6 @@ abstract class CheckRelyingPartyHashSame
 
     /**
      * Return the Relying Party ID from the config or credential.
-     *
-     * @param  \Laragear\WebAuthn\Assertion\Validator\AssertionValidation|\Laragear\WebAuthn\Attestation\Validator\AttestationValidation  $validation
-     * @return string
      */
     abstract protected function relyingPartyId(AssertionValidation|AttestationValidation $validation): string;
 }
