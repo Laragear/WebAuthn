@@ -4,9 +4,12 @@ namespace Laragear\WebAuthn\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\Isolatable;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Encryption\Encrypter;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
 use Symfony\Component\Console\Attribute\AsCommand;
+use UnexpectedValueException;
+use function env;
 use function substr;
 use const SIGABRT;
 use const SIGQUIT;
@@ -20,7 +23,7 @@ class ReEncryptCommand extends Command implements Isolatable
      * @var string
      */
     protected $signature = 'webauthn:re-encrypt
-                {key : The new Application Key to use to re-encrypt the Passkeys}
+                {key? : The new Application Key to use to re-encrypt the Passkeys}
                 {--cipher? : The cipher mechanism to encode the Passkeys}
                 {--chunks=1000 : The number of Passkeys to retrieve from the database in each chunk}';
 
@@ -51,7 +54,7 @@ class ReEncryptCommand extends Command implements Isolatable
 
         $encrypter = $this->createEncrypterWithNewKey();
 
-        $this->info('Using ...' . substr($this->option('key'), -5) . ' as re-encryption key');
+        $this->info('Using "...' . substr($this->option('key'), -5) . '" as re-encryption key');
 
         /** @var \Illuminate\Support\LazyCollection<\Laragear\WebAuthn\Models\WebAuthnCredential> $credentials */
         $credentials = WebAuthnCredential::query()->select(['id', 'public_key'])->lazy($this->option('chunks'));
@@ -69,15 +72,22 @@ class ReEncryptCommand extends Command implements Isolatable
                 $this->warn("The command was stopped after $progress re-encrypted credentials.");
             }
 
-            $credential->setRawAttributes([
-                $credential->getKeyName() => $credential->getKey(),
-                'public_key' => $encrypter->encrypt($credential->public_key)
-            ])->saveOrFail();
+            try {
+                $credential->setRawAttributes([
+                    ...$credential->getRawOriginal(),
+                    'public_key' => $encrypter->encrypt($credential->public_key)
+                ]);
+            } catch (DecryptException) {
+                // If the public key couldn't be decrypted, then it may be already encrypted with the new key
+                continue;
+            } finally {
+                $credential->save();
 
-            $bar->advance();
+                $bar->advance();
+            }
         }
 
-        $this->info("Re-encrypted {$credentials->count()} credentials.");
+        $this->info("Successfully encrypted {$credentials->count()} credentials.");
     }
 
     /**
@@ -87,8 +97,10 @@ class ReEncryptCommand extends Command implements Isolatable
      */
     protected function createEncrypterWithNewKey(): Encrypter
     {
-        return new Encrypter(
-            $this->option('key'), $this->option('cipher') ?: $this->laravel->make('config')->get('app')
-        );
+        if ($key = $this->argument('key') ?: env('WEBAUTHN_NEW_KEY')) {
+            return new Encrypter($key, $this->option('cipher') ?: $this->laravel->make('config')->get('app.cipher'));
+        }
+
+        throw new UnexpectedValueException('The WEBAUTHN_NEW_KEY environment variable has no key for re-encryption.');
     }
 }

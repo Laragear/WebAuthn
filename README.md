@@ -546,6 +546,24 @@ return [
 
 The outgoing challenges are random string of bytes. This controls how many bytes, the seconds which the challenge is valid, and the session key used to store the challenge while its being resolved by the device.
 
+## Re-encrypt Passkeys
+
+You may have a problem whe cycling your application key: WebAuthn Credentials will cease to work. As these are stored encrypted into the database, changing the application key will render them useless for decryption.
+
+To avoid that, **before** your application credentials, use the `webauthn:re-encrypt` Artisan command. For security reasons, you may specify the key as the `WEBAUTHN_NEW_KEY` environment variable, but you can also set it verbatim in the command line. 
+
+```shell
+php artisan webauthn:re-encrypt
+```
+
+    Using "...jTsmF" as re-encryption key
+    325/325 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
+    Successfully encrypted 325 credentials.
+
+> [!TIP]
+> 
+> If the command stops mid-re-encryption, you may restart it again. The commands will skip any Passkey that cannot be decrypted with the old encryption key, because these should be already re-encrypted.
+
 ## Laravel UI, Jetstream, Fortify, Sanctum, Breeze, Inertia and Livewire
 
 In _theory_ this package should work without any problems with these packages, but you may need to override or _redirect_ the authentication flow (read: override methods) to one using WebAuthn.
