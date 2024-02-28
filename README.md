@@ -20,7 +20,8 @@ public function login(AssertedRequest $request)
     return response()->json(['message' => "Welcome back, $user->name!"]);
 }
 ```
-
+> [!TIP]
+> 
 > You want to add two-factor authentication to your app? Check out [Laragear TwoFactor](https://github.com/Laragear/TwoFactor).
 
 ## Become a sponsor
@@ -65,7 +66,7 @@ After that, you can quickly start WebAuthn with the included controllers and ins
 4. [Register the controllers](#4-register-the-routes-and-controllers)
 5. [Use the Javascript helper](#5-use-the-javascript-helper)
 
-> **Info**
+> [!IMPORTANT]
 >
 > While you can use Passkeys without users by invoking the _ceremonies_ manually, Laragear WebAuthn is intended to be used with already existing Users.
 
@@ -99,7 +100,8 @@ Create the `webauthn_credentials` table by publishing the migration file and mig
 php artisan vendor:publish --provider="Laragear\WebAuthn\WebAuthnServiceProvider" --tag="migrations"
 php artisan migrate
 ```
-
+> [!TIP]
+> 
 > You may edit the migration to your liking, like adding new columns, but **not** to remove them or change their name.
 
 ### 3. Implement the contract and trait
@@ -236,7 +238,8 @@ public function register(AttestedRequest $request)
     // })
 }
 ```
-
+> [!WARNING]
+> 
 > Both `AttestationRequest` and `AttestedRequest` validates the authenticated user. If the user is not authenticated, an HTTP 403 status code will be returned.
 
 ### Attestation User verification
@@ -270,7 +273,8 @@ public function registerDevice(AttestationRequest $request)
     return $request->userless()->toCreate();
 }
 ```
-
+> [!IMPORTANT]
+> 
 > The Authenticator WILL require [user verification](#attestation-user-verification) on login when using `userless()`. Its highly probable the user will also be asked for [user verification on login](#assertion-user-verification), as it will depend on the authenticator itself.
 
 ### Multiple credentials per device
@@ -471,7 +475,8 @@ public function authenticate(Request $request, AssertionValidator $assertion)
     return "Welcome aboard, {$credential->user->name}!";
 }
 ```
-
+> [!WARNING]
+>
 > The pipes list and the pipes themselves are **not** covered by API changes, and are marked as `internal`. These may change between versions without notice.
 
 ## Advanced Configuration
@@ -516,9 +521,9 @@ The _Relying Party_ is just a way to uniquely identify your application in the u
 * `name`: The name of the application. Defaults to the application name.
 * `id`: An unique ID the application, [recommended to be the site domain](https://www.w3.org/TR/webauthn-2/#rp-id). If `null`, the device _may_ fill it internally, usually as the full domain.
 
-> Warning
+> [!IMPORTANT]
 >
-> WebAuthn authentication only work on the top domain it was registered. 
+> WebAuthn authentication only work on the domain it was registered, and its subdomains. 
 
 Instead of modifying the config file, you should use the environment variables to set the name and ID for WebAuthn.
 
