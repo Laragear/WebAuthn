@@ -558,23 +558,25 @@ If you think WebAuthn is critical for these packages, [consider supporting this 
 
 * **Does this work with any browser?**
 
-[Yes](https://caniuse.com/#feat=webauthn). In the case of old browsers, you should have a fallback detection script. This can be asked with [the included JavaScript helper](#5-use-the-javascript-helper) in a breeze:
+[Yes](https://caniuse.com/#feat=webauthn).
+
+In case of older browser, you should check for WebAuthn support beforehand. This can be done [using the @laragear/webpass helper](#5-use-the-javascript-helper) in a breeze:
 
 ```javascript
-if (WebAuthn.doesntSupportWebAuthn()) {
+if (Webpass.isUnsupported()) {
    alert('Your device is not secure enough to use this site!');
 }
 ```
 
 * **Does this store the user fingerprints, PINs or patterns in my site?**
 
-No. WebAuthn only stores a cryptographic public key generated randomly by the device.
+No. WebAuthn only stores a cryptographic public key (Passkey) generated randomly by the device in the server.
 
-* **Can a phishing site steal WebAuthn credentials and use them in my site to impersonate an user?**
+* **Can a phishing site steal WebAuthn credentials (Passkeys) and use them in my site to impersonate a user?**
 
 No. WebAuthn _kills the phishing_ because, unlike passwords, the private key never leaves the device, and the key-pair is bound to the top-most domain it was registered.
 
-An user bing _phished_ at `staetbank.com` won't be able to login with a key made on the legit site `statebank.com`, as the device won't be able to find it.
+A user being _phished_ at `staetbank.com` won't be able to log in with a key made on the legit site `statebank.com`, as the device won't be able to find it.
 
 * **Can WebAuthn data identify a particular device?**
 
@@ -588,21 +590,27 @@ Yes, as long you are hashing them as you should. This is done by Laravel by defa
 
 Yes.
 
-* **Can a user register two or more credentials in the same device?**
+* **Can a user register two or more credentials (Passkeys) in the same device?**
 
 Not by default, but [you can enable it](#multiple-credentials-per-device).
 
 * **If a user loses his device, can he register a new device?**
 
-Yes. If you're not using a [password fallback](#password-fallback), you may need to create a logic to register a new device using an email or SMS. It's assumed he is reading his email using a trusted device.
+Yes. If you're not using a [password fallback](#password-fallback), you may need to create a logic to register a new device using an email or SMS. It's assumed the user can access its email through a trusted device.
 
 * **What's the difference between disabling and deleting a credential?**
 
-Disabling a credential doesn't delete it, so it's useful as a blacklisting mechanism and these can also be re-enabled. When the credential is deleted, it goes away forever from the server, so the credential in the authenticator device becomes orphaned.
+Disabling a credential doesn't delete it, so it's useful as a blacklisting mechanism until re-enabled or deleted. When the credential is deleted, it goes away forever from the server, so the credential in the authenticator device becomes orphaned.
 
 * **Can a user delete its credentials from its device?**
 
 Yes. If it does, the other part of the credentials in your server gets orphaned. You may want to show the user a list of registered credentials in the application to delete them.
+
+* **Can I delete a credential from the user's device?**
+
+No, there is no WebAuthn mechanism for that.
+
+The user must manually delete the credential from its device. Instructions depend on the device itself.
 
 * **How secure is this against passwords or 2FA?**
 
@@ -610,11 +618,11 @@ Extremely secure since it works only on HTTPS (or `localhost`). Also, no passwor
 
 * **Can I deactivate the password fallback? Can I enforce only WebAuthn authentication and nothing else?**
 
-[Yes](#password-fallback). Just be sure to create recovery helpers to avoid locking out your users.
+[Yes](#password-fallback). Just be sure to create recovery helpers to avoid locking out your users if they lose their device or [gets cloned](#detecting-cloned-credentials).
 
 * **Does this include JavaScript to handle WebAuthn in the frontend?**
 
-It's encouraged to [use Webpass package](#5-use-the-javascript-helper).
+No. It's encouraged to [use Webpass package](#5-use-the-javascript-helper) in your project or just directly through the CDN.
 
 Alternatively, for complex WebAuthn management, consider using the [`navigator.credentials`](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/credentials) API directly.
 
@@ -622,13 +630,13 @@ Alternatively, for complex WebAuthn management, consider using the [`navigator.c
 
 Yes and no. To register users, you still need to use [captcha](https://github.com/Laragear/ReCaptcha), honeypots, or other mechanisms to stop bots from filling forms.
 
-Once a user is registered, bots won't be able to log in because the real user is the only one that has the private key required for WebAuthn.
+Once a user is registered, bots won't be able to brute force your authentication because the real user is the only one that has the private key required for WebAuthn.
 
 * **Does this encode/decode the WebAuthn data automatically in the frontend?**
 
 Yes, the [Webpass helper](#5-use-the-javascript-helper) does it automatically for you.
 
-* **Does this encrypt the public keys?**
+* **Does this encrypt the public keys in the database?**
 
 Yes, public keys are encrypted when saved into the database with your app key.
 
@@ -672,7 +680,7 @@ No. The user can use whatever to authenticate in your app. This may be enabled o
 
 * **Everytime I make attestations or assertions, it says no challenge exists!** 
 
-Remember that your WebAuthn routes **must use Sessions**, because the Challenges are stored there.
+Remember that your WebAuthn routes **must use Sessions**, because cryptographic challenges are stored there.
 
 Session are automatically started on the `web` route group, or using the `StartSession` middleware directly. You can check this on your [HTTP Kernel Middleware](https://laravel.com/docs/9.x/middleware#middleware-groups).
 
@@ -680,7 +688,7 @@ Session are automatically started on the `web` route group, or using the `StartS
 
 If you have [debugging enabled](https://laravel.com/docs/9.x/configuration#debug-mode), like on development environments, the assertion data is logged in your [application logs](https://laravel.com/docs/9.x/logging).
 
-The rest of errors are thrown as-is. You may want to log them manually using [Laravel's Error Handler](https://laravel.com/docs/10.x/errors) depending on the case. 
+The rest of errors are thrown as-is. You may want to log them manually using [Laravel's Error Handler](https://laravel.com/docs/10.x/errors) depending on the case.
 
 ## Laravel Octane Compatibility
 
