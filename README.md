@@ -152,7 +152,7 @@ WebAuthn::routes();
 
 ### 5. Use the Javascript helper
 
-If you're using simple HTML packages, you may use the `@laragear/webpass` Javascript file directly setting it in your HTML document header.
+If you're using just HTML pages, you may use the `@laragear/webpass` Javascript file directly setting it in your HTML document header.
 
 ```html
 <head>
