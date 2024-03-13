@@ -12,6 +12,7 @@ use Laragear\WebAuthn\ByteBuffer;
 use Laragear\WebAuthn\CborDecoder;
 use Laragear\WebAuthn\Exceptions\AttestationException;
 use Laragear\WebAuthn\Exceptions\DataException;
+
 use function base64_decode;
 use function is_array;
 use function is_string;
@@ -63,6 +64,7 @@ class CompileAttestationObject
      * Returns an array map from a BASE64 encoded CBOR string.
      *
      * @return array{fmt: string, attStmt: array, authData: \Laragear\WebAuthn\ByteBuffer}
+     *
      * @throws \Laragear\WebAuthn\Exceptions\AttestationException
      */
     protected function decodeCborBase64(Request $request): array
@@ -73,19 +75,19 @@ class CompileAttestationObject
             throw AttestationException::make($e->getMessage());
         }
 
-        if (!is_array($data)) {
+        if (! is_array($data)) {
             throw AttestationException::make('CBOR Object is anything but an array.');
         }
 
-        if (!isset($data['fmt']) || !is_string($data['fmt'])) {
+        if (! isset($data['fmt']) || ! is_string($data['fmt'])) {
             throw AttestationException::make('Format is missing or invalid.');
         }
 
-        if (!isset($data['attStmt']) || !is_array($data['attStmt'])) {
+        if (! isset($data['attStmt']) || ! is_array($data['attStmt'])) {
             throw AttestationException::make('Statement is missing or invalid.');
         }
 
-        if (!isset($data['authData']) || !$data['authData'] instanceof ByteBuffer) {
+        if (! isset($data['authData']) || ! $data['authData'] instanceof ByteBuffer) {
             throw AttestationException::make('Authenticator Data is missing or invalid.');
         }
 

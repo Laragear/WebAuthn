@@ -88,6 +88,7 @@ trait WebAuthnAuthentication
      * Returns a queryable relationship for its WebAuthn Credentials.
      *
      * @phpstan-ignore-next-line
+     *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany|\Laragear\WebAuthn\Models\WebAuthnCredential
      */
     public function webAuthnCredentials(): MorphMany

@@ -13,6 +13,7 @@ use Ramsey\Uuid\Uuid;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
 use Tests\TestCase;
+
 use function config;
 
 #[WithMigration]
@@ -122,7 +123,7 @@ class AttestationRequestTest extends TestCase
                 'authenticatorSelection' => [
                     'residentKey' => 'required',
                     'requireResidentKey' => true,
-                    'userVerification' => 'required'
+                    'userVerification' => 'required',
                 ],
             ]);
     }

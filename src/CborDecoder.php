@@ -4,12 +4,13 @@ namespace Laragear\WebAuthn;
 
 use InvalidArgumentException;
 use Laragear\WebAuthn\Exceptions\DataException;
+
 use function is_int;
 use function is_string;
 use function sprintf;
 
 /**
- * MIT License
+ * MIT License.
  *
  * Copyright (c) 2018 Thomas Bleeker
  *
@@ -61,6 +62,7 @@ use function sprintf;
  *
  * @author Lukas Buchs
  * @author Thomas Bleeker
+ *
  * @internal
  */
 class CborDecoder
@@ -147,18 +149,22 @@ class CborDecoder
             case 24:
                 $val = $buf->getByteVal($offset);
                 $offset++;
+
                 return static::parseSimpleValue($val);
             case 25:
                 $floatValue = $buf->getHalfFloatVal($offset);
                 $offset += 2;
+
                 return $floatValue;
             case 26:
                 $floatValue = $buf->getFloatVal($offset);
                 $offset += 4;
+
                 return $floatValue;
             case 27:
                 $floatValue = $buf->getDoubleVal($offset);
                 $offset += 8;
+
                 return $floatValue;
             case 28:
             case 29:
@@ -197,18 +203,22 @@ class CborDecoder
             case 24:
                 $val = $buf->getByteVal($offset);
                 $offset++;
+
                 return $val;
             case 25:
                 $val = $buf->getUint16Val($offset);
                 $offset += 2;
+
                 return $val;
             case 26:
                 $val = $buf->getUint32Val($offset);
                 $offset += 4;
+
                 return $val;
             case 27:
                 $val = $buf->getUint64Val($offset);
                 $offset += 8;
+
                 return $val;
             case 28:
             case 29:
@@ -242,11 +252,13 @@ class CborDecoder
             case static::CBOR_MAJOR_BYTE_STRING:
                 $data = $buf->getBytes($offset, $val);
                 $offset += $val;
+
                 return new ByteBuffer($data); // bytes
 
             case static::CBOR_MAJOR_TEXT_STRING:
                 $data = $buf->getBytes($offset, $val);
                 $offset += $val;
+
                 return $data; // UTF-8
 
             case static::CBOR_MAJOR_ARRAY:
@@ -275,7 +287,7 @@ class CborDecoder
             $mapKey = static::parseItem($buffer, $offset);
             $mapVal = static::parseItem($buffer, $offset);
 
-            if (!is_int($mapKey) && !is_string($mapKey)) {
+            if (! is_int($mapKey) && ! is_string($mapKey)) {
                 throw new DataException('Can only use strings or integers as map keys');
             }
 

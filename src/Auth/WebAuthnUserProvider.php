@@ -10,6 +10,7 @@ use Laragear\WebAuthn\Assertion\Validator\AssertionValidation;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidator;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 use Laragear\WebAuthn\Exceptions\AssertionException;
+
 use function class_implements;
 use function config;
 use function in_array;
@@ -69,7 +70,7 @@ class WebAuthnUserProvider extends EloquentUserProvider
     }
 
     /**
-     * Check if the credentials are for a public key signed challenge
+     * Check if the credentials are for a public key signed challenge.
      */
     protected function isSignedChallenge(array $credentials): bool
     {

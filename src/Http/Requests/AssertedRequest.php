@@ -4,6 +4,7 @@ namespace Laragear\WebAuthn\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
+
 use function auth;
 
 class AssertedRequest extends FormRequest
@@ -40,7 +41,9 @@ class AssertedRequest extends FormRequest
      * Logs in the user for this assertion request.
      *
      * @param  string|null  $guard
+     *
      * @phpstan-ignore-next-line
+     *
      * @return \Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable|\Illuminate\Contracts\Auth\Authenticatable|null
      */
     public function login(

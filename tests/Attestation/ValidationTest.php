@@ -1,4 +1,6 @@
-<?php /** @noinspection JsonEncodingApiUsageInspection */
+<?php
+
+/** @noinspection JsonEncodingApiUsageInspection */
 
 namespace Tests\Attestation;
 
@@ -26,6 +28,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
 use Tests\TestCase;
+
 use function base64_decode;
 use function base64_encode;
 use function hex2bin;
@@ -35,7 +38,7 @@ use function session;
 use function tap;
 
 /**
- * CBOR Encoded strings where done in "cbor.me"
+ * CBOR Encoded strings where done in "cbor.me".
  *
  * @see https://cbor.me
  */
@@ -125,7 +128,7 @@ class ValidationTest extends TestCase
             json_encode([
                 'type' => 'webauthn.create',
                 'origin' => 'https://scoped.localhost',
-                'challenge' => $this->challenge->data->toBase64Url()
+                'challenge' => $this->challenge->data->toBase64Url(),
             ])
         );
 
@@ -494,7 +497,7 @@ class ValidationTest extends TestCase
             json_encode([
                 'type' => 'webauthn.create',
                 'origin' => '',
-                'challenge' => FakeAuthenticator::ATTESTATION_CHALLENGE
+                'challenge' => FakeAuthenticator::ATTESTATION_CHALLENGE,
             ])
         );
 
@@ -514,7 +517,7 @@ class ValidationTest extends TestCase
             json_encode([
                 'type' => 'webauthn.create',
                 'origin' => 'https://otherhost.com',
-                'challenge' => FakeAuthenticator::ATTESTATION_CHALLENGE
+                'challenge' => FakeAuthenticator::ATTESTATION_CHALLENGE,
             ])
         );
 
@@ -534,7 +537,7 @@ class ValidationTest extends TestCase
             json_encode([
                 'type' => 'webauthn.create',
                 'origin' => 'https://invalidlocalhost',
-                'challenge' => FakeAuthenticator::ATTESTATION_CHALLENGE
+                'challenge' => FakeAuthenticator::ATTESTATION_CHALLENGE,
             ])
         );
 

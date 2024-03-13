@@ -1,4 +1,6 @@
-<?php /** @noinspection JsonEncodingApiUsageInspection */
+<?php
+
+/** @noinspection JsonEncodingApiUsageInspection */
 
 namespace Tests\Auth;
 

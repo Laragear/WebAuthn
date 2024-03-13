@@ -13,7 +13,7 @@ use Laragear\WebAuthn\Models\WebAuthnCredential;
 class MayPreventDuplicateCredentials
 {
     /**
-     * Handle the Attestation creation
+     * Handle the Attestation creation.
      */
     public function handle(AttestationCreation $attestable, Closure $next): mixed
     {
@@ -35,9 +35,9 @@ class MayPreventDuplicateCredentials
             // @phpstan-ignore-next-line
             ->map(static function (WebAuthnCredential $credential): array {
                 return array_filter([
-                    'id'=> $credential->getKey(),
+                    'id' => $credential->getKey(),
                     'type' => 'public-key',
-                    'transports' => $credential->transports
+                    'transports' => $credential->transports,
                 ]);
             })
             ->toArray();

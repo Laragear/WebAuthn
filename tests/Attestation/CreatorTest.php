@@ -14,6 +14,7 @@ use Orchestra\Testbench\Attributes\WithMigration;
 use Ramsey\Uuid\Uuid;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
 use Tests\TestCase;
+
 use function config;
 use function now;
 use function session;
@@ -66,7 +67,7 @@ class CreatorTest extends TestCase
             })
             ->assertJson([
                 'rp' => [
-                    'name' => 'Laravel'
+                    'name' => 'Laravel',
                 ],
                 'user' => [
                     'name' => 'test@email.com',
@@ -108,8 +109,8 @@ class CreatorTest extends TestCase
             })
             ->assertJsonFragment([
                 'authenticatorSelection' => [
-                    'userVerification' => 'required'
-                ]
+                    'userVerification' => 'required',
+                ],
             ]);
     }
 
@@ -123,8 +124,8 @@ class CreatorTest extends TestCase
             })
             ->assertJsonFragment([
                 'authenticatorSelection' => [
-                    'userVerification' => 'discouraged'
-                ]
+                    'userVerification' => 'discouraged',
+                ],
             ]);
     }
 
@@ -140,7 +141,7 @@ class CreatorTest extends TestCase
                 'authenticatorSelection' => [
                     'residentKey' => 'required',
                     'requireResidentKey' => true,
-                    'userVerification' => 'required'
+                    'userVerification' => 'required',
                 ],
             ]);
     }
@@ -172,8 +173,8 @@ class CreatorTest extends TestCase
         $this->response()
             ->assertJsonFragment([
                 'excludeCredentials' => [
-                    ['id'=> 'test_id', 'type' => 'public-key',]
-                ]
+                    ['id' => 'test_id', 'type' => 'public-key'],
+                ],
             ]);
     }
 

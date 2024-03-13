@@ -8,6 +8,7 @@ use Laragear\WebAuthn\Attestation\Validator\AttestationValidator;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 use Laragear\WebAuthn\Events\CredentialCreated;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
+
 use function is_callable;
 
 /**

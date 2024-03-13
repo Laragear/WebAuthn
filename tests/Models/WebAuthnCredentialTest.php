@@ -1,4 +1,6 @@
-<?php /** @noinspection JsonEncodingApiUsageInspection */
+<?php
+
+/** @noinspection JsonEncodingApiUsageInspection */
 
 namespace Tests\Models;
 
@@ -12,6 +14,7 @@ use Ramsey\Uuid\Uuid;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
 use Tests\TestCase;
+
 use function array_merge;
 use function json_encode;
 use function now;
@@ -47,7 +50,7 @@ class WebAuthnCredentialTest extends TestCase
         DB::table('webauthn_credentials')->insert($base());
 
         DB::table('webauthn_credentials')->insert($base([
-            'id' => '27EdS6eTDHCTa9Y73G9gY1b81yVJuuiu1TTyorFicBf'
+            'id' => '27EdS6eTDHCTa9Y73G9gY1b81yVJuuiu1TTyorFicBf',
         ]));
 
         DB::table('webauthn_credentials')->insert($base([

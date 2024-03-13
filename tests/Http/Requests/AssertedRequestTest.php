@@ -18,6 +18,7 @@ use Ramsey\Uuid\Uuid;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
 use Tests\TestCase;
+
 use function array_merge;
 use function base64_decode;
 use function config;
@@ -95,7 +96,7 @@ class AssertedRequestTest extends TestCase
         )]);
 
         $this->postJson('test', FakeAuthenticator::assertionResponse(), [
-            'X-WebAuthn-Remember' => 1
+            'X-WebAuthn-Remember' => 1,
         ])->assertOk();
 
         $event->assertDispatched(Login::class, static function (Login $event): bool {
@@ -112,7 +113,7 @@ class AssertedRequestTest extends TestCase
         )]);
 
         $this->postJson('test', FakeAuthenticator::assertionResponse(), [
-            'WebAuthn-Remember' => 1
+            'WebAuthn-Remember' => 1,
         ])->assertOk();
 
         $event->assertDispatched(Login::class, static function (Login $event): bool {
@@ -129,7 +130,7 @@ class AssertedRequestTest extends TestCase
         )]);
 
         $this->postJson('test', array_merge(FakeAuthenticator::assertionResponse(), [
-            'remember' => 'on'
+            'remember' => 'on',
         ]))->assertOk();
 
         $event->assertDispatched(Login::class, static function (Login $event): bool {
@@ -184,7 +185,7 @@ class AssertedRequestTest extends TestCase
         )]);
 
         $this->postJson('test', array_merge(FakeAuthenticator::assertionResponse(), [
-            'remember' => 'on'
+            'remember' => 'on',
         ]))->assertOk();
 
         $this->assertAuthenticatedAs(WebAuthnAuthenticatableUser::find(1));
@@ -232,7 +233,7 @@ class AssertedRequestTest extends TestCase
                 'signature' => 'test',
                 'userHandle' => 'test',
             ],
-            'type' => 'test'
+            'type' => 'test',
         ])
             ->assertJsonValidationErrorFor('rawId');
     }

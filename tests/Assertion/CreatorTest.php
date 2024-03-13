@@ -12,6 +12,7 @@ use Orchestra\Testbench\Attributes\WithMigration;
 use Ramsey\Uuid\Uuid;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
 use Tests\TestCase;
+
 use function config;
 use function in_array;
 use function now;
@@ -123,8 +124,8 @@ class CreatorTest extends TestCase
                 'timeout' => 60000,
                 'challenge' => session('_webauthn')->data->toBase64Url(),
                 'allowCredentials' => [
-                    ['id' => 'test_id', 'type' => 'public-key']
-                ]
+                    ['id' => 'test_id', 'type' => 'public-key'],
+                ],
             ]);
     }
 

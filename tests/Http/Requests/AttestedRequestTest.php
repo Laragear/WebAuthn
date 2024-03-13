@@ -15,6 +15,7 @@ use Orchestra\Testbench\Attributes\WithMigration;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
 use Tests\TestCase;
+
 use function base64_decode;
 use function config;
 
@@ -70,10 +71,10 @@ class AttestedRequestTest extends TestCase
         $this->session(['_webauthn' => new Challenge(
             new ByteBuffer(
                 base64_decode(FakeAuthenticator::ATTESTATION_CHALLENGE)),
-                60,
-                false,
-                ['user_uuid' => FakeAuthenticator::ATTESTATION_USER['id']]
-            )
+            60,
+            false,
+            ['user_uuid' => FakeAuthenticator::ATTESTATION_USER['id']]
+        ),
         ]);
 
         $event = Event::fake(CredentialCreated::class);
@@ -98,10 +99,10 @@ class AttestedRequestTest extends TestCase
         $this->session(['foo' => new Challenge(
             new ByteBuffer(
                 base64_decode(FakeAuthenticator::ATTESTATION_CHALLENGE)),
-                60,
-                false,
-                ['user_uuid' => FakeAuthenticator::ATTESTATION_USER['id']]
-            )
+            60,
+            false,
+            ['user_uuid' => FakeAuthenticator::ATTESTATION_USER['id']]
+        ),
         ]);
 
         $this->postJson('test', FakeAuthenticator::attestationResponse())->assertOk();
@@ -116,10 +117,10 @@ class AttestedRequestTest extends TestCase
         $this->session(['_webauthn' => new Challenge(
             new ByteBuffer(
                 base64_decode(FakeAuthenticator::ATTESTATION_CHALLENGE)),
-                60,
-                false,
-                ['user_uuid' => FakeAuthenticator::ATTESTATION_USER['id']]
-            )
+            60,
+            false,
+            ['user_uuid' => FakeAuthenticator::ATTESTATION_USER['id']]
+        ),
         ]);
 
         $this->postJson('test', FakeAuthenticator::attestationResponse())->assertOk();
@@ -142,10 +143,10 @@ class AttestedRequestTest extends TestCase
 
         $this->session(['_webauthn' => new Challenge(
             new ByteBuffer(base64_decode(FakeAuthenticator::ATTESTATION_CHALLENGE)),
-                60,
-                false,
-                ['user_uuid' => FakeAuthenticator::ATTESTATION_USER['id']]
-            )
+            60,
+            false,
+            ['user_uuid' => FakeAuthenticator::ATTESTATION_USER['id']]
+        ),
         ]);
 
         $this->postJson('test', FakeAuthenticator::attestationResponse())->assertOk();
@@ -165,7 +166,7 @@ class AttestedRequestTest extends TestCase
             60,
             false,
             ['user_uuid' => FakeAuthenticator::ATTESTATION_USER['id']]
-        )
+        ),
         ]);
 
         Route::middleware('web')->post('test', static function (AttestedRequest $request): array {

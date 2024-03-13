@@ -6,6 +6,7 @@ use Illuminate\Support\Carbon;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
 use Orchestra\Testbench\Attributes\WithMigration;
 use Ramsey\Uuid\Uuid;
+
 use function now;
 
 #[WithMigration]
@@ -52,7 +53,7 @@ class WebAuthnAuthenticationTest extends TestCase
             'aaguid' => Uuid::NIL,
             'public_key' => 'test_key',
             'attestation_format' => 'none',
-            'disabled_at' => now()
+            'disabled_at' => now(),
         ])->save();
 
         $this->user->flushCredentials();
@@ -71,7 +72,7 @@ class WebAuthnAuthenticationTest extends TestCase
             'aaguid' => Uuid::NIL,
             'public_key' => 'test_key',
             'attestation_format' => 'none',
-            'disabled_at' => now()
+            'disabled_at' => now(),
         ])->save();
 
         $this->user->load('webAuthnCredentials');
@@ -96,14 +97,14 @@ class WebAuthnAuthenticationTest extends TestCase
             'aaguid' => Uuid::NIL,
             'public_key' => 'test_key',
             'attestation_format' => 'none',
-            'disabled_at' => now()
+            'disabled_at' => now(),
         ])->save();
 
         $this->user->flushCredentials('test_id_2');
 
         $this->assertDatabaseCount(WebAuthnCredential::class, 1);
         $this->assertDatabaseMissing(WebAuthnCredential::class, [
-            'id' => 'test_id'
+            'id' => 'test_id',
         ]);
     }
 
@@ -118,7 +119,7 @@ class WebAuthnAuthenticationTest extends TestCase
             'aaguid' => Uuid::NIL,
             'public_key' => 'test_key',
             'attestation_format' => 'none',
-            'disabled_at' => now()
+            'disabled_at' => now(),
         ])->save();
 
         $this->user->load('webAuthnCredentials');
@@ -132,7 +133,7 @@ class WebAuthnAuthenticationTest extends TestCase
 
         $this->assertDatabaseCount(WebAuthnCredential::class, 1);
         $this->assertDatabaseMissing(WebAuthnCredential::class, [
-            'id' => 'test_id'
+            'id' => 'test_id',
         ]);
     }
 
@@ -149,7 +150,7 @@ class WebAuthnAuthenticationTest extends TestCase
             'aaguid' => Uuid::NIL,
             'public_key' => 'test_key',
             'attestation_format' => 'none',
-            'disabled_at' => now()->subMinute()
+            'disabled_at' => now()->subMinute(),
         ])->save();
 
         $this->user->disableAllCredentials();
@@ -178,7 +179,7 @@ class WebAuthnAuthenticationTest extends TestCase
             'aaguid' => Uuid::NIL,
             'public_key' => 'test_key',
             'attestation_format' => 'none',
-            'disabled_at' => now()->subMinute()
+            'disabled_at' => now()->subMinute(),
         ])->save();
 
         $this->user->load('webAuthnCredentials');

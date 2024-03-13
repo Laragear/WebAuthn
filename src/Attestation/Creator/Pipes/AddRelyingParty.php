@@ -20,7 +20,7 @@ class AddRelyingParty
     }
 
     /**
-     * Handle the Attestation creation
+     * Handle the Attestation creation.
      */
     public function handle(AttestationCreation $attestable, Closure $next): mixed
     {
