@@ -28,8 +28,7 @@ class AssertionValidation
         public ?WebAuthnCredential $credential = null,
         public ?ClientDataJson $clientDataJson = null,
         public ?AuthenticatorData $authenticatorData = null,
-    )
-    {
+    ) {
         //
     }
 }

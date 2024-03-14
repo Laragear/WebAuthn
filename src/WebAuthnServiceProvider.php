@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
+
 use function method_exists;
 
 /**
@@ -23,6 +24,7 @@ class WebAuthnServiceProvider extends ServiceProvider
      * Register the service provider.
      *
      * @return void
+     *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function register(): void
@@ -40,6 +42,7 @@ class WebAuthnServiceProvider extends ServiceProvider
      * Boot the service provider.
      *
      * @return void
+     *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function boot(): void
@@ -59,6 +62,7 @@ class WebAuthnServiceProvider extends ServiceProvider
      * Publishes migrations from the given path.
      *
      * @param  string[]|string  $paths
+     *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     protected function publishesPackageMigrations(array|string $paths, string $groups = 'migrations'): void
@@ -107,6 +111,7 @@ class WebAuthnServiceProvider extends ServiceProvider
      * Extends the Authentication Factory with a WebAuthn Eloquent-Compatible User Provider.
      *
      * @return void
+     *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     protected function registerUserProvider(): void

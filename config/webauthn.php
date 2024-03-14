@@ -15,7 +15,7 @@ return [
 
     'relying_party' => [
         'name' => env('WEBAUTHN_NAME', config('app.name')),
-        'id'   => env('WEBAUTHN_ID'),
+        'id' => env('WEBAUTHN_ID'),
     ],
 
     /*

@@ -1,4 +1,6 @@
-<?php /** @noinspection JsonEncodingApiUsageInspection */
+<?php
+
+/** @noinspection JsonEncodingApiUsageInspection */
 
 namespace Tests\Assertion;
 
@@ -26,6 +28,7 @@ use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
 use Tests\TestCase;
 use Throwable;
+
 use function base64_decode;
 use function base64_encode;
 use function json_encode;
@@ -121,7 +124,7 @@ class ValidationTest extends TestCase
         $publicKey = 'txSZLg1bc1ndhdq5tjlsbplNwm4wsKd4/IwCuEuSfPw=';
 
         DB::table('webauthn_credentials')->where('id', FakeAuthenticator::CREDENTIAL_ID)->update([
-            'public_key' => Crypt::encryptString("-----BEGIN PUBLIC KEY-----\n$publicKey\n-----END PUBLIC KEY-----\n")
+            'public_key' => Crypt::encryptString("-----BEGIN PUBLIC KEY-----\n$publicKey\n-----END PUBLIC KEY-----\n"),
         ]);
 
         $this->validation->request->setJson(new InputBag($assertionResponse));
@@ -140,7 +143,7 @@ class ValidationTest extends TestCase
         $publicKey = 'MCowBQYDK2VwAyEAtxSZLg1bc1ndhdq5tjlsbplNwm4wsKd4/IwCuEuSfPw=';
 
         DB::table('webauthn_credentials')->where('id', FakeAuthenticator::CREDENTIAL_ID)->update([
-            'public_key' => Crypt::encryptString("-----BEGIN PUBLIC KEY-----\n$publicKey\n-----END PUBLIC KEY-----\n")
+            'public_key' => Crypt::encryptString("-----BEGIN PUBLIC KEY-----\n$publicKey\n-----END PUBLIC KEY-----\n"),
         ]);
 
         $this->validation->request->setJson(new InputBag($assertionResponse));
@@ -474,7 +477,7 @@ class ValidationTest extends TestCase
             json_encode([
                 'type' => 'webauthn.get',
                 'origin' => '',
-                'challenge' => FakeAuthenticator::ASSERTION_CHALLENGE
+                'challenge' => FakeAuthenticator::ASSERTION_CHALLENGE,
             ])
         );
 
@@ -494,7 +497,7 @@ class ValidationTest extends TestCase
             json_encode([
                 'type' => 'webauthn.get',
                 'origin' => 'https://otherhost.com',
-                'challenge' => FakeAuthenticator::ASSERTION_CHALLENGE
+                'challenge' => FakeAuthenticator::ASSERTION_CHALLENGE,
             ])
         );
 
@@ -514,7 +517,7 @@ class ValidationTest extends TestCase
             json_encode([
                 'type' => 'webauthn.get',
                 'origin' => 'https://invalidlocalhost',
-                'challenge' => FakeAuthenticator::ASSERTION_CHALLENGE
+                'challenge' => FakeAuthenticator::ASSERTION_CHALLENGE,
             ])
         );
 
@@ -572,11 +575,11 @@ class ValidationTest extends TestCase
     public function test_signature_fails_if_credential_public_key_invalid(): void
     {
         DB::table('webauthn_credentials')->where('id', FakeAuthenticator::CREDENTIAL_ID)->update([
-            'public_key' => Crypt::encryptString('invalid')
+            'public_key' => Crypt::encryptString('invalid'),
         ]);
 
         $this->expectException(AssertionException::class);
-        $this->expectExceptionMessageMatches("/^Assertion Error: Public key is invalid.*/m");
+        $this->expectExceptionMessageMatches('/^Assertion Error: Public key is invalid.*/m');
 
         $this->validate();
     }
@@ -598,7 +601,7 @@ class ValidationTest extends TestCase
     public function test_signature_fails_if_invalid(): void
     {
         DB::table('webauthn_credentials')->where('id', FakeAuthenticator::CREDENTIAL_ID)->update([
-            'public_key' => Crypt::encryptString("-----BEGIN PUBLIC KEY-----
+            'public_key' => Crypt::encryptString('-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnBadZo+CnNdUHvzCWuLN
 TFsXTCjsHH5A+aUtIImsJsbTKmYsYtOuiOwEgcGglKEJV0MwzV4v2SDQzSirwLEr
 isis4qV6Q3a0ZyZcYhgyMzvkk5CtDhpzxhsmFwiMSGt9gVRE8cOxGDQX2jTPfqyk
@@ -606,12 +609,12 @@ xZTkoXKEHevq8kl5PBCPsaWskrWsySw9mmqNCmIjhE2Evgarm0Xq7yq5h62H2ZzF
 T3U5C0H32I9cTPk6f/SVke+GMseVRiLleltJMNl0CAcKGBmJpQfeLFlKmOc15Wql
 wuMegjGULD9dPQvZS5uX+P0bHYfXq5V/HTwrR9FmkEdhq5YB9nE6RkE6Fbs5f+LI
 hQIDAQAB
------END PUBLIC KEY-----")
+-----END PUBLIC KEY-----'),
         ]);
 
         $this->expectException(AssertionException::class);
 
-        $this->expectExceptionMessageMatches("/^Assertion Error: Signature is invalid.*/m");
+        $this->expectExceptionMessageMatches('/^Assertion Error: Signature is invalid.*/m');
 
         $this->validate();
     }
@@ -621,7 +624,7 @@ hQIDAQAB
         $event = Event::fake([CredentialCloned::class, CredentialDisabled::class]);
 
         DB::table('webauthn_credentials')->where('id', FakeAuthenticator::CREDENTIAL_ID)->update([
-            'counter' => 1
+            'counter' => 1,
         ]);
 
         $this->expectException(AssertionException::class);
@@ -646,7 +649,7 @@ hQIDAQAB
         $event = Event::fake([CredentialCloned::class, CredentialDisabled::class]);
 
         DB::table('webauthn_credentials')->where('id', FakeAuthenticator::CREDENTIAL_ID)->update([
-            'counter' => 2
+            'counter' => 2,
         ]);
 
         $this->expectException(AssertionException::class);

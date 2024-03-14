@@ -13,7 +13,7 @@ use Laragear\WebAuthn\Enums\UserVerification;
 class SetResidentKeyConfiguration
 {
     /**
-     * Handle the Attestation creation
+     * Handle the Attestation creation.
      */
     public function handle(AttestationCreation $attestable, Closure $next): mixed
     {
@@ -28,7 +28,6 @@ class SetResidentKeyConfiguration
                 $attestable->userVerification = UserVerification::REQUIRED;
             }
         }
-
 
         return $next($attestable);
     }

@@ -8,7 +8,9 @@ use Laragear\WebAuthn\Attestation\Validator\AttestationValidation;
 use Laragear\WebAuthn\Exceptions\AttestationException;
 use Laragear\WebAuthn\Exceptions\DataException;
 use Ramsey\Uuid\Uuid;
+
 use function parse_url;
+
 use const PHP_URL_HOST;
 
 /**

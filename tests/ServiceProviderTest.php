@@ -13,6 +13,7 @@ use Laragear\WebAuthn\WebAuthnAuthentication;
 use Laragear\WebAuthn\WebAuthnServiceProvider;
 use Orchestra\Testbench\Attributes\DefineEnvironment;
 use Orchestra\Testbench\Attributes\WithMigration;
+
 use function version_compare;
 
 #[WithMigration]
@@ -46,8 +47,7 @@ class ServiceProviderTest extends TestCase
 
         static::assertSame(
             [
-                realpath(WebAuthnServiceProvider::MIGRATIONS . '/0000_00_00_000000_create_webauthn_credentials.php') =>
-                    $this->app->databasePath("migrations/2020_01_01_163025_create_webauthn_credentials.php"),
+                realpath(WebAuthnServiceProvider::MIGRATIONS.'/0000_00_00_000000_create_webauthn_credentials.php') => $this->app->databasePath('migrations/2020_01_01_163025_create_webauthn_credentials.php'),
             ],
             ServiceProvider::pathsToPublish(WebAuthnServiceProvider::class, 'migrations')
         );
@@ -62,7 +62,8 @@ class ServiceProviderTest extends TestCase
     {
         static::assertNull($this->app->make(WebAuthnAuthenticatable::class));
 
-        $user = new class extends Fluent implements WebAuthnAuthenticatable {
+        $user = new class extends Fluent implements WebAuthnAuthenticatable
+        {
             use WebAuthnAuthentication;
         };
 

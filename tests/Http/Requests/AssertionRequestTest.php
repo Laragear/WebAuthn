@@ -14,6 +14,7 @@ use Orchestra\Testbench\Attributes\WithMigration;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
 use Tests\TestCase;
+
 use function config;
 use function session;
 use function strlen;
@@ -44,11 +45,11 @@ class AssertionRequestTest extends TestCase
 
         $this->postJson('test')
             ->assertSessionHas('_webauthn', function (Challenge $challenge): bool {
-                return !$challenge->verify;
+                return ! $challenge->verify;
             })
             ->assertJson([
                 'timeout' => 60000,
-                'challenge' => session('_webauthn')->data->toBase64Url()
+                'challenge' => session('_webauthn')->data->toBase64Url(),
             ]);
     }
 
@@ -63,7 +64,7 @@ class AssertionRequestTest extends TestCase
         $this->postJson('test')
             ->assertJson([
                 'timeout' => 120000,
-                'challenge' => session('_webauthn')->data->toBase64Url()
+                'challenge' => session('_webauthn')->data->toBase64Url(),
             ]);
     }
 
@@ -78,7 +79,7 @@ class AssertionRequestTest extends TestCase
         $this->postJson('test')
             ->assertJson([
                 'timeout' => 60000,
-                'challenge' => session('_webauthn')->data->toBase64Url()
+                'challenge' => session('_webauthn')->data->toBase64Url(),
             ]);
 
         static::assertSame(64, strlen(session('_webauthn')->data->toHex()));
@@ -109,7 +110,7 @@ class AssertionRequestTest extends TestCase
             ->assertOk()
             ->assertJson([
                 'timeout' => 60000,
-                'challenge' => session('_webauthn')->data->toBase64Url()
+                'challenge' => session('_webauthn')->data->toBase64Url(),
             ]);
     }
 
@@ -136,7 +137,7 @@ class AssertionRequestTest extends TestCase
         $this->postJson('test')->assertJson([
             'timeout' => 60000,
             'userVerification' => 'discouraged',
-            'challenge' => session('_webauthn')->data->toBase64Url()
+            'challenge' => session('_webauthn')->data->toBase64Url(),
         ]);
 
         static::assertFalse(session('_webauthn')->verify);
@@ -151,7 +152,7 @@ class AssertionRequestTest extends TestCase
         $this->postJson('test')->assertJson([
             'timeout' => 60000,
             'userVerification' => 'required',
-            'challenge' => session('_webauthn')->data->toBase64Url()
+            'challenge' => session('_webauthn')->data->toBase64Url(),
         ]);
 
         static::assertTrue(session('_webauthn')->verify);

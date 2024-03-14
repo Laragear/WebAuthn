@@ -5,6 +5,7 @@ namespace Laragear\WebAuthn\Attestation\Creator\Pipes;
 use Closure;
 use Laragear\WebAuthn\Attestation\AuthenticatorData;
 use Laragear\WebAuthn\Attestation\Creator\AttestationCreation;
+
 use function function_exists;
 
 /**
@@ -13,7 +14,7 @@ use function function_exists;
 class AddAcceptedAlgorithms
 {
     /**
-     * Handle the Attestation creation
+     * Handle the Attestation creation.
      */
     public function handle(AttestationCreation $attestable, Closure $next): mixed
     {
@@ -22,7 +23,7 @@ class AddAcceptedAlgorithms
         // which type the key is. This way we can later validate the challenge.
         $algorithms = [
             AuthenticatorData::EC2_ES256,
-            AuthenticatorData::RSA_RS256
+            AuthenticatorData::RSA_RS256,
         ];
 
         if ($this->isSupportingEd25519()) {

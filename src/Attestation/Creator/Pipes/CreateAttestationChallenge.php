@@ -24,7 +24,7 @@ class CreateAttestationChallenge
     }
 
     /**
-     * Handle the Attestation creation
+     * Handle the Attestation creation.
      *
      * @throws \Random\RandomException
      */

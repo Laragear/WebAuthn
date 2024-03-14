@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Laragear\WebAuthn\Assertion\Creator\AssertionCreation;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
+
 use function array_filter;
 
 class MayRetrieveCredentialsIdForUser
@@ -40,7 +41,7 @@ class MayRetrieveCredentialsIdForUser
             return array_filter([
                 'id' => $credential->getKey(),
                 'type' => 'public-key',
-                'transports' => $credential->transports
+                'transports' => $credential->transports,
             ]);
         });
     }

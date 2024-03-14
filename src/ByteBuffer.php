@@ -7,6 +7,7 @@ use InvalidArgumentException;
 use JsonSerializable;
 use OutOfBoundsException;
 use Stringable;
+
 use function base64_decode;
 use function base64_encode;
 use function bin2hex;
@@ -23,7 +24,7 @@ use function substr;
 use function unpack;
 
 /**
- * MIT License
+ * MIT License.
  *
  * Copyright (c) 2018 Thomas Bleeker
  *
@@ -75,12 +76,13 @@ use function unpack;
  *
  * @author Lukas Buchs
  * @author Thomas Bleeker
+ *
  * @internal
  */
 class ByteBuffer implements JsonSerializable, Jsonable, Stringable
 {
     /**
-     * Create a new ByteBuffer
+     * Create a new ByteBuffer.
      */
     final public function __construct(protected string $binaryData, protected int $dataLength = 0)
     {
@@ -108,7 +110,7 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
      */
     public function hasNoLength(): bool
     {
-        return !$this->hasLength();
+        return ! $this->hasLength();
     }
 
     /**
@@ -158,7 +160,7 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
      */
     public function getByteVal(int $offset = 0): int
     {
-        if (!$byte = $this->binaryData[$offset] ?? null) {
+        if (! $byte = $this->binaryData[$offset] ?? null) {
             throw new InvalidArgumentException('ByteBuffer: Invalid offset');
         }
 
@@ -227,8 +229,8 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
         // FROM spec pseudo decode_half(unsigned char *halfp)
         $half = $this->getUint16Val($offset);
 
-        $exp = ($half >> 10) & 0x1f;
-        $mant = $half & 0x3ff;
+        $exp = ($half >> 10) & 0x1F;
+        $mant = $half & 0x3FF;
 
         if ($exp === 0) {
             $val = $mant * (2 ** -24);
@@ -261,6 +263,7 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
         if ($offset < 0 || ($offset + 8) > $this->dataLength) {
             throw new InvalidArgumentException('ByteBuffer: Invalid offset');
         }
+
         return unpack('E', $this->binaryData, $offset)[1];
     }
 
@@ -375,7 +378,7 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
     }
 
     /**
-     * Create a random ByteBuffer
+     * Create a random ByteBuffer.
      *
      * @throws \Random\RandomException
      */

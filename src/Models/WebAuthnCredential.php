@@ -9,7 +9,9 @@ use Laragear\MetaModel\CustomizableModel;
 use Laragear\WebAuthn\Events\CredentialDisabled;
 use Laragear\WebAuthn\Events\CredentialEnabled;
 use Laragear\WebAuthn\Migrations\WebAuthnAuthenticationMigration;
+
 use function parse_url;
+
 use const PHP_URL_HOST;
 
 /**
@@ -41,27 +43,20 @@ use const PHP_URL_HOST;
  * @method \Illuminate\Support\LazyCollection<int, \static>|\static[] lazyByIdDesc(int $chunkSize = 1000, string|null $column = null, string|null $alias = null)
  *
  * @property-read string $id
- *
  * @property-read string $user_id
  * @property string|null $alias
- *
  * @property-read int $counter
  * @property-read string $rp_id
  * @property-read string $origin
  * @property-read array<int, string>|null $transports
  * @property-read string $aaguid
- *
  * @property-read string $public_key
  * @property-read string $attestation_format
  * @property-read array<int, string> $certificates
- *
  * @property-read \Illuminate\Support\Carbon|null $disabled_at
- *
  * @property-read \Laragear\WebAuthn\ByteBuffer $binary_id
- *
  * @property-read \Illuminate\Support\Carbon $updated_at
  * @property-read \Illuminate\Support\Carbon $created_at
- *
  * @property-read \Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable $authenticatable
  *
  * @method \Illuminate\Database\Eloquent\Builder|\static whereEnabled()
@@ -107,12 +102,14 @@ class WebAuthnCredential extends Model
 
     /**
      * @phpstan-ignore-next-line
+     *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo|\Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable
      */
     public function authenticatable(): MorphTo
     {
         return $this->morphTo('authenticatable');
     }
+
     /**
      * Filter the query by enabled credentials.
      */
@@ -144,7 +141,7 @@ class WebAuthnCredential extends Model
      */
     public function isDisabled(): bool
     {
-        return !$this->isEnabled();
+        return ! $this->isEnabled();
     }
 
     /**
@@ -188,7 +185,7 @@ class WebAuthnCredential extends Model
     }
 
     /**
-     * Returns the RP ID attribute
+     * Returns the RP ID attribute.
      *
      * @param  string  $rpId
      * @return string

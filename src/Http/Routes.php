@@ -14,8 +14,7 @@ class Routes
         string $attestController = 'App\Http\Controllers\WebAuthn\WebAuthnRegisterController',
         string $assert = 'webauthn/login',
         string $assertController = 'App\Http\Controllers\WebAuthn\WebAuthnLoginController',
-    ): void
-    {
+    ): void {
         Route::middleware('web')
             ->group(static function () use ($assert, $assertController, $attest, $attestController): void {
                 Route::controller($attestController)

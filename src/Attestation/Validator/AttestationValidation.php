@@ -12,7 +12,7 @@ use Laragear\WebAuthn\Models\WebAuthnCredential;
 class AttestationValidation
 {
     /**
-     * Create a new Attestation Validation procedure
+     * Create a new Attestation Validation procedure.
      */
     public function __construct(
         public WebAuthnAuthenticatable $user,
@@ -21,8 +21,7 @@ class AttestationValidation
         public ?AttestationObject $attestationObject = null,
         public ?ClientDataJson $clientDataJson = null,
         public ?WebAuthnCredential $credential = null,
-    )
-    {
+    ) {
         //
     }
 }

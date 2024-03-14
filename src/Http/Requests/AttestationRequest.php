@@ -26,11 +26,12 @@ class AttestationRequest extends FormRequest
      * Validate the class instance.
      *
      * @return void
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function validateResolved(): void
     {
-        if (!$this->passesAuthorization()) {
+        if (! $this->passesAuthorization()) {
             $this->failedAuthorization();
         }
     }

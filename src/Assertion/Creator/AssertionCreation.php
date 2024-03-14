@@ -19,8 +19,7 @@ class AssertionCreation
         public ?Collection $acceptedCredentials = null,
         public ?UserVerification $userVerification = null,
         public JsonTransport $json = new JsonTransport(),
-    )
-    {
+    ) {
         //
     }
 }

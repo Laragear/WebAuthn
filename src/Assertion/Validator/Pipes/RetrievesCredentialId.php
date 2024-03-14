@@ -6,6 +6,7 @@ use Closure;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidation;
 use Laragear\WebAuthn\Exceptions\AssertionException;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
+
 use function in_array;
 
 /**
@@ -31,7 +32,7 @@ class RetrievesCredentialId
         // We can now find the credential.
         $validation->credential = WebAuthnCredential::whereKey($id)->first();
 
-        if (!$validation->credential) {
+        if (! $validation->credential) {
             throw AssertionException::make('Credential ID does not exist.');
         }
 

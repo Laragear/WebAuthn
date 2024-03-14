@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Laragear\WebAuthn\Attestation\Formats;
 
 /**

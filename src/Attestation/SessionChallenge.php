@@ -12,6 +12,7 @@ trait SessionChallenge
      * Stores an Attestation challenge into the Cache.
      *
      * @param  array{credentials?: string[]}|array{user_uuid: string, user_handle: string}  $options
+     *
      * @throws \Random\RandomException
      */
     protected function storeChallenge(Request $request, ?UserVerification $verify, array $options = []): Challenge
@@ -27,6 +28,7 @@ trait SessionChallenge
      * Creates a Challenge using the default timeout.
      *
      * @param  array{credentials?: string[]}|array{user_uuid: string, user_handle: string}  $options
+     *
      * @throws \Random\RandomException
      */
     protected function createChallenge(?UserVerification $verify, array $options = []): Challenge

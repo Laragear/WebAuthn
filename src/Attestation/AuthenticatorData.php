@@ -5,6 +5,7 @@ namespace Laragear\WebAuthn\Attestation;
 use Laragear\WebAuthn\ByteBuffer;
 use Laragear\WebAuthn\CborDecoder;
 use Laragear\WebAuthn\Exceptions\DataException;
+
 use function base64_encode;
 use function chr;
 use function chunk_split;
@@ -16,7 +17,7 @@ use function substr;
 use function unpack;
 
 /**
- * MIT License
+ * MIT License.
  *
  * Copyright (c) 2021 Lukas Buchs
  *
@@ -43,6 +44,7 @@ use function unpack;
  * This file has been modernized to fit Laravel.
  *
  * @author Lukas Buchs
+ *
  * @internal
  *
  * DER = Distinguished Encoding Rules;
@@ -86,11 +88,9 @@ class AuthenticatorData
         public int $counter,
         public object $attestedCredentialData,
         public array $extensionData,
-    )
-    {
+    ) {
         //
     }
-
 
     /**
      * Checks if the Relying Party ID hash is the same as the one issued.
@@ -386,7 +386,7 @@ class AuthenticatorData
         return (object) [
             'aaguid' => substr($binary, 37, 16),
             'credentialId' => new ByteBuffer(substr($binary, 55, $length)),
-            'credentialPublicKey' => static::readCredentialPublicKey($binary, 55 + $length, $endOffset)
+            'credentialPublicKey' => static::readCredentialPublicKey($binary, 55 + $length, $endOffset),
         ];
     }
 
@@ -400,7 +400,7 @@ class AuthenticatorData
         // COSE key-encoded elliptic curve public key in EC2 format
         $publicKey = (object) [
             'kty' => $enc[static::COSE_KTY],
-            'alg' => $enc[static::COSE_ALG]
+            'alg' => $enc[static::COSE_ALG],
         ];
 
         match ($publicKey->alg) {
