@@ -42,7 +42,7 @@
         "illuminate/http": "10.*|11.*",
         "illuminate/session": "10.*|11.*",
         "illuminate/support": "10.*|11.*",
-        "laragear/meta-model": "1.*"
+        "laragear/meta-model": "^1.1"
     },
     "require-dev": {
         "ext-sodium": "*",
