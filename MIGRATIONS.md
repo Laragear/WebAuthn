@@ -85,6 +85,7 @@ All customizable models can be configured with additional fillable, guarded, hid
 
 Customize the model using the available static properties:
 
+- `$useConnection`: The connection name to use.
 - `$useCasts`: The casts attributes to merge.
 - `$useFillable`: The fillable attributes to merge.
 - `$useGuarded`: The guarded attributes to merge.

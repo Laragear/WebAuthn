@@ -18,7 +18,7 @@ class WebAuthnAuthenticationMigration extends CustomizableMigration
         // on the Assertion procedure as the device returns which credential it used.
         $table->string('id', 510)->primary();
 
-        $this->createMorph($table, 'authenticatable');
+        $this->createMorph($table, 'authenticatable', 'webauthn_user_index');
 
         // When requesting to create a credential, the app will set a "user handle" to be
         // a UUID to anonymize the user personal information. If a second credential is
