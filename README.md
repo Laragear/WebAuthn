@@ -170,7 +170,7 @@ This package original Javascript helper has been moved into its own package, cal
 
 ```html
 <head>
-    <script src="https://cdn.jsdelivr.net/npm/@laragear/webpass@1/dist/webpass.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@laragear/webpass@2/dist/webpass.js" defer></script>
 </head>
 
 <body>
@@ -191,13 +191,13 @@ This package original Javascript helper has been moved into its own package, cal
 Alternatively, you may want to include it in your project dependencies if you're using a frontend framework like Vue, React, Angular or Svelte, to name a few.
 
 ```shell
-npm i laragear-webpass
+npm i @laragear/webpass@2
 ```
 
 Once done, you may attest and assert the authenticator using the `Webpass` object:
 
 ```javascript
-import Webpass from "laragear-webpass"
+import Webpass from "@laragear/webpass"
 
 if (Webpass.isUnsupported()) {
     return alert("Your browser doesn't support WebAuthn.")
