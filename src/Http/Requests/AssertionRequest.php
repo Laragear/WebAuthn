@@ -30,6 +30,16 @@ class AssertionRequest extends FormRequest
     protected ?string $userVerification = null;
 
     /**
+     * Validate the class instance.
+     *
+     * @return void
+     */
+    public function validateResolved(): void
+    {
+
+    }
+
+    /**
      * Return or make a new Assertion Creation.
      */
     protected function assertion(): AssertionCreation

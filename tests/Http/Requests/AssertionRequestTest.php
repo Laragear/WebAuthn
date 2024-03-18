@@ -28,6 +28,13 @@ class AssertionRequestTest extends DatabaseTestCase
         ]);
     }
 
+    protected function defineRoutes($router)
+    {
+        $router->middleware('web')->post('test', function (AssertionRequest $request) {
+            return $request->toVerify();
+        });
+    }
+
     protected function defineEnvironment($app): void
     {
         $app->make('config')->set('auth.providers.users.driver', 'eloquent-webauthn');
@@ -36,10 +43,6 @@ class AssertionRequestTest extends DatabaseTestCase
 
     public function test_creates_assertion(): void
     {
-        Route::middleware('web')->post('test', function (AssertionRequest $request) {
-            return $request->toVerify();
-        });
-
         $this->postJson('test')
             ->assertSessionHas('_webauthn', function (Challenge $challenge): bool {
                 return ! $challenge->verify;

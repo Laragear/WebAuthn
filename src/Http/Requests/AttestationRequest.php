@@ -21,6 +21,18 @@ class AttestationRequest extends FormRequest
     protected AttestationCreation $attestation;
 
     /**
+     * Validate the class instance.
+     *
+     * @return void
+     */
+    public function validateResolved(): void
+    {
+        if (! $this->passesAuthorization()) {
+            $this->failedAuthorization();
+        }
+    }
+
+    /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(?WebAuthnAuthenticatable $user): bool
