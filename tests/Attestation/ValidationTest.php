@@ -28,6 +28,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
 use Tests\TestCase;
+
 use function base64_decode;
 use function base64_encode;
 use function hex2bin;
@@ -199,7 +200,7 @@ class ValidationTest extends TestCase
         $invalid = FakeAuthenticator::attestationResponse();
 
         $invalid['response']['clientDataJSON'] = ByteBuffer::encodeBase64Url(json_encode([
-            'origin' => '', 'challenge' => ''
+            'origin' => '', 'challenge' => '',
         ]));
 
         $this->request->setJson(new ParameterBag($invalid));

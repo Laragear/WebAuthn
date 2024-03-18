@@ -8,7 +8,9 @@ use Laragear\WebAuthn\Assertion\Validator\AssertionValidation;
 use Laragear\WebAuthn\Attestation\Validator\AttestationValidation;
 use Laragear\WebAuthn\ByteBuffer;
 use Laragear\WebAuthn\ClientDataJson;
+
 use function json_decode;
+
 use const JSON_THROW_ON_ERROR;
 
 /**
@@ -42,7 +44,7 @@ abstract class CompileClientDataJson
         $object = (object) $object;
 
         foreach (['type', 'origin', 'challenge'] as $key) {
-            if (!isset($object->{$key})) {
+            if (! isset($object->{$key})) {
                 static::throw($validation, "Client Data JSON does not contain the [$key] key.");
             }
         }

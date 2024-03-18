@@ -28,6 +28,7 @@ use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
 use Tests\TestCase;
 use Throwable;
+
 use function base64_decode;
 use function base64_encode;
 use function json_encode;
@@ -334,7 +335,7 @@ class ValidationTest extends TestCase
         $invalid = FakeAuthenticator::assertionResponse();
 
         $invalid['response']['clientDataJSON'] = ByteBuffer::encodeBase64Url(json_encode([
-            'origin' => '', 'challenge' => ''
+            'origin' => '', 'challenge' => '',
         ]));
 
         $this->request->setJson(new ParameterBag($invalid));
