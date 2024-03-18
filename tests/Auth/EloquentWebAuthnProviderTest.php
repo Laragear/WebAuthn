@@ -9,15 +9,13 @@ use Laragear\WebAuthn\Assertion\Validator\AssertionValidator;
 use Laragear\WebAuthn\Exceptions\AssertionException;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
 use Mockery;
-use Orchestra\Testbench\Attributes\WithMigration;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
+use Tests\DatabaseTestCase;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
-use Tests\TestCase;
 
-#[WithMigration]
-class EloquentWebAuthnProviderTest extends TestCase
+class EloquentWebAuthnProviderTest extends DatabaseTestCase
 {
     protected function defineEnvironment($app): void
     {
@@ -25,7 +23,7 @@ class EloquentWebAuthnProviderTest extends TestCase
         $app->make('config')->set('auth.providers.users.model', WebAuthnAuthenticatableUser::class);
     }
 
-    protected function afterRefreshingDatabase(): void
+    protected function defineDatabaseSeeders(): void
     {
         WebAuthnAuthenticatableUser::forceCreate([
             'name' => FakeAuthenticator::ATTESTATION_USER['displayName'],

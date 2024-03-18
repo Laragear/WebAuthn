@@ -10,19 +10,16 @@ use Laragear\WebAuthn\Assertion\Creator\AssertionCreator;
 use Laragear\WebAuthn\Challenge;
 use Laragear\WebAuthn\Http\Requests\AssertionRequest;
 use Laragear\WebAuthn\JsonTransport;
-use Orchestra\Testbench\Attributes\WithMigration;
+use Tests\DatabaseTestCase;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
-use Tests\TestCase;
-
 use function config;
 use function session;
 use function strlen;
 
-#[WithMigration]
-class AssertionRequestTest extends TestCase
+class AssertionRequestTest extends DatabaseTestCase
 {
-    protected function afterRefreshingDatabase(): void
+    protected function defineDatabaseSeeders(): void
     {
         WebAuthnAuthenticatableUser::forceCreate([
             'name' => FakeAuthenticator::ATTESTATION_USER['displayName'],

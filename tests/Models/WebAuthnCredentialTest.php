@@ -9,20 +9,17 @@ use Illuminate\Support\Facades\Event;
 use Laragear\WebAuthn\Events\CredentialDisabled;
 use Laragear\WebAuthn\Events\CredentialEnabled;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
-use Orchestra\Testbench\Attributes\WithMigration;
 use Ramsey\Uuid\Uuid;
+use Tests\DatabaseTestCase;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
-use Tests\TestCase;
-
 use function array_merge;
 use function json_encode;
 use function now;
 
-#[WithMigration]
-class WebAuthnCredentialTest extends TestCase
+class WebAuthnCredentialTest extends DatabaseTestCase
 {
-    protected function afterRefreshingDatabase(): void
+    protected function defineDatabaseSeeders(): void
     {
         WebAuthnAuthenticatableUser::forceCreate([
             'name' => FakeAuthenticator::ATTESTATION_USER['displayName'],

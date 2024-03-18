@@ -12,11 +12,8 @@ use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 use Laragear\WebAuthn\WebAuthnAuthentication;
 use Laragear\WebAuthn\WebAuthnServiceProvider;
 use Orchestra\Testbench\Attributes\DefineEnvironment;
-use Orchestra\Testbench\Attributes\WithMigration;
-
 use function version_compare;
 
-#[WithMigration]
 class ServiceProviderTest extends TestCase
 {
     public function test_merges_config(): void

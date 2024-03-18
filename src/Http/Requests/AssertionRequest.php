@@ -9,7 +9,6 @@ use Laragear\WebAuthn\Assertion\Creator\AssertionCreation;
 use Laragear\WebAuthn\Assertion\Creator\AssertionCreator;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 use Laragear\WebAuthn\Enums\UserVerification;
-
 use function auth;
 use function is_array;
 
@@ -29,14 +28,6 @@ class AssertionRequest extends FormRequest
      * If the user may or may not be verified on login.
      */
     protected ?string $userVerification = null;
-
-    /**
-     * Validate the class instance.
-     */
-    public function validateResolved(): void
-    {
-        //
-    }
 
     /**
      * Return or make a new Assertion Creation.

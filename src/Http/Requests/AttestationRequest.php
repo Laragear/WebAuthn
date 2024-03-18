@@ -17,30 +17,11 @@ class AttestationRequest extends FormRequest
 {
     /**
      * The attestation instance that would be returned.
-     *
-     * @var \Laragear\WebAuthn\Attestation\Creator\AttestationCreation
      */
     protected AttestationCreation $attestation;
 
     /**
-     * Validate the class instance.
-     *
-     * @return void
-     *
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    public function validateResolved(): void
-    {
-        if (! $this->passesAuthorization()) {
-            $this->failedAuthorization();
-        }
-    }
-
-    /**
      * Determine if the user is authorized to make this request.
-     *
-     * @param  \Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable|null  $user
-     * @return bool
      */
     public function authorize(?WebAuthnAuthenticatable $user): bool
     {
@@ -49,8 +30,6 @@ class AttestationRequest extends FormRequest
 
     /**
      * Returns the existing attestation instance.
-     *
-     * @return \Laragear\WebAuthn\Attestation\Creator\AttestationCreation
      */
     protected function attestation(): AttestationCreation
     {
@@ -107,8 +86,6 @@ class AttestationRequest extends FormRequest
 
     /**
      * Returns a response with the instructions to create a WebAuthn Credential.
-     *
-     * @return \Illuminate\Contracts\Support\Responsable
      */
     public function toCreate(): Responsable
     {

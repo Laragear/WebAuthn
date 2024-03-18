@@ -4,17 +4,14 @@ namespace Tests;
 
 use Illuminate\Support\Carbon;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
-use Orchestra\Testbench\Attributes\WithMigration;
 use Ramsey\Uuid\Uuid;
-
 use function now;
 
-#[WithMigration]
-class WebAuthnAuthenticationTest extends TestCase
+class WebAuthnAuthenticationTest extends DatabaseTestCase
 {
     protected Stubs\WebAuthnAuthenticatableUser $user;
 
-    protected function afterRefreshingDatabase(): void
+    protected function defineDatabaseSeeders(): void
     {
         $this->user = Stubs\WebAuthnAuthenticatableUser::forceCreate([
             'name' => FakeAuthenticator::ATTESTATION_USER['displayName'],

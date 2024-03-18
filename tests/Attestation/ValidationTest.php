@@ -22,13 +22,11 @@ use Laragear\WebAuthn\Challenge;
 use Laragear\WebAuthn\Exceptions\AttestationException;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
 use Mockery;
-use Orchestra\Testbench\Attributes\WithMigration;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Tests\DatabaseTestCase;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
-use Tests\TestCase;
-
 use function base64_decode;
 use function base64_encode;
 use function hex2bin;
@@ -42,8 +40,7 @@ use function tap;
  *
  * @see https://cbor.me
  */
-#[WithMigration]
-class ValidationTest extends TestCase
+class ValidationTest extends DatabaseTestCase
 {
     protected Request $request;
     protected WebAuthnAuthenticatableUser $user;
@@ -51,35 +48,42 @@ class ValidationTest extends TestCase
     protected AttestationValidator $validator;
     protected Challenge $challenge;
 
-    protected function setUp(): void
+    protected function defineDatabaseSeeders(): void
     {
-        parent::setUp();
-
-        $this->request = Request::create(
-            'https://test.app/webauthn/create', 'POST', content: json_encode(FakeAuthenticator::attestationResponse())
-        );
-
         $this->user = WebAuthnAuthenticatableUser::forceCreate([
             'name' => FakeAuthenticator::ATTESTATION_USER['displayName'],
             'email' => FakeAuthenticator::ATTESTATION_USER['name'],
             'password' => 'test_password',
         ]);
-
-        $this->validator = new AttestationValidator($this->app);
-        $this->validation = new AttestationValidation($this->user, $this->request);
-
+    }
+    protected function defineEnvironment($app)
+    {
         $this->travelTo(now()->startOfSecond());
+    }
 
-        $this->challenge = new Challenge(
-            new ByteBuffer(base64_decode(FakeAuthenticator::ATTESTATION_CHALLENGE)),
-            60,
-            false,
-            ['user_uuid' => FakeAuthenticator::ATTESTATION_USER['id']]
-        );
+    protected function setUp(): void
+    {
+        $this->afterApplicationCreated(function (): void {
+            $this->request = Request::create(
+                'https://test.app/webauthn/create', 'POST', content: json_encode(FakeAuthenticator::attestationResponse())
+            );
 
-        $this->session(['_webauthn' => $this->challenge]);
+            $this->validator = new AttestationValidator($this->app);
+            $this->validation = new AttestationValidation($this->user, $this->request);
 
-        $this->request->setLaravelSession($this->app->make('session.store'));
+            $this->challenge = new Challenge(
+                new ByteBuffer(base64_decode(FakeAuthenticator::ATTESTATION_CHALLENGE)),
+                60,
+                false,
+                ['user_uuid' => FakeAuthenticator::ATTESTATION_USER['id']]
+            );
+
+            $this->session(['_webauthn' => $this->challenge]);
+
+            $this->request->setLaravelSession($this->app->make('session.store'));
+        });
+
+        parent::setUp();
     }
 
     protected function validate(): AttestationValidation
