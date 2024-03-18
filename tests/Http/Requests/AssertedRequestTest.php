@@ -17,6 +17,7 @@ use Ramsey\Uuid\Uuid;
 use Tests\DatabaseTestCase;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
+
 use function array_merge;
 use function base64_decode;
 use function config;

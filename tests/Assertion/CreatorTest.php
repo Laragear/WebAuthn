@@ -11,6 +11,7 @@ use Laragear\WebAuthn\Enums\UserVerification;
 use Ramsey\Uuid\Uuid;
 use Tests\DatabaseTestCase;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
+
 use function config;
 use function in_array;
 use function now;
@@ -34,7 +35,7 @@ class CreatorTest extends DatabaseTestCase
 
     protected function setUp(): void
     {
-        $this->afterApplicationCreated(function(): void {
+        $this->afterApplicationCreated(function (): void {
             $this->request = Request::create('https://test.app/webauthn/create', 'POST');
 
             $this->creator = new AssertionCreator($this->app);

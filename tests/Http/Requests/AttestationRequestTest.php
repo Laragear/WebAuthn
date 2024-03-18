@@ -7,12 +7,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Laragear\WebAuthn\Challenge;
 use Laragear\WebAuthn\Http\Requests\AttestationRequest;
-use Laragear\WebAuthn\Http\Requests\AttestationWithoutUserRequest;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
 use Ramsey\Uuid\Uuid;
 use Tests\DatabaseTestCase;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
+
 use function config;
 
 class AttestationRequestTest extends DatabaseTestCase

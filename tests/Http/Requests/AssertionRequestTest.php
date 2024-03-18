@@ -13,6 +13,7 @@ use Laragear\WebAuthn\JsonTransport;
 use Tests\DatabaseTestCase;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
+
 use function config;
 use function session;
 use function strlen;

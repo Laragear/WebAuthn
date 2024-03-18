@@ -27,6 +27,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Tests\DatabaseTestCase;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
+
 use function base64_decode;
 use function base64_encode;
 use function hex2bin;
@@ -56,6 +57,7 @@ class ValidationTest extends DatabaseTestCase
             'password' => 'test_password',
         ]);
     }
+
     protected function defineEnvironment($app)
     {
         $this->travelTo(now()->startOfSecond());

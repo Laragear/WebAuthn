@@ -10,12 +10,12 @@ use Laragear\WebAuthn\ByteBuffer;
 use Laragear\WebAuthn\Challenge;
 use Laragear\WebAuthn\Events\CredentialCreated;
 use Laragear\WebAuthn\Http\Requests\AttestedRequest;
-use Laragear\WebAuthn\Http\Requests\AttestedWithoutUserRequest;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
 use Orchestra\Testbench\Attributes\WithMigration;
 use Tests\DatabaseTestCase;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
+
 use function base64_decode;
 use function config;
 
