@@ -2,6 +2,7 @@
 
 namespace Laragear\WebAuthn\Http;
 
+use Illuminate\Routing\RouteRegistrar;
 use Illuminate\Support\Facades\Route;
 
 class Routes
@@ -14,8 +15,8 @@ class Routes
         string $attestController = 'App\Http\Controllers\WebAuthn\WebAuthnRegisterController',
         string $assert = 'webauthn/login',
         string $assertController = 'App\Http\Controllers\WebAuthn\WebAuthnLoginController',
-    ): void {
-        Route::middleware('web')
+    ): RouteRegistrar {
+        return Route::middleware('web')
             ->group(static function () use ($assert, $assertController, $attest, $attestController): void {
                 Route::controller($attestController)
                     ->group(static function () use ($attest): void {
