@@ -10,25 +10,30 @@ use Laragear\WebAuthn\Assertion\Creator\AssertionCreator;
 use Laragear\WebAuthn\Challenge;
 use Laragear\WebAuthn\Http\Requests\AssertionRequest;
 use Laragear\WebAuthn\JsonTransport;
-use Orchestra\Testbench\Attributes\WithMigration;
+use Tests\DatabaseTestCase;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
-use Tests\TestCase;
 
 use function config;
 use function session;
 use function strlen;
 
-#[WithMigration]
-class AssertionRequestTest extends TestCase
+class AssertionRequestTest extends DatabaseTestCase
 {
-    protected function afterRefreshingDatabase(): void
+    protected function defineDatabaseSeeders(): void
     {
         WebAuthnAuthenticatableUser::forceCreate([
             'name' => FakeAuthenticator::ATTESTATION_USER['displayName'],
             'email' => FakeAuthenticator::ATTESTATION_USER['name'],
             'password' => 'test_password',
         ]);
+    }
+
+    protected function defineRoutes($router)
+    {
+        $router->middleware('web')->post('test', function (AssertionRequest $request) {
+            return $request->toVerify();
+        });
     }
 
     protected function defineEnvironment($app): void
@@ -39,10 +44,6 @@ class AssertionRequestTest extends TestCase
 
     public function test_creates_assertion(): void
     {
-        Route::middleware('web')->post('test', function (AssertionRequest $request) {
-            return $request->toVerify();
-        });
-
         $this->postJson('test')
             ->assertSessionHas('_webauthn', function (Challenge $challenge): bool {
                 return ! $challenge->verify;

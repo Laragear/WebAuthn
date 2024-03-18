@@ -12,17 +12,17 @@ use Laragear\WebAuthn\Events\CredentialCreated;
 use Laragear\WebAuthn\Http\Requests\AttestedRequest;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
 use Orchestra\Testbench\Attributes\WithMigration;
+use Tests\DatabaseTestCase;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
-use Tests\TestCase;
 
 use function base64_decode;
 use function config;
 
 #[WithMigration]
-class AttestedRequestTest extends TestCase
+class AttestedRequestTest extends DatabaseTestCase
 {
-    protected function afterRefreshingDatabase(): void
+    protected function defineDatabaseSeeders(): void
     {
         $this->be(
             WebAuthnAuthenticatableUser::forceCreate([

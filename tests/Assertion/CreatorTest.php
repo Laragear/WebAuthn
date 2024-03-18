@@ -8,40 +8,44 @@ use Laragear\WebAuthn\Assertion\Creator\AssertionCreation;
 use Laragear\WebAuthn\Assertion\Creator\AssertionCreator;
 use Laragear\WebAuthn\Challenge;
 use Laragear\WebAuthn\Enums\UserVerification;
-use Orchestra\Testbench\Attributes\WithMigration;
 use Ramsey\Uuid\Uuid;
+use Tests\DatabaseTestCase;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
-use Tests\TestCase;
 
 use function config;
 use function in_array;
 use function now;
 use function session;
 
-#[WithMigration]
-class CreatorTest extends TestCase
+class CreatorTest extends DatabaseTestCase
 {
     protected Request $request;
     protected WebAuthnAuthenticatableUser $user;
     protected AssertionCreation $creation;
     protected AssertionCreator $creator;
 
-    protected function setUp(): void
+    protected function defineDatabaseSeeders(): void
     {
-        parent::setUp();
-
-        $this->request = Request::create('https://test.app/webauthn/create', 'POST');
         $this->user = WebAuthnAuthenticatableUser::forceCreate([
             'name' => 'test',
             'email' => 'test@email.com',
             'password' => 'test_password',
         ]);
+    }
 
-        $this->creator = new AssertionCreator($this->app);
-        $this->creation = new AssertionCreation($this->request);
+    protected function setUp(): void
+    {
+        $this->afterApplicationCreated(function (): void {
+            $this->request = Request::create('https://test.app/webauthn/create', 'POST');
 
-        $this->startSession();
-        $this->request->setLaravelSession($this->app->make('session.store'));
+            $this->creator = new AssertionCreator($this->app);
+            $this->creation = new AssertionCreation($this->request);
+
+            $this->startSession();
+            $this->request->setLaravelSession($this->app->make('session.store'));
+        });
+
+        parent::setUp();
     }
 
     protected function response(): TestResponse

@@ -6,18 +6,16 @@ use Laragear\WebAuthn\Http\Requests\AssertedRequest;
 use Laragear\WebAuthn\Http\Requests\AssertionRequest;
 use Laragear\WebAuthn\Http\Requests\AttestationRequest;
 use Laragear\WebAuthn\Http\Requests\AttestedRequest;
+use Laragear\WebAuthn\Http\Routes;
 use Laragear\WebAuthn\JsonTransport;
-use Laragear\WebAuthn\WebAuthn;
-use Orchestra\Testbench\Attributes\WithMigration;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
 use Tests\TestCase;
 
-#[WithMigration]
 class StubControllersTest extends TestCase
 {
     protected function defineWebRoutes($router): void
     {
-        WebAuthn::routes();
+        Routes::register();
     }
 
     public function test_uses_attestation_request(): void

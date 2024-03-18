@@ -13,11 +13,10 @@ use Laragear\WebAuthn\ByteBuffer;
 use Laragear\WebAuthn\Challenge;
 use Laragear\WebAuthn\Http\Requests\AssertedRequest;
 use Mockery;
-use Orchestra\Testbench\Attributes\WithMigration;
 use Ramsey\Uuid\Uuid;
+use Tests\DatabaseTestCase;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
-use Tests\TestCase;
 
 use function array_merge;
 use function base64_decode;
@@ -25,10 +24,9 @@ use function config;
 use function now;
 use function session;
 
-#[WithMigration]
-class AssertedRequestTest extends TestCase
+class AssertedRequestTest extends DatabaseTestCase
 {
-    protected function afterRefreshingDatabase(): void
+    protected function defineDatabaseSeeders(): void
     {
         WebAuthnAuthenticatableUser::forceCreate([
             'name' => FakeAuthenticator::ATTESTATION_USER['displayName'],

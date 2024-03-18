@@ -32,10 +32,11 @@ class AssertionRequest extends FormRequest
 
     /**
      * Validate the class instance.
+     *
+     * @return void
      */
     public function validateResolved(): void
     {
-        //
     }
 
     /**

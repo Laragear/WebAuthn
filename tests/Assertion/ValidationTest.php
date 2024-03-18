@@ -20,13 +20,12 @@ use Laragear\WebAuthn\Events\CredentialDisabled;
 use Laragear\WebAuthn\Exceptions\AssertionException;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
 use Mockery;
-use Orchestra\Testbench\Attributes\WithMigration;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Tests\DatabaseTestCase;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
-use Tests\TestCase;
 use Throwable;
 
 use function base64_decode;
@@ -35,8 +34,7 @@ use function json_encode;
 use function now;
 use function session;
 
-#[WithMigration]
-class ValidationTest extends TestCase
+class ValidationTest extends DatabaseTestCase
 {
     protected Request $request;
     protected WebAuthnAuthenticatableUser $user;
@@ -44,37 +42,15 @@ class ValidationTest extends TestCase
     protected AssertionValidator $validator;
     protected Challenge $challenge;
 
-    protected function setUp(): void
+    protected function defineDatabaseSeeders(): void
     {
-        parent::setUp();
-
-        // Force booting the model if not booted previously.
-        WebAuthnCredential::make();
-
-        $this->request = Request::create(
-            'https://test.app/webauthn/create', 'POST', content: json_encode(FakeAuthenticator::assertionResponse())
-        );
-
         $this->user = WebAuthnAuthenticatableUser::forceCreate([
             'name' => FakeAuthenticator::ATTESTATION_USER['displayName'],
             'email' => FakeAuthenticator::ATTESTATION_USER['name'],
             'password' => 'test_password',
         ]);
 
-        $this->validator = new AssertionValidator($this->app);
-        $this->validation = new AssertionValidation($this->request);
-
-        $this->travelTo(now()->startOfSecond());
-
-        $this->challenge = new Challenge(
-            new ByteBuffer(base64_decode(FakeAuthenticator::ASSERTION_CHALLENGE)), 60, false,
-        );
-
-        $this->session(['_webauthn' => $this->challenge]);
-
-        $this->request->setLaravelSession($this->app->make('session.store'));
-
-        $this->credential = DB::table('webauthn_credentials')->insert([
+        DB::table('webauthn_credentials')->insert([
             'id' => FakeAuthenticator::CREDENTIAL_ID,
             'authenticatable_type' => WebAuthnAuthenticatableUser::class,
             'authenticatable_id' => 1,
@@ -88,6 +64,36 @@ class ValidationTest extends TestCase
             'updated_at' => now(),
             'created_at' => now(),
         ]);
+    }
+
+    protected function defineEnvironment($app): void
+    {
+        $this->travelTo(now()->startOfSecond());
+    }
+
+    protected function setUp(): void
+    {
+        $this->afterApplicationCreated(function (): void {
+            // Force booting the model if not booted previously.
+            WebAuthnCredential::make();
+
+            $this->request = Request::create(
+                'https://test.app/webauthn/create', 'POST', content: json_encode(FakeAuthenticator::assertionResponse())
+            );
+
+            $this->validator = new AssertionValidator($this->app);
+            $this->validation = new AssertionValidation($this->request);
+
+            $this->challenge = new Challenge(
+                new ByteBuffer(base64_decode(FakeAuthenticator::ASSERTION_CHALLENGE)), 60, false,
+            );
+
+            $this->session(['_webauthn' => $this->challenge]);
+
+            $this->request->setLaravelSession($this->app->make('session.store'));
+        });
+
+        parent::setUp();
     }
 
     protected function validate(): AssertionValidation
