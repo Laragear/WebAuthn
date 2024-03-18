@@ -645,7 +645,7 @@ If you think WebAuthn is critical for these packages, [consider supporting this 
 [Yes](https://caniuse.com/#feat=webauthn). In the case of old browsers, you should have a fallback detection script. This can be asked with [the included JavaScript helper](#5-use-the-javascript-helper) in a breeze:
 
 ```javascript
-if (WebAuthn.doesntSupportWebAuthn()) {
+if (WebAuthn.isNotSupported()) {
    alert('Your device is not secure enough to use this site!');
 }
 ```
@@ -702,6 +702,10 @@ It's encouraged to [use Webpass package](#5-use-the-javascript-helper).
 
 Alternatively, for complex WebAuthn management, consider using the [`navigator.credentials`](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/credentials) API directly.
 
+* **The attestation is fine, but assertion never logs in the user**
+
+This happens because you forgot [the first step](#1-add-the-webauthn-driver), using the WebAuthn driver to authenticate users.
+
 * **Does WebAuthn eliminate bots? Can I forget about _captchas_?**
 
 Yes and no. To register users, you still need to use [captcha](https://github.com/Laragear/ReCaptcha), honeypots, or other mechanisms to stop bots from filling forms.
@@ -716,6 +720,10 @@ Yes, the [Webpass helper](#5-use-the-javascript-helper) does it automatically fo
 
 Yes, public keys are encrypted when saved into the database with your app key.
 
+* **I changed my `APP_KEY` and nobody can log in**
+
+Since public keys are encrypted with your app key, older public keys will become useless. To change that, create a console command that decrypts (with the old key) and re-encrypts the `public_key` column of the table where the authentication data is.
+
 * **Does this include WebAuthn credential recovery routes?**
 
 No. You're free to create your own flow for recovery.
@@ -724,9 +732,9 @@ My recommendation is to email the user, pointing to a route that registers a new
 
 * **Can I use my smartphone as authenticator through my PC or Mac?**
 
-It depends. 
+Usually.
 
-This is entirely up to hardware, OS and browser vendor themselves, but mostly the OS. Some OS or browsers may offer a way to sync private keys on the cloud, even letting the assertion challenge to be signed remotely instead of transmitting the private key. Please check your target platforms of choice.
+While this is entirely up to hardware, OS and browser vendor themselves, modern _platforms_ will show a QR code, push notification, or ask to bring closer your smartphone to complete the WebAuthn ceremony. Please check your target platforms of choice.
 
 * **Why my device doesn't show Windows Hello/Passkey/TouchID/FaceID/OpticID/pattern/fingerprint authentication?**
 
@@ -772,7 +780,7 @@ Yes. Instead of using `webauthn:install`, use `vendor:publish` and follow the pr
 
 * **Why `ext-sodium` is required as optional?**
 
-Some authenticators can create EdDSA 25519 public keys, which are part of [W3C WebAuthn 3.0 draft](https://www.w3.org/TR/webauthn-3/#dom-publickeycredentialcreationoptions-pubkeycredparams). These keys are shorter and don't require too much computational power to verify, which opens the usage for low-power or "passive" authenticators (like smart-cards).
+Some authenticators can create EdDSA 25519 public keys, which are part of [W3C WebAuthn 3.0 draft](https://www.w3.org/TR/webauthn-3/#dom-publickeycredentialcreationoptions-pubkeycredparams). These keys are shorter and don't require too much computational power to verify, which opens the usage for low-power or "passive" authenticators (like smart-cards). 
 
 If sodium or the [`paragonie/sodium-compat`](https://github.com/paragonie/sodium_compat) package are not installed, the server won't report EdDSA 25519 compatibility to the authenticator, and any EdDSA 25519 public key previously stored will fail validation. 
 
