@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Stringable;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidation;
+use Laragear\WebAuthn\ByteBuffer;
 use Laragear\WebAuthn\Exceptions\AssertionException;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
-
 use function base64_decode;
 use function function_exists;
 use function hash;
@@ -18,7 +18,6 @@ use function openssl_error_string;
 use function openssl_pkey_get_public;
 use function openssl_verify;
 use function strlen;
-
 use const OPENSSL_ALGO_SHA256;
 
 /**
@@ -50,7 +49,7 @@ class CheckPublicKeySignature
      */
     protected function retrieveSignature(Request $request): string
     {
-        $signature = base64_decode($request->json('response.signature', ''));
+        $signature = ByteBuffer::decodeBase64Url($request->json('response.signature', ''));
 
         return $signature
             ?: throw AssertionException::make('Signature is empty.');
@@ -61,8 +60,8 @@ class CheckPublicKeySignature
      */
     protected function retrieveBinaryVerifiable(Request $request): string
     {
-        $verifiable = base64_decode($request->json('response.authenticatorData')).
-            hash('sha256', base64_decode($request->json('response.clientDataJSON')), true);
+        $verifiable = ByteBuffer::decodeBase64Url($request->json('response.authenticatorData')).
+            hash('sha256', ByteBuffer::decodeBase64Url($request->json('response.clientDataJSON')), true);
 
         return $verifiable
             ?: throw AssertionException::make('Authenticator Data or Client Data JSON are empty or malformed.');

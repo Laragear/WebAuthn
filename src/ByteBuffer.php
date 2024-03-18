@@ -7,7 +7,6 @@ use InvalidArgumentException;
 use JsonSerializable;
 use OutOfBoundsException;
 use Stringable;
-
 use function base64_decode;
 use function base64_encode;
 use function bin2hex;
@@ -390,7 +389,7 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
     /**
      * Decodes a BASE64 URL string.
      */
-    protected static function decodeBase64Url(string $data): string|false
+    public static function decodeBase64Url(string $data): string|false
     {
         return base64_decode(strtr($data, '-_', '+/').str_repeat('=', 3 - (3 + strlen($data)) % 4));
     }
@@ -398,7 +397,7 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
     /**
      * Encodes a BASE64 URL string.
      */
-    protected static function encodeBase64Url(string $data): string|false
+    public static function encodeBase64Url(string $data): string|false
     {
         return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
     }

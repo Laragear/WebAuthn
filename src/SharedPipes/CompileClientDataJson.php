@@ -3,15 +3,13 @@
 namespace Laragear\WebAuthn\SharedPipes;
 
 use Closure;
+use Illuminate\Http\Request;
 use JsonException;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidation;
 use Laragear\WebAuthn\Attestation\Validator\AttestationValidation;
 use Laragear\WebAuthn\ByteBuffer;
 use Laragear\WebAuthn\ClientDataJson;
-
-use function base64_decode;
 use function json_decode;
-
 use const JSON_THROW_ON_ERROR;
 
 /**
@@ -30,9 +28,7 @@ abstract class CompileClientDataJson
     public function handle(AssertionValidation|AttestationValidation $validation, Closure $next): mixed
     {
         try {
-            $object = json_decode(
-                base64_decode($validation->request->json('response.clientDataJSON', '')), false, 32, JSON_THROW_ON_ERROR
-            );
+            $object = $this->decodeClientDataJson($validation->request);
         } catch (JsonException) {
             static::throw($validation, 'Client Data JSON is invalid or malformed.');
         }
@@ -52,5 +48,19 @@ abstract class CompileClientDataJson
         );
 
         return $next($validation);
+    }
+
+    /**
+     * Decode the "clientDataJSON" part of the request "response" key.
+     *
+     * @return object{type?: string|null, origin?: string|null, challenge?: string|null}
+     *
+     * @throws \JsonException
+     */
+    protected function decodeClientDataJson(Request $request): object
+    {
+        return json_decode(
+            ByteBuffer::decodeBase64Url($request->json('response.clientDataJSON', '')), false, 32, JSON_THROW_ON_ERROR
+        );
     }
 }

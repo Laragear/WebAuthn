@@ -5,10 +5,9 @@ namespace Laragear\WebAuthn\Assertion\Validator\Pipes;
 use Closure;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidation;
 use Laragear\WebAuthn\Attestation\AuthenticatorData;
+use Laragear\WebAuthn\ByteBuffer;
 use Laragear\WebAuthn\Exceptions\AssertionException;
 use Laragear\WebAuthn\Exceptions\DataException;
-
-use function base64_decode;
 
 /**
  * @internal
@@ -22,7 +21,7 @@ class CompileAuthenticatorData
      */
     public function handle(AssertionValidation $validation, Closure $next): mixed
     {
-        $data = base64_decode($validation->request->json('response.authenticatorData', ''));
+        $data = ByteBuffer::decodeBase64Url($validation->request->json('response.authenticatorData', ''));
 
         if (! $data) {
             throw AssertionException::make('Authenticator Data does not exist or is empty.');
