@@ -136,28 +136,34 @@ From here you're ready to work with WebAuthn Authentication. The following steps
 
 WebAuthn uses exclusive routes to register and authenticate users. Creating these routes and controller may be cumbersome, specially if it's your first time in the WebAuthn realm, so these are installed automatically at `Http\Controllers\WebAuthn` when using `webauthn:install`.
 
-Go into your `web.php` routes file and register a default set of routes with the `\Laragear\WebAuthn\Http\Routes::register()` method.
+Go into your `web.php` routes file and register a default set of routes with the `\Laragear\WebAuthn\Http\Routes::register()` method. Since WebAuthn doesn't require protection for CSRF/XSRF tokens, you may disable it for these routes.
 
 ```php
 // web.php
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 use Laragear\WebAuthn\Http\Routes as WebAuthnRoutes;
 
 Route::view('welcome');
 
 // WebAuthn Routes
-WebAuthnRoutes::register();
+WebAuthnRoutes::register()->withoutMiddleware(VerifyCsrfToken::class);
 ```
+
+> [!TIP]
+> 
+> The [`@laragear/webpass` javascript helper](#5-use-the-javascript-helper) supports adding CSRF/XSRF tokens.
 
 The method allows to use different attestation and assertion paths, and even each of the controllers.
 
 ```php
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Laragear\WebAuthn\Http\Routes as WebAuthnRoutes;
 
 WebAuthnRoutes::register(
     attest: 'auth/register',
     assert: 'auth/login'
-);
+)->withoutMiddleware(VerifyCsrfToken::class);
 ```
 
 > [!INFO]
