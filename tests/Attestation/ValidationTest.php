@@ -180,14 +180,14 @@ class ValidationTest extends TestCase
 
     public function test_compiling_client_data_json_fails_if_empty(): void
     {
-        $this->expectException(AttestationException::class);
-        $this->expectExceptionMessage('Attestation Error: Client Data JSON is empty.');
-
         $invalid = FakeAuthenticator::attestationResponse();
 
-        $invalid['response']['clientDataJSON'] = base64_encode(json_encode([]));
+        $invalid['response']['clientDataJSON'] = ByteBuffer::encodeBase64Url(json_encode([]));
 
         $this->request->setJson(new ParameterBag($invalid));
+        $this->expectException(AttestationException::class);
+
+        $this->expectExceptionMessage('Attestation Error: Client Data JSON is empty.');
 
         $this->validate();
     }
@@ -199,7 +199,9 @@ class ValidationTest extends TestCase
 
         $invalid = FakeAuthenticator::attestationResponse();
 
-        $invalid['response']['clientDataJSON'] = base64_encode(json_encode(['origin' => '', 'challenge' => '']));
+        $invalid['response']['clientDataJSON'] = ByteBuffer::encodeBase64Url(json_encode([
+            'origin' => '', 'challenge' => '',
+        ]));
 
         $this->request->setJson(new ParameterBag($invalid));
 

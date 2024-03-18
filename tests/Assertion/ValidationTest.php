@@ -320,7 +320,7 @@ class ValidationTest extends TestCase
     {
         $invalid = FakeAuthenticator::assertionResponse();
 
-        $invalid['response']['clientDataJSON'] = base64_encode(json_encode([]));
+        $invalid['response']['clientDataJSON'] = ByteBuffer::encodeBase64Url(json_encode([]));
 
         $this->request->setJson(new ParameterBag($invalid));
 
@@ -334,7 +334,9 @@ class ValidationTest extends TestCase
     {
         $invalid = FakeAuthenticator::assertionResponse();
 
-        $invalid['response']['clientDataJSON'] = base64_encode(json_encode(['origin' => '', 'challenge' => '']));
+        $invalid['response']['clientDataJSON'] = ByteBuffer::encodeBase64Url(json_encode([
+            'origin' => '', 'challenge' => '',
+        ]));
 
         $this->request->setJson(new ParameterBag($invalid));
 

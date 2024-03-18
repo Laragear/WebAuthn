@@ -13,7 +13,6 @@ use Laragear\WebAuthn\CborDecoder;
 use Laragear\WebAuthn\Exceptions\AttestationException;
 use Laragear\WebAuthn\Exceptions\DataException;
 
-use function base64_decode;
 use function is_array;
 use function is_string;
 
@@ -70,7 +69,7 @@ class CompileAttestationObject
     protected function decodeCborBase64(Request $request): array
     {
         try {
-            $data = CborDecoder::decode(base64_decode($request->json('response.attestationObject', '')));
+            $data = CborDecoder::decode(ByteBuffer::decodeBase64Url($request->json('response.attestationObject', '')));
         } catch (DataException $e) {
             throw AttestationException::make($e->getMessage());
         }

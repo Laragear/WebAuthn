@@ -9,7 +9,6 @@ use Laragear\WebAuthn\Attestation\Validator\AttestationValidation;
 use Laragear\WebAuthn\ByteBuffer;
 use Laragear\WebAuthn\ClientDataJson;
 
-use function base64_decode;
 use function json_decode;
 
 use const JSON_THROW_ON_ERROR;
@@ -31,7 +30,8 @@ abstract class CompileClientDataJson
     {
         try {
             $object = json_decode(
-                base64_decode($validation->request->json('response.clientDataJSON', '')), false, 32, JSON_THROW_ON_ERROR
+                ByteBuffer::decodeBase64Url($validation->request->json('response.clientDataJSON', '')),
+                false, 32, JSON_THROW_ON_ERROR
             );
         } catch (JsonException) {
             static::throw($validation, 'Client Data JSON is invalid or malformed.');
@@ -40,6 +40,8 @@ abstract class CompileClientDataJson
         if (! $object) {
             static::throw($validation, 'Client Data JSON is empty.');
         }
+
+        $object = (object) $object;
 
         foreach (['type', 'origin', 'challenge'] as $key) {
             if (! isset($object->{$key})) {
