@@ -37,7 +37,6 @@ class AssertionRequest extends FormRequest
      */
     public function validateResolved(): void
     {
-
     }
 
     /**
