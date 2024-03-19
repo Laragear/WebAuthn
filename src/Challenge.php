@@ -14,10 +14,9 @@ class Challenge
         public int $timeout,
         public bool $verify = true,
         public array $properties = [],
-        public int $milliseconds = 0,
+        public int $expiresAt = 0,
     ) {
-        $this->milliseconds = $this->timeout * 1000;
-        $this->timeout = Date::now()->addSeconds($this->timeout)->getTimestamp();
+        $this->expiresAt = Date::now()->getTimestamp() + $this->timeout;
     }
 
     /**
@@ -25,7 +24,7 @@ class Challenge
      */
     public function isValid(): bool
     {
-        return Date::createFromTimestamp($this->timeout)->isFuture();
+        return Date::now()->getTimestamp() <= $this->expiresAt;
     }
 
     /**
@@ -38,8 +37,6 @@ class Challenge
 
     /**
      * Creates a new Challenge instance using a random ByteBuffer of the given length.
-     *
-     * @throws \Random\RandomException
      */
     public static function random(int $length, int $timeout, bool $verify = true, array $options = []): static
     {

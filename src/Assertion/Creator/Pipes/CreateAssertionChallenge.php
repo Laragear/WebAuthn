@@ -9,8 +9,6 @@ use Laragear\WebAuthn\ChallengeRepository;
 
 class CreateAssertionChallenge
 {
-    use SessionChallenge;
-
     /**
      * Create a new pipe instance.
      */

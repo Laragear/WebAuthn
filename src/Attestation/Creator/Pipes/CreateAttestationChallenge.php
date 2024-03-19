@@ -12,8 +12,6 @@ use Laragear\WebAuthn\ChallengeRepository;
  */
 class CreateAttestationChallenge
 {
-    use SessionChallenge;
-
     /**
      * Create a new pipe instance.
      */
@@ -24,8 +22,6 @@ class CreateAttestationChallenge
 
     /**
      * Handle the Attestation creation.
-     *
-     * @throws \Random\RandomException
      */
     public function handle(AttestationCreation $attestable, Closure $next): mixed
     {
@@ -34,7 +30,7 @@ class CreateAttestationChallenge
             'user_handle' => $attestable->json->get('user.name'),
         ]);
 
-        $attestable->json->set('timeout', $challenge->milliseconds);
+        $attestable->json->set('timeout', $challenge->timeout * 1000);
         $attestable->json->set('challenge', $challenge->data);
 
         return $next($attestable);
