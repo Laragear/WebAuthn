@@ -39,7 +39,7 @@ class CreatorTest extends DatabaseTestCase
             $this->request = Request::create('https://test.app/webauthn/create', 'POST');
 
             $this->creator = new AttestationCreator($this->app);
-            $this->creation = new AttestationCreation($this->user, $this->request);
+            $this->creation = new AttestationCreation($this->user);
 
             $this->startSession();
             $this->request->setLaravelSession($this->app->make('session.store'));

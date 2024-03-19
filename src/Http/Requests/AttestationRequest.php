@@ -45,7 +45,7 @@ class AttestationRequest extends FormRequest
      */
     protected function attestation(): AttestationCreation
     {
-        return $this->attestation ??= new AttestationCreation($this->user(), $this);
+        return $this->attestation ??= new AttestationCreation($this->user());
     }
 
     /**

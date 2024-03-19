@@ -26,6 +26,8 @@ class MayPreventDuplicateCredentials
 
     /**
      * Returns a collection of credentials ready to be inserted into the Attestable JSON.
+     *
+     * @return array<array{id?: string, type?: "public-key", transports?: string[]}>
      */
     protected function credentials(WebAuthnAuthenticatable $user): array
     {

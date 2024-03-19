@@ -2,7 +2,6 @@
 
 namespace Laragear\WebAuthn\Attestation\Creator;
 
-use Illuminate\Http\Request;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 use Laragear\WebAuthn\Enums\ResidentKey;
 use Laragear\WebAuthn\Enums\UserVerification;
@@ -15,7 +14,6 @@ class AttestationCreation
      */
     public function __construct(
         public WebAuthnAuthenticatable $user,
-        public Request $request,
         public ?ResidentKey $residentKey = null,
         public ?UserVerification $userVerification = null,
         public bool $uniqueCredentials = true,
