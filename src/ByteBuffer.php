@@ -7,7 +7,6 @@ use InvalidArgumentException;
 use JsonSerializable;
 use OutOfBoundsException;
 use Stringable;
-
 use function base64_decode;
 use function base64_encode;
 use function bin2hex;
@@ -379,8 +378,6 @@ class ByteBuffer implements JsonSerializable, Jsonable, Stringable
 
     /**
      * Create a random ByteBuffer.
-     *
-     * @throws \Random\RandomException
      */
     public static function makeRandom(int $length): static
     {
