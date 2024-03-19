@@ -13,7 +13,6 @@ use Laragear\WebAuthn\Enums\UserVerification;
 use Ramsey\Uuid\Uuid;
 use Tests\DatabaseTestCase;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
-
 use function config;
 use function now;
 use function session;
@@ -62,7 +61,8 @@ class CreatorTest extends DatabaseTestCase
 
         $this->response()
             ->assertSessionHas('_webauthn', function (Challenge $challenge): bool {
-                static::assertSame(now()->addMinute()->getTimestamp(), $challenge->timeout);
+                static::assertSame(60, $challenge->timeout);
+                static::assertSame(now()->addMinute()->getTimestamp(), $challenge->expiresAt);
                 static::assertTrue(Uuid::isValid(Uuid::fromString($challenge->properties['user_uuid'])));
                 static::assertSame('test@email.com', $challenge->properties['user_handle']);
                 static::assertFalse($challenge->verify);

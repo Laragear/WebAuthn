@@ -11,7 +11,6 @@ use Laragear\WebAuthn\Enums\UserVerification;
 use Ramsey\Uuid\Uuid;
 use Tests\DatabaseTestCase;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
-
 use function config;
 use function in_array;
 use function now;
@@ -63,7 +62,8 @@ class CreatorTest extends DatabaseTestCase
 
         $this->response()
             ->assertSessionHas('_webauthn', static function (Challenge $challenge): bool {
-                return now()->addMinutes(2)->getTimestamp() === $challenge->timeout;
+                return now()->addMinutes(2)->getTimestamp() === $challenge->expiresAt
+                    && 120 === $challenge->timeout;
             })
             ->assertJson([
                 'timeout' => 120000,
@@ -86,7 +86,8 @@ class CreatorTest extends DatabaseTestCase
 
         $this->response()
             ->assertSessionHas('_webauthn', function (Challenge $challenge): bool {
-                static::assertSame(now()->addMinute()->getTimestamp(), $challenge->timeout);
+                static::assertSame(60, $challenge->timeout);
+                static::assertSame(now()->addMinute()->getTimestamp(), $challenge->expiresAt);
                 static::assertFalse($challenge->verify);
 
                 return true;
