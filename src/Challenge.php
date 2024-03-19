@@ -13,17 +13,27 @@ class Challenge
         public ByteBuffer $data,
         public int $timeout,
         public bool $verify = true,
-        public array $properties = []
+        public array $properties = [],
+        public int $milliseconds = 0,
     ) {
+        $this->milliseconds = $this->timeout * 1000;
         $this->timeout = Date::now()->addSeconds($this->timeout)->getTimestamp();
+    }
+
+    /**
+     * Check if the current challenge has not expired.
+     */
+    public function isValid(): bool
+    {
+        return Date::createFromTimestamp($this->timeout)->isFuture();
     }
 
     /**
      * Check if the current challenge has expired in time and no longer valid.
      */
-    public function hasExpired(): bool
+    public function isExpired(): bool
     {
-        return Date::createFromTimestamp($this->timeout)->isPast();
+        return ! $this->isValid();
     }
 
     /**

@@ -3,10 +3,9 @@
 namespace Laragear\WebAuthn\Attestation\Creator\Pipes;
 
 use Closure;
-use Illuminate\Config\Repository;
-use Illuminate\Contracts\Cache\Factory;
 use Laragear\WebAuthn\Attestation\Creator\AttestationCreation;
 use Laragear\WebAuthn\Attestation\SessionChallenge;
+use Laragear\WebAuthn\ChallengeRepository;
 
 /**
  * @internal
@@ -18,7 +17,7 @@ class CreateAttestationChallenge
     /**
      * Create a new pipe instance.
      */
-    public function __construct(protected Repository $config, protected Factory $cache)
+    public function __construct(protected ChallengeRepository $challenge)
     {
         //
     }
@@ -30,13 +29,12 @@ class CreateAttestationChallenge
      */
     public function handle(AttestationCreation $attestable, Closure $next): mixed
     {
-        $attestable->json->set('timeout', $this->config->get('webauthn.challenge.timeout') * 1000);
-
-        $challenge = $this->storeChallenge($attestable->request, $attestable->userVerification, [
+        $challenge = $this->challenge->store($attestable->userVerification, [
             'user_uuid' => $attestable->json->get('user.id'),
             'user_handle' => $attestable->json->get('user.name'),
         ]);
 
+        $attestable->json->set('timeout', $challenge->milliseconds);
         $attestable->json->set('challenge', $challenge->data);
 
         return $next($attestable);

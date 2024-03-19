@@ -3,11 +3,9 @@
 namespace Laragear\WebAuthn\SharedPipes;
 
 use Closure;
-use Illuminate\Contracts\Config\Repository;
-use Illuminate\Http\Request;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidation;
 use Laragear\WebAuthn\Attestation\Validator\AttestationValidation;
-use Laragear\WebAuthn\Challenge;
+use Laragear\WebAuthn\ChallengeRepository;
 
 /**
  * This should be the first pipe to run, as the Challenge may expire by mere milliseconds.
@@ -21,7 +19,7 @@ abstract class RetrieveChallenge
     /**
      * Create a new pipe instance.
      */
-    public function __construct(protected Repository $config)
+    public function __construct(protected ChallengeRepository $challenge)
     {
         //
     }
@@ -31,27 +29,10 @@ abstract class RetrieveChallenge
      */
     public function handle(AttestationValidation|AssertionValidation $validation, Closure $next): mixed
     {
-        $validation->challenge = $this->retrieveChallenge($validation->request);
-
-        if (! $validation->challenge) {
-            static::throw($validation, 'Challenge does not exist.');
+        if ($validation->challenge = $this->challenge->pull()) {
+            return $next($validation);
         }
 
-        return $next($validation);
-    }
-
-    /**
-     * Pulls an Attestation challenge from the Cache.
-     */
-    protected function retrieveChallenge(Request $request): ?Challenge
-    {
-        /** @var \Laragear\WebAuthn\Challenge|null $challenge */
-        $challenge = $request->session()->pull($this->config->get('webauthn.challenge.key'));
-
-        if (! $challenge || $challenge->hasExpired()) {
-            return null;
-        }
-
-        return $challenge;
+        static::throw($validation, 'Challenge does not exist.');
     }
 }
