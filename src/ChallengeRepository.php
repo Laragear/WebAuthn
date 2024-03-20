@@ -13,7 +13,6 @@ class ChallengeRepository
      */
     public function __construct(protected SessionContract $session, protected ConfigContract $config)
     {
-
     }
 
     /**

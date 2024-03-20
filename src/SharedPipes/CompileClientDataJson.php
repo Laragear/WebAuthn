@@ -8,7 +8,9 @@ use Laragear\WebAuthn\Assertion\Validator\AssertionValidation;
 use Laragear\WebAuthn\Attestation\Validator\AttestationValidation;
 use Laragear\WebAuthn\ByteBuffer;
 use Laragear\WebAuthn\ClientDataJson;
+
 use function json_decode;
+
 use const JSON_THROW_ON_ERROR;
 
 /**

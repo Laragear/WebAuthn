@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Contracts\Config\Repository;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidation;
 use Laragear\WebAuthn\Attestation\Validator\AttestationValidation;
+
 use function parse_url;
 
 abstract class CheckOriginSecure

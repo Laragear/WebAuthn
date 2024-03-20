@@ -5,6 +5,7 @@ namespace Laragear\WebAuthn\Attestation\Creator\Pipes;
 use Closure;
 use Laragear\WebAuthn\Attestation\AuthenticatorData;
 use Laragear\WebAuthn\Attestation\Creator\AttestationCreation;
+
 use function function_exists;
 
 /**

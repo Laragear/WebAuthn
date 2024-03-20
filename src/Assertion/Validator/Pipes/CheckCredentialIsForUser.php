@@ -6,6 +6,7 @@ use Closure;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidation;
 use Laragear\WebAuthn\Exceptions\AssertionException;
 use Ramsey\Uuid\Uuid;
+
 use function hash_equals;
 
 /**

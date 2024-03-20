@@ -15,6 +15,7 @@ use Orchestra\Testbench\Attributes\WithMigration;
 use Tests\DatabaseTestCase;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
+
 use function base64_decode;
 use function config;
 

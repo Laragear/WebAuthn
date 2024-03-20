@@ -9,6 +9,7 @@ use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 use Laragear\WebAuthn\Events\CredentialCreated;
 use Laragear\WebAuthn\JsonTransport;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
+
 use function is_callable;
 
 /**

@@ -11,6 +11,7 @@ use Laragear\WebAuthn\Enums\UserVerification;
 use Ramsey\Uuid\Uuid;
 use Tests\DatabaseTestCase;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
+
 use function config;
 use function in_array;
 use function now;

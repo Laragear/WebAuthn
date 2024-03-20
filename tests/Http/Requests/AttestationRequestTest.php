@@ -12,6 +12,7 @@ use Ramsey\Uuid\Uuid;
 use Tests\DatabaseTestCase;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
+
 use function config;
 
 class AttestationRequestTest extends DatabaseTestCase

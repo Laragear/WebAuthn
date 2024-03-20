@@ -12,6 +12,7 @@ use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 use Laragear\WebAuthn\WebAuthnAuthentication;
 use Laragear\WebAuthn\WebAuthnServiceProvider;
 use Orchestra\Testbench\Attributes\DefineEnvironment;
+
 use function version_compare;
 
 class ServiceProviderTest extends TestCase

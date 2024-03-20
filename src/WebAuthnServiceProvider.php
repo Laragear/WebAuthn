@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
+
 use function method_exists;
 
 /**

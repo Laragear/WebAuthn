@@ -7,6 +7,7 @@ use Laragear\WebAuthn\Challenge;
 use Laragear\WebAuthn\ChallengeRepository;
 use Laragear\WebAuthn\Enums\UserVerification;
 use Mockery\MockInterface;
+
 use function now;
 
 class ChallengeRepositoryTest extends TestCase

@@ -6,6 +6,7 @@ use Closure;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidation;
 use Laragear\WebAuthn\Exceptions\AssertionException;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
+
 use function in_array;
 
 /**

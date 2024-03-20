@@ -9,6 +9,7 @@ use Laragear\WebAuthn\Assertion\Creator\AssertionCreation;
 use Laragear\WebAuthn\Assertion\Creator\AssertionCreator;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 use Laragear\WebAuthn\Enums\UserVerification;
+
 use function auth;
 use function is_array;
 

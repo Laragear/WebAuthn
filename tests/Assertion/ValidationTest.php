@@ -25,6 +25,7 @@ use Tests\DatabaseTestCase;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
 use Throwable;
+
 use function base64_decode;
 use function base64_encode;
 use function json_encode;

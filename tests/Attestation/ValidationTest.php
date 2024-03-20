@@ -27,6 +27,7 @@ use Ramsey\Uuid\Uuid;
 use Tests\DatabaseTestCase;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
+
 use function base64_decode;
 use function base64_encode;
 use function hex2bin;
@@ -447,7 +448,7 @@ class ValidationTest extends DatabaseTestCase
 
         $invalid['response']['clientDataJSON'] = base64_encode(
             json_encode([
-                'type' => 'webauthn.create', 'origin' => '', 'challenge' => FakeAuthenticator::ATTESTATION_CHALLENGE
+                'type' => 'webauthn.create', 'origin' => '', 'challenge' => FakeAuthenticator::ATTESTATION_CHALLENGE,
             ])
         );
 
@@ -466,7 +467,7 @@ class ValidationTest extends DatabaseTestCase
         $invalid['response']['clientDataJSON'] = base64_encode(
             json_encode([
                 'type' => 'webauthn.create', 'origin' => 'invalid',
-                'challenge' => FakeAuthenticator::ATTESTATION_CHALLENGE
+                'challenge' => FakeAuthenticator::ATTESTATION_CHALLENGE,
             ])
         );
 
@@ -485,7 +486,7 @@ class ValidationTest extends DatabaseTestCase
         $invalid['response']['clientDataJSON'] = base64_encode(
             json_encode([
                 'type' => 'webauthn.create', 'origin' => 'http://unsecure.com',
-                'challenge' => FakeAuthenticator::ATTESTATION_CHALLENGE
+                'challenge' => FakeAuthenticator::ATTESTATION_CHALLENGE,
             ])
         );
 

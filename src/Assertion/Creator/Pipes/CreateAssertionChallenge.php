@@ -4,7 +4,6 @@ namespace Laragear\WebAuthn\Assertion\Creator\Pipes;
 
 use Closure;
 use Laragear\WebAuthn\Assertion\Creator\AssertionCreation;
-use Laragear\WebAuthn\Attestation\SessionChallenge;
 use Laragear\WebAuthn\ChallengeRepository;
 
 class CreateAssertionChallenge
