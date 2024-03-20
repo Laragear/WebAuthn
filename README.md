@@ -456,7 +456,14 @@ If you want to manually Attest and Assert users, you may instance their respecti
 | `AssertionCreator`     | Creates a request to validate a WebAuthn Credential.             |
 | `AssertionValidator`   | Validates a response for a WebAuthn Credential.                  |
 
-All of these pipelines **require** the current Request to work, as is used to generate Challenges in the Session and validate different parts of the authentication data.
+All of these pipelines don't require the current Request JSON to work. You can either use the `makeFromRequest()` helper, or instance a `Laragear\WebAuthn\JsonTransport` manually with the required data.
+
+```php
+$assertion = AssertionValidation::fromRequest($request);
+
+// Same as...
+$assertion = new AssertionValidation(new JsonTransport($request->json()->all()));
+```
 
 For example, you may manually authenticate a user with its WebAuthn Credentials `AssertionValidator` pipeline. We can just type-hint a pipeline in a Controller action argument and Laravel will automatically inject the instance to it.
 
@@ -468,7 +475,7 @@ use Illuminate\Support\Facades\Auth;
 public function authenticate(Request $request, AssertionValidator $assertion)
 {
     $credential = $assertion
-        ->send(new AssertionValidation($request))
+        ->send(AssertionValidation::fromRequest($request))
         ->thenReturn()
         ->credential;
     

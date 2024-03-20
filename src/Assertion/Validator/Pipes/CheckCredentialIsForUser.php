@@ -6,7 +6,6 @@ use Closure;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidation;
 use Laragear\WebAuthn\Exceptions\AssertionException;
 use Ramsey\Uuid\Uuid;
-
 use function hash_equals;
 
 /**
@@ -36,7 +35,7 @@ class CheckCredentialIsForUser
         if ($validation->user) {
             $this->validateUser($validation);
 
-            if ($validation->request->json('response.userHandle')) {
+            if ($validation->request->get('response.userHandle')) {
                 $this->validateId($validation);
             }
         } else {
@@ -62,7 +61,7 @@ class CheckCredentialIsForUser
      */
     protected function validateId(AssertionValidation $validation): void
     {
-        $handle = $validation->request->json('response.userHandle');
+        $handle = $validation->request->get('response.userHandle');
 
         if (! $handle || ! hash_equals(Uuid::fromString($validation->credential->user_id)->getHex()->toString(), $handle)) {
             throw AssertionException::make('User ID is not owner of the stored credential.');

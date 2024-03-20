@@ -13,7 +13,6 @@ use Ramsey\Uuid\Uuid;
 use Tests\DatabaseTestCase;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
-
 use function array_merge;
 use function json_encode;
 use function now;

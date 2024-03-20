@@ -4,7 +4,6 @@ namespace Laragear\WebAuthn;
 
 use InvalidArgumentException;
 use Laragear\WebAuthn\Exceptions\DataException;
-
 use function is_int;
 use function is_string;
 use function sprintf;

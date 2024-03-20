@@ -3,7 +3,6 @@
 namespace Laragear\WebAuthn\Attestation\Validator\Pipes;
 
 use Closure;
-use Illuminate\Http\Request;
 use Laragear\WebAuthn\Attestation\AttestationObject;
 use Laragear\WebAuthn\Attestation\AuthenticatorData;
 use Laragear\WebAuthn\Attestation\Formats\None;
@@ -12,7 +11,7 @@ use Laragear\WebAuthn\ByteBuffer;
 use Laragear\WebAuthn\CborDecoder;
 use Laragear\WebAuthn\Exceptions\AttestationException;
 use Laragear\WebAuthn\Exceptions\DataException;
-
+use Laragear\WebAuthn\JsonTransport;
 use function is_array;
 use function is_string;
 
@@ -66,10 +65,10 @@ class CompileAttestationObject
      *
      * @throws \Laragear\WebAuthn\Exceptions\AttestationException
      */
-    protected function decodeCborBase64(Request $request): array
+    protected function decodeCborBase64(JsonTransport $request): array
     {
         try {
-            $data = CborDecoder::decode(ByteBuffer::decodeBase64Url($request->json('response.attestationObject', '')));
+            $data = CborDecoder::decode(ByteBuffer::decodeBase64Url($request->get('response.attestationObject', '')));
         } catch (DataException $e) {
             throw AttestationException::make($e->getMessage());
         }

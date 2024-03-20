@@ -19,7 +19,6 @@ use function session;
 
 class CreatorTest extends DatabaseTestCase
 {
-    protected Request $request;
     protected WebAuthnAuthenticatableUser $user;
     protected AttestationCreation $creation;
     protected AttestationCreator $creator;
@@ -36,13 +35,10 @@ class CreatorTest extends DatabaseTestCase
     protected function setUp(): void
     {
         $this->afterApplicationCreated(function (): void {
-            $this->request = Request::create('https://test.app/webauthn/create', 'POST');
-
             $this->creator = new AttestationCreator($this->app);
             $this->creation = new AttestationCreation($this->user);
 
             $this->startSession();
-            $this->request->setLaravelSession($this->app->make('session.store'));
         });
 
         parent::setUp();
@@ -51,7 +47,7 @@ class CreatorTest extends DatabaseTestCase
     protected function response(): TestResponse
     {
         return $this->createTestResponse(
-            $this->creator->send($this->creation)->thenReturn()->json->toResponse($this->request), null
+            $this->creator->send($this->creation)->thenReturn()->json->toResponse(new Request()), null
         );
     }
 

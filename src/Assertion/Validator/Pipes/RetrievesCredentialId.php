@@ -6,7 +6,6 @@ use Closure;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidation;
 use Laragear\WebAuthn\Exceptions\AssertionException;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
-
 use function in_array;
 
 /**
@@ -21,7 +20,7 @@ class RetrievesCredentialId
      */
     public function handle(AssertionValidation $validation, Closure $next): mixed
     {
-        $id = $validation->request->json('id');
+        $id = $validation->request->get('id');
 
         // First, always check if the credential is on the list of accepted credentials IDs
         // before going to the database to retrieve the complete credential in question.

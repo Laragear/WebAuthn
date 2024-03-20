@@ -10,7 +10,7 @@ use Laragear\WebAuthn\Assertion\Validator\AssertionValidation;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidator;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 use Laragear\WebAuthn\Exceptions\AssertionException;
-
+use Laragear\WebAuthn\JsonTransport;
 use function class_implements;
 use function config;
 use function in_array;
@@ -100,7 +100,9 @@ class WebAuthnUserProvider extends EloquentUserProvider
         try {
             // When we hit this method, we already have the user for the credential, so we will
             // pass it to the Assertion Validation data, thus avoiding fetching it again.
-            $this->validator->send(new AssertionValidation(request(), $user))->thenReturn();
+            $this->validator
+                ->send(new AssertionValidation(new JsonTransport(request(['id', 'rawId', 'response', 'type'])), $user))
+                ->thenReturn();
         } catch (AssertionException $e) {
             // If we're debugging, like under local development, push the error to the logger.
             if (config('app.debug')) {

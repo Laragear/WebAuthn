@@ -9,9 +9,7 @@ use Laragear\MetaModel\CustomizableModel;
 use Laragear\WebAuthn\Events\CredentialDisabled;
 use Laragear\WebAuthn\Events\CredentialEnabled;
 use Laragear\WebAuthn\Migrations\WebAuthnAuthenticationMigration;
-
 use function parse_url;
-
 use const PHP_URL_HOST;
 
 /**

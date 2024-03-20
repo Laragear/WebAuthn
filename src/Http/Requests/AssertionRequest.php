@@ -9,10 +9,12 @@ use Laragear\WebAuthn\Assertion\Creator\AssertionCreation;
 use Laragear\WebAuthn\Assertion\Creator\AssertionCreator;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 use Laragear\WebAuthn\Enums\UserVerification;
-
 use function auth;
 use function is_array;
 
+/**
+ * @method \Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable|null user($guard = null)
+ */
 class AssertionRequest extends FormRequest
 {
     /**
@@ -37,6 +39,7 @@ class AssertionRequest extends FormRequest
      */
     public function validateResolved(): void
     {
+        //
     }
 
     /**
@@ -44,7 +47,7 @@ class AssertionRequest extends FormRequest
      */
     protected function assertion(): AssertionCreation
     {
-        return $this->assertion ??= new AssertionCreation($this);
+        return $this->assertion ??= new AssertionCreation();
     }
 
     /**

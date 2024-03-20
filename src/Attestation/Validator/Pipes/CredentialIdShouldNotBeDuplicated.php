@@ -31,6 +31,6 @@ class CredentialIdShouldNotBeDuplicated
      */
     protected function credentialAlreadyExists(AttestationValidation $validation): bool
     {
-        return WebAuthnCredential::whereKey($validation->request->json('id'))->exists();
+        return WebAuthnCredential::whereKey($validation->request->get('id'))->exists();
     }
 }

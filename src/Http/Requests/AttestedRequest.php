@@ -7,8 +7,8 @@ use Laragear\WebAuthn\Attestation\Validator\AttestationValidation;
 use Laragear\WebAuthn\Attestation\Validator\AttestationValidator;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 use Laragear\WebAuthn\Events\CredentialCreated;
+use Laragear\WebAuthn\JsonTransport;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
-
 use function is_callable;
 
 /**
@@ -54,7 +54,7 @@ class AttestedRequest extends FormRequest
     protected function passedValidation(): void
     {
         $this->credential = $this->container->make(AttestationValidator::class)
-            ->send(new AttestationValidation($this->user(), $this))
+            ->send(new AttestationValidation($this->user(), new JsonTransport($this->validated())))
             ->then(static function (AttestationValidation $validation): WebAuthnCredential {
                 return $validation->credential;
             });

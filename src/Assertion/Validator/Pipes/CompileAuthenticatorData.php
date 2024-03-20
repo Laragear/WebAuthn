@@ -21,7 +21,7 @@ class CompileAuthenticatorData
      */
     public function handle(AssertionValidation $validation, Closure $next): mixed
     {
-        $data = ByteBuffer::decodeBase64Url($validation->request->json('response.authenticatorData', ''));
+        $data = ByteBuffer::decodeBase64Url($validation->request->get('response.authenticatorData', ''));
 
         if (! $data) {
             throw AssertionException::make('Authenticator Data does not exist or is empty.');

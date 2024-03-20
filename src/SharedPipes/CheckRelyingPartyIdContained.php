@@ -7,10 +7,8 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Support\Str;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidation;
 use Laragear\WebAuthn\Attestation\Validator\AttestationValidation;
-
 use function hash_equals;
 use function parse_url;
-
 use const PHP_URL_HOST;
 
 /**

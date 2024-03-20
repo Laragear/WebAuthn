@@ -4,7 +4,6 @@ namespace Laragear\WebAuthn\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
-
 use function auth;
 
 class AssertedRequest extends FormRequest

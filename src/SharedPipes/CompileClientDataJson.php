@@ -8,9 +8,7 @@ use Laragear\WebAuthn\Assertion\Validator\AssertionValidation;
 use Laragear\WebAuthn\Attestation\Validator\AttestationValidation;
 use Laragear\WebAuthn\ByteBuffer;
 use Laragear\WebAuthn\ClientDataJson;
-
 use function json_decode;
-
 use const JSON_THROW_ON_ERROR;
 
 /**
@@ -30,7 +28,7 @@ abstract class CompileClientDataJson
     {
         try {
             $object = json_decode(
-                ByteBuffer::decodeBase64Url($validation->request->json('response.clientDataJSON', '')),
+                ByteBuffer::decodeBase64Url($validation->request->get('response.clientDataJSON', '')),
                 false, 32, JSON_THROW_ON_ERROR
             );
         } catch (JsonException) {

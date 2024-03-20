@@ -2,11 +2,11 @@
 
 namespace Laragear\WebAuthn\Attestation\Validator;
 
-use Illuminate\Http\Request;
 use Laragear\WebAuthn\Attestation\AttestationObject;
 use Laragear\WebAuthn\Challenge;
 use Laragear\WebAuthn\ClientDataJson;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
+use Laragear\WebAuthn\JsonTransport;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
 
 class AttestationValidation
@@ -16,7 +16,7 @@ class AttestationValidation
      */
     public function __construct(
         public WebAuthnAuthenticatable $user,
-        public Request $request,
+        public JsonTransport $request,
         public ?Challenge $challenge = null,
         public ?AttestationObject $attestationObject = null,
         public ?ClientDataJson $clientDataJson = null,

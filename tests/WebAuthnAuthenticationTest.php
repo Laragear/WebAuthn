@@ -5,7 +5,6 @@ namespace Tests;
 use Illuminate\Support\Carbon;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
 use Ramsey\Uuid\Uuid;
-
 use function now;
 
 class WebAuthnAuthenticationTest extends DatabaseTestCase

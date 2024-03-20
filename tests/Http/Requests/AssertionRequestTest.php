@@ -13,7 +13,6 @@ use Laragear\WebAuthn\JsonTransport;
 use Tests\DatabaseTestCase;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
-
 use function config;
 use function session;
 use function strlen;
@@ -29,7 +28,7 @@ class AssertionRequestTest extends DatabaseTestCase
         ]);
     }
 
-    protected function defineRoutes($router)
+    protected function defineRoutes($router): void
     {
         $router->middleware('web')->post('test', function (AssertionRequest $request) {
             return $request->toVerify();

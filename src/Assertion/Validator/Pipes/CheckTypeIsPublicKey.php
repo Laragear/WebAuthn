@@ -18,7 +18,7 @@ class CheckTypeIsPublicKey
      */
     public function handle(AssertionValidation $validation, Closure $next): mixed
     {
-        if ($validation->request->json('type') !== 'public-key') {
+        if ($validation->request->get('type') !== 'public-key') {
             throw AssertionException::make('Response type is not [public-key].');
         }
 

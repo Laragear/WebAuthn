@@ -5,7 +5,6 @@ namespace Laragear\WebAuthn\Attestation;
 use Laragear\WebAuthn\ByteBuffer;
 use Laragear\WebAuthn\CborDecoder;
 use Laragear\WebAuthn\Exceptions\DataException;
-
 use function base64_encode;
 use function chr;
 use function chunk_split;
