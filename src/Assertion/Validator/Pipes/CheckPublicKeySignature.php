@@ -10,7 +10,6 @@ use Laragear\WebAuthn\ByteBuffer;
 use Laragear\WebAuthn\Exceptions\AssertionException;
 use Laragear\WebAuthn\JsonTransport;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
-
 use function base64_decode;
 use function function_exists;
 use function hash;
@@ -19,7 +18,6 @@ use function openssl_error_string;
 use function openssl_pkey_get_public;
 use function openssl_verify;
 use function strlen;
-
 use const OPENSSL_ALGO_SHA256;
 
 /**
@@ -119,7 +117,7 @@ class CheckPublicKeySignature
     {
         if (! $publicKey = openssl_pkey_get_public($credential->public_key)) {
             throw AssertionException::make('Public key is invalid: '.openssl_error_string());
-        }https://
+        }
 
         if (openssl_verify($verifiable, $signature, $publicKey, OPENSSL_ALGO_SHA256) !== 1) {
             throw AssertionException::make('Signature is invalid: '.openssl_error_string());
