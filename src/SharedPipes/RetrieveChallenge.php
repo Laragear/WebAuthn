@@ -29,7 +29,7 @@ abstract class RetrieveChallenge
      */
     public function handle(AttestationValidation|AssertionValidation $validation, Closure $next): mixed
     {
-        if ($validation->challenge = $this->challenge->pull($validation)) {
+        if ($validation->challenge == $this->challenge->pull($validation)) {
             return $next($validation);
         }
 
