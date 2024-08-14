@@ -4,6 +4,7 @@ namespace Laragear\WebAuthn\Attestation\Creator\Pipes;
 
 use Closure;
 use Laragear\WebAuthn\Attestation\Creator\AttestationCreation;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @internal
@@ -19,7 +20,7 @@ class AddUserDescriptor
         $existingId = $attestable->user->webAuthnCredentials()->getQuery()->value('user_id');
 
         $attestable->json->set('user', [
-            'id' => $existingId ?: $attestable->user->webAuthnId()->getHex()->toString(),
+            'id' => ($existingId ? Uuid::fromString($existingId) : $attestable->user->webAuthnId())->getHex()->toString(),
             ...$attestable->user->webAuthnData(),
         ]);
 
