@@ -4,6 +4,7 @@ namespace Laragear\WebAuthn\Assertion\Validator\Pipes;
 
 use Closure;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidation;
+use Laragear\WebAuthn\ByteBuffer;
 use Laragear\WebAuthn\Exceptions\AssertionException;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use Ramsey\Uuid\Uuid;
@@ -67,12 +68,18 @@ class CheckCredentialIsForUser
         // of the authenticator, which is pushed from the application to be saved. If
         // the userHandle cannot be decoded and normalized, then surely is invalid.
         try {
-            $handle = Uuid::fromString($validation->json->get('response.userHandle'))->getHex()->toString();
+            $handle = Uuid::fromString($validation->json->get('response.userHandle'));
         } catch (InvalidUuidStringException) {
-            throw AssertionException::make('The userHandle is not a valid hexadecimal UUID (32/36 characters).');
+            try {
+                // This is required for compatibility with credentials created by versions
+                // of Webpass that used SimpleWebAuthn/browser < v10.0.0
+                $handle = Uuid::fromString(ByteBuffer::decodeBase64Url($validation->json->get('response.userHandle')));
+            } catch (InvalidUuidStringException) {
+                throw AssertionException::make('The userHandle is not a valid hexadecimal UUID (32/36 characters).');
+            }
         }
 
-        if (! hash_equals(Uuid::fromString($validation->credential->user_id)->getHex()->toString(), $handle)) {
+        if (! hash_equals(Uuid::fromString($validation->credential->user_id)->getHex()->toString(), $handle->getHex()->toString())) {
             throw AssertionException::make('User ID is not owner of the stored credential.');
         }
     }
