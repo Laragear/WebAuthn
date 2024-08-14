@@ -277,6 +277,19 @@ class ValidationTest extends DatabaseTestCase
         $this->validator->send($this->validation)->thenReturn();
     }
 
+    public function test_credential_check_base64_user_handle(): void
+    {
+        $assertionResponse = FakeAuthenticator::assertionResponse();
+
+        $assertionResponse['response']['userHandle'] = base64_encode($assertionResponse['response']['userHandle']);
+
+        $this->validation->json = new JsonTransport($assertionResponse);
+
+        $this->validation->user = WebAuthnAuthenticatableUser::query()->first();
+
+        static::assertInstanceOf(AssertionValidation::class, $this->validator->send($this->validation)->thenReturn());
+    }
+
     public function test_credential_check_is_not_for_user_id(): void
     {
         DB::table('webauthn_credentials')->where('id', FakeAuthenticator::CREDENTIAL_ID)->update([
