@@ -170,7 +170,7 @@ class CreatorTest extends DatabaseTestCase
         ])->save();
 
         $this->response()
-            ->assertJsonPath('user.id', $uuid->toString());
+            ->assertJsonPath('user.id', $uuid->getHex()->toString());
     }
 
     public function test_adds_existing_credentials_if_unique_by_default(): void
