@@ -360,6 +360,22 @@ public function createChallenge(AssertedRequest $request)
 }
 ```
 
+You can also use the `login()` method will callbacks, which will be passed to the [`attemptWhen()`](https://laravel.com/docs/11.x/authentication#specifying-additional-conditions) method of the Session Guard.
+
+```php
+// app\Http\Controllers\WebAuthn\WebAuthnLoginController.php
+use Laragear\WebAuthn\Http\Requests\AssertedRequest;
+
+public function createChallenge(AssertedRequest $request)
+{
+    $user = $request->login(callbacks: fn ($user) => $user->isNotBanned());
+    
+    return $user 
+        ? response("Welcome back, $user->name!");
+        : response('Something went wrong, try again!');
+}
+```
+
 If you need greater control on the Assertion procedure, you may want to [Assert manually](#manually-attesting-and-asserting).
 
 ### Assertion User Verification
@@ -449,7 +465,7 @@ The following events are fired by this package, which you can [listen to in your
 
 ## Manually Attesting and Asserting
 
-If you want to manually Attest and Assert users, for example to create users at the same time they register (attest) a device,  you may instance their respective pipelines used for both WebAuthn Ceremonies:
+If you want to manually Attest and Assert users, for example to create users at the same time they register (attest) a device, you may instance their respective pipelines used for both WebAuthn Ceremonies:
 
 | Pipeline               | Description                                          |
 |------------------------|------------------------------------------------------|
@@ -462,7 +478,7 @@ If you want to manually Attest and Assert users, for example to create users at 
 > 
 > The `AttestationValidator` instances a storable credential, it doesn't save it. This way you have the chance to alter the model with additional data before persisting.
 
-Compared to prior versions, the validation data to pass through `AttestationValidator` and `AssertionValidator` no longer require the current Request instance. Instead, these only need the JSON array. 
+Compared to prior versions, the validation data to pass through `AttestationValidator` and `AssertionValidator` no longer require the current Request instance. Instead, these only need the JSON array of data. 
 
 If you prefer, you can still use the `fromRequest()` helper, which will extract the required WebAuthn data from the current or issued Request instance, or manually instance a `Laragear\WebAuthn\JsonTransport` with the required data.
 

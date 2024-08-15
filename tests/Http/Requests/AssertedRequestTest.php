@@ -17,7 +17,6 @@ use Ramsey\Uuid\Uuid;
 use Tests\DatabaseTestCase;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
-
 use function array_merge;
 use function base64_decode;
 use function config;
@@ -275,5 +274,46 @@ class AssertedRequestTest extends DatabaseTestCase
             ->andReturn();
 
         $this->postJson('custom', FakeAuthenticator::assertionResponse())->assertOk();
+    }
+
+    public function test_logins_with_callbacks(): void
+    {
+        Route::middleware('web')->post('custom-false', function (AssertedRequest $request) {
+            $request->login(callbacks: function ($user): bool {
+                static::assertInstanceOf(WebAuthnAuthenticatableUser::class, $user);
+
+                return false;
+            });
+        });
+
+        Route::middleware('web')->post('custom-true', function (AssertedRequest $request) {
+            $request->login(callbacks: function ($user): bool {
+                static::assertInstanceOf(WebAuthnAuthenticatableUser::class, $user);
+
+                return true;
+            });
+        });
+
+        $session = Mockery::mock(\Illuminate\Contracts\Session\Session::class);
+
+        // Expect it only once. The second callback doesn't reach a second execution since it fails.
+        $session->expects('regenerate')->with(false)->andReturn();
+
+        $this->app->resolving(AssertedRequest::class, function (AssertedRequest $request) use ($session): void {
+            $request->setLaravelSession($session);
+        });
+
+        $this->mock(AssertionValidator::class)
+            ->expects('send->thenReturn')
+            ->twice()
+            ->andReturn();
+
+        $this->postJson('custom-false', FakeAuthenticator::assertionResponse())->assertOk();
+
+        $this->assertGuest();
+
+        $this->postJson('custom-true', FakeAuthenticator::assertionResponse())->assertOk();
+
+        $this->assertAuthenticated();
     }
 }

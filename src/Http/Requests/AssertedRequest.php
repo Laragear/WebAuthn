@@ -4,8 +4,9 @@ namespace Laragear\WebAuthn\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
-
+use UnexpectedValueException;
 use function auth;
+use function method_exists;
 
 class AssertedRequest extends FormRequest
 {
@@ -49,10 +50,31 @@ class AssertedRequest extends FormRequest
     public function login(
         string $guard = null,
         bool $remember = null,
-        bool $destroySession = false
+        bool $destroySession = false,
+        callable|array $callbacks = null
     ): ?WebAuthnAuthenticatable {
         /** @var \Illuminate\Contracts\Auth\StatefulGuard $auth */
         $auth = auth()->guard($guard);
+
+        $remember ??= $this->hasRemember();
+
+        // If the developer is using a callback or an array of callbacks, we will try to use
+        // the "attemptWhen" method of the Session Guard. Since these callback are expected
+        // to run, we will fail miserably if the guard does not support attempt callbacks.
+        if ($callbacks !== null) {
+            if (! method_exists($auth, 'attemptWhen')) {
+                throw new UnexpectedValueException("The [$guard] guard does not support attempt callbacks.");
+            }
+
+            if ($auth->attemptWhen($this->validated(), $callbacks, $remember)) {
+                $this->session()->regenerate($destroySession);
+
+                // @phpstan-ignore-next-line
+                return $auth->user();
+            }
+
+            return null;
+        }
 
         if ($auth->attempt($this->validated(), $remember ?? $this->hasRemember())) {
             $this->session()->regenerate($destroySession);
