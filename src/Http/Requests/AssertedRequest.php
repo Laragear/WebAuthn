@@ -5,7 +5,6 @@ namespace Laragear\WebAuthn\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 use UnexpectedValueException;
-
 use function auth;
 use function config;
 use function method_exists;
@@ -79,7 +78,7 @@ class AssertedRequest extends FormRequest
             return null;
         }
 
-        if ($auth->attempt($this->validated(), $remember ?? $this->hasRemember())) {
+        if ($auth->attempt($this->validated(), $remember)) {
             $this->session()->regenerate($destroySession);
 
             // @phpstan-ignore-next-line
