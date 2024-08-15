@@ -7,6 +7,7 @@ use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 use UnexpectedValueException;
 
 use function auth;
+use function config;
 use function method_exists;
 
 class AssertedRequest extends FormRequest
@@ -64,6 +65,7 @@ class AssertedRequest extends FormRequest
         // to run, we will fail miserably if the guard does not support attempt callbacks.
         if ($callbacks !== null) {
             if (! method_exists($auth, 'attemptWhen')) {
+                $guard ??= config('auth.defaults.guard');
                 throw new UnexpectedValueException("The [$guard] guard does not support attempt callbacks.");
             }
 
