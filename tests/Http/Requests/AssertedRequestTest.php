@@ -20,7 +20,6 @@ use Ramsey\Uuid\Uuid;
 use Tests\DatabaseTestCase;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
-
 use function array_merge;
 use function base64_decode;
 use function config;
@@ -335,6 +334,6 @@ class AssertedRequestTest extends DatabaseTestCase
 
         $this->postJson('custom', FakeAuthenticator::assertionResponse())
             ->assertJsonPath('message', 'The [web] guard does not support attempt callbacks.')
-            ->assertInternalServerError();
+            ->assertServerError();
     }
 }
