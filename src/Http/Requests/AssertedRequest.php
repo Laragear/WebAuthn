@@ -5,6 +5,7 @@ namespace Laragear\WebAuthn\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 use UnexpectedValueException;
+
 use function auth;
 use function config;
 use function method_exists;
