@@ -162,7 +162,10 @@ use Laragear\WebAuthn\Http\Routes as WebAuthnRoutes;
 
 WebAuthnRoutes::register(
     attest: 'auth/register',
-    assert: 'auth/login'
+    attestController: '\App\Http\Controllers\Admin\WebAuthnRegisterController',
+    assert: 'auth/login',
+    assertController: '\App\Http\Controllers\Admin\WebAuthnLoginController',
+    registerMiddleware: 'admin'
 )->withoutMiddleware(VerifyCsrfToken::class);
 ```
 
