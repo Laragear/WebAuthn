@@ -302,6 +302,9 @@ public function registerDevice(AttestationRequest $request)
     return $request->userless()->toCreate();
 }
 ```
+
+In layman temrs, once the Resident Key is created, the authenticator will be able to find the correct credential for your app by finding which credentials match your Relaying Party ID (like `my-app.com`), and show the user these credentials. This effectively eliminates the step of the user sending its username so the server can return which credentials ID the authenticator should use.
+
 > [!IMPORTANT]
 >
 > The Authenticator WILL require [user verification](#attestation-user-verification) on login when using `userless()`. Its highly probable the user will also be asked for [user verification on login](#assertion-user-verification), as it will depend on the authenticator itself.
