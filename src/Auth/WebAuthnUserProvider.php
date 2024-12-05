@@ -123,7 +123,7 @@ class WebAuthnUserProvider extends EloquentUserProvider
      */
     public function rehashPasswordIfRequired(UserContract $user, array $credentials, bool $force = false): void
     {
-        if (! $this->isSignedChallenge($credentials)) {
+        if (! $this->isSignedChallenge($credentials) && method_exists(get_parent_class($this), 'rehashPasswordIfRequired')) {
             parent::rehashPasswordIfRequired($user, $credentials, $force);
         }
     }
