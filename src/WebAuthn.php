@@ -15,7 +15,7 @@ class WebAuthn extends Http\Routes
         $some = ['foo', 'bar'];
 
         foreach ($some as $key => $value) {
-            # code...
+            // code...
         }
     }
 }
