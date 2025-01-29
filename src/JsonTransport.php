@@ -38,7 +38,7 @@ class JsonTransport implements Arrayable, Jsonable, JsonSerializable, Stringable
     /**
      * Retrieves a value from the underlying JSON array.
      */
-    public function get(string $key, string|int $default = null): mixed
+    public function get(string $key, string|int|null $default = null): mixed
     {
         return Arr::get($this->json, $key, $default);
     }

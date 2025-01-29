@@ -1,0 +1,3 @@
+parameters:
+    ignoreErrors:
+        - '#Trait Laragear\\WebAuthn\\WebAuthnAuthentication is used zero times and is not analysed\.#'

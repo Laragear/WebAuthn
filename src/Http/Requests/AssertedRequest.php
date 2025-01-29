@@ -50,10 +50,10 @@ class AssertedRequest extends FormRequest
      * @return \Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable|\Illuminate\Contracts\Auth\Authenticatable|null
      */
     public function login(
-        string $guard = null,
-        bool $remember = null,
+        ?string $guard = null,
+        ?bool $remember = null,
         bool $destroySession = false,
-        callable|array $callbacks = null
+        callable|array|null $callbacks = null
     ): ?WebAuthnAuthenticatable {
         /** @var \Illuminate\Contracts\Auth\StatefulGuard $auth */
         $auth = auth()->guard($guard);
