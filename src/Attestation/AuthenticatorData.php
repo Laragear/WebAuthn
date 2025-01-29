@@ -369,6 +369,8 @@ class AuthenticatorData
     /**
      * Reads the attestation data.
      *
+     * @param-out  int  $endOffset
+     *
      * @return object{aaguid: string, credentialId: \Laragear\WebAuthn\ByteBuffer, credentialPublicKey: object}&\stdClass
      */
     protected static function readAttestData(string $binary, int &$endOffset): object
@@ -392,6 +394,8 @@ class AuthenticatorData
 
     /**
      * Read COSE key-encoded elliptic curve public key in EC2 format.
+     *
+     * @param-out  int  $endOffset
      */
     protected static function readCredentialPublicKey(string $binary, int $offset, int &$endOffset): object
     {

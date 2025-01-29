@@ -17,8 +17,8 @@ use const PHP_URL_HOST;
 /**
  * @mixin \Illuminate\Database\Eloquent\Builder
  *
- * @method \Illuminate\Database\Eloquent\Builder|\static newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\static query()
+ * @method \Illuminate\Database\Eloquent\Builder|static newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|static query()
  * @method static \Laragear\WebAuthn\Models\WebAuthnCredential make(array $attributes = [])
  * @method static \Laragear\WebAuthn\Models\WebAuthnCredential create(array $attributes = [])
  * @method static \Laragear\WebAuthn\Models\WebAuthnCredential forceCreate(array $attributes)
@@ -33,14 +33,14 @@ use const PHP_URL_HOST;
  * @method \Laragear\WebAuthn\Models\WebAuthnCredential createOrFirst(array $attributes, array $values = [])
  * @method \Laragear\WebAuthn\Models\WebAuthnCredential sole($columns = ['*'])
  * @method \Laragear\WebAuthn\Models\WebAuthnCredential findOrNew($id, $columns = ['*'])
- * @method \Illuminate\Database\Eloquent\Collection<int, \static>|\static[]|\static|null find($id, $columns = ['*'])
- * @method \Illuminate\Database\Eloquent\Collection<int, \static>|\static[]|\static findOrFail($id, $columns = ['*'])
- * @method \Illuminate\Database\Eloquent\Collection<int, \static>|\static[]|\static findOr($id, $columns = ['*'], \Closure|null $callback = null)
- * @method \Illuminate\Database\Eloquent\Collection<int, \static>|\static[] findMany($id, $columns = ['*'])
- * @method \Illuminate\Database\Eloquent\Collection<int, \static>|\static[] fromQuery($query, $bindings = [])
- * @method \Illuminate\Support\LazyCollection<int, \static>|\static[] lazy(int $chunkSize = 1000)
- * @method \Illuminate\Support\LazyCollection<int, \static>|\static[] lazyById(int $chunkSize = 1000, string|null $column = null, string|null $alias = null)
- * @method \Illuminate\Support\LazyCollection<int, \static>|\static[] lazyByIdDesc(int $chunkSize = 1000, string|null $column = null, string|null $alias = null)
+ * @method \Illuminate\Database\Eloquent\Collection<int, static>|static[]|static|null find($id, $columns = ['*'])
+ * @method \Illuminate\Database\Eloquent\Collection<int, static>|static[]|static findOrFail($id, $columns = ['*'])
+ * @method \Illuminate\Database\Eloquent\Collection<int, static>|static[]|static findOr($id, $columns = ['*'], \Closure|null $callback = null)
+ * @method \Illuminate\Database\Eloquent\Collection<int, static>|static[] findMany($id, $columns = ['*'])
+ * @method \Illuminate\Database\Eloquent\Collection<int, static>|static[] fromQuery($query, $bindings = [])
+ * @method \Illuminate\Support\LazyCollection<int, static>|static[] lazy(int $chunkSize = 1000)
+ * @method \Illuminate\Support\LazyCollection<int, static>|static[] lazyById(int $chunkSize = 1000, string|null $column = null, string|null $alias = null)
+ * @method \Illuminate\Support\LazyCollection<int, static>|static[] lazyByIdDesc(int $chunkSize = 1000, string|null $column = null, string|null $alias = null)
  *
  * @property-read string $id
  * @property-read string $user_id
@@ -101,9 +101,7 @@ class WebAuthnCredential extends Model
     protected $visible = ['id', 'origin', 'alias', 'aaguid', 'attestation_format', 'disabled_at'];
 
     /**
-     * @phpstan-ignore-next-line
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo|\Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo<\Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable, $this>
      */
     public function authenticatable(): MorphTo
     {

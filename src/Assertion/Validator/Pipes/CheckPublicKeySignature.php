@@ -65,7 +65,7 @@ class CheckPublicKeySignature
         $verifiable = ByteBuffer::decodeBase64Url($request->get('response.authenticatorData')).
             hash('sha256', ByteBuffer::decodeBase64Url($request->get('response.clientDataJSON')), true);
 
-        return $verifiable
+        return $verifiable // @phpstan-ignore-line
             ?: throw AssertionException::make('Authenticator Data or Client Data JSON are empty or malformed.');
     }
 

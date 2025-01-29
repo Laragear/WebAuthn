@@ -42,12 +42,6 @@ class AssertedRequest extends FormRequest
 
     /**
      * Logs in the user for this assertion request.
-     *
-     * @param  string|null  $guard
-     *
-     * @phpstan-ignore-next-line
-     *
-     * @return \Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable|\Illuminate\Contracts\Auth\Authenticatable|null
      */
     public function login(
         ?string $guard = null,
