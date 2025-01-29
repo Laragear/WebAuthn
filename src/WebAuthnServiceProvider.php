@@ -70,7 +70,7 @@ class WebAuthnServiceProvider extends ServiceProvider
      */
     protected function publishesPackageMigrations(array|string $paths, string $groups = 'migrations'): void
     {
-        if (method_exists(static::class, 'publishesMigrations')) {
+        if (method_exists(static::class, 'publishesMigrations')) { // @phpstan-ignore-line
             foreach ((array) $paths as $path) {
                 $this->publishesMigrations([$path => $this->app->databasePath('migrations/')], 'migrations');
             }
@@ -88,7 +88,7 @@ class WebAuthnServiceProvider extends ServiceProvider
             $files[$file->getRealPath()] = $this->app->databasePath("migrations/{$prefix}_$filename");
         }
 
-        method_exists($this, 'publishesMigrations')
+        method_exists($this, 'publishesMigrations') // @phpstan-ignore-line
             ? $this->publishesMigrations($files, $groups)
             : $this->publishes($files, $groups);
     }

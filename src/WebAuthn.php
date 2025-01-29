@@ -9,4 +9,13 @@ namespace Laragear\WebAuthn;
 class WebAuthn extends Http\Routes
 {
     //
+
+    public function something()
+    {
+        $some = ['foo', 'bar'];
+
+        foreach ($some as $key => $value) {
+            // code...
+        }
+    }
 }

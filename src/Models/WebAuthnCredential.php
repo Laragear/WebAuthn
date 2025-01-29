@@ -17,8 +17,8 @@ use const PHP_URL_HOST;
 /**
  * @mixin \Illuminate\Database\Eloquent\Builder
  *
- * @method \Illuminate\Database\Eloquent\Builder|\static newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\static query()
+ * @method \Illuminate\Database\Eloquent\Builder|static newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|static query()
  * @method static \Laragear\WebAuthn\Models\WebAuthnCredential make(array $attributes = [])
  * @method static \Laragear\WebAuthn\Models\WebAuthnCredential create(array $attributes = [])
  * @method static \Laragear\WebAuthn\Models\WebAuthnCredential forceCreate(array $attributes)
@@ -27,20 +27,20 @@ use const PHP_URL_HOST;
  * @method \Laragear\WebAuthn\Models\WebAuthnCredential firstOrNew(array $attributes = [], array $values = [])
  * @method \Laragear\WebAuthn\Models\WebAuthnCredential firstOrFail($columns = ['*'])
  * @method \Laragear\WebAuthn\Models\WebAuthnCredential firstOrCreate(array $attributes, array $values = [])
- * @method \Laragear\WebAuthn\Models\WebAuthnCredential firstOr($columns = ['*'], \Closure $callback = null)
+ * @method \Laragear\WebAuthn\Models\WebAuthnCredential firstOr($columns = ['*'], \Closure|null $callback = null)
  * @method \Laragear\WebAuthn\Models\WebAuthnCredential firstWhere($column, $operator = null, $value = null, $boolean = 'and')
  * @method \Laragear\WebAuthn\Models\WebAuthnCredential updateOrCreate(array $attributes, array $values = [])
  * @method \Laragear\WebAuthn\Models\WebAuthnCredential createOrFirst(array $attributes, array $values = [])
  * @method \Laragear\WebAuthn\Models\WebAuthnCredential sole($columns = ['*'])
  * @method \Laragear\WebAuthn\Models\WebAuthnCredential findOrNew($id, $columns = ['*'])
- * @method \Illuminate\Database\Eloquent\Collection<int, \static>|\static[]|\static|null find($id, $columns = ['*'])
- * @method \Illuminate\Database\Eloquent\Collection<int, \static>|\static[]|\static findOrFail($id, $columns = ['*'])
- * @method \Illuminate\Database\Eloquent\Collection<int, \static>|\static[]|\static findOr($id, $columns = ['*'], \Closure $callback = null)
- * @method \Illuminate\Database\Eloquent\Collection<int, \static>|\static[] findMany($id, $columns = ['*'])
- * @method \Illuminate\Database\Eloquent\Collection<int, \static>|\static[] fromQuery($query, $bindings = [])
- * @method \Illuminate\Support\LazyCollection<int, \static>|\static[] lazy(int $chunkSize = 1000)
- * @method \Illuminate\Support\LazyCollection<int, \static>|\static[] lazyById(int $chunkSize = 1000, string|null $column = null, string|null $alias = null)
- * @method \Illuminate\Support\LazyCollection<int, \static>|\static[] lazyByIdDesc(int $chunkSize = 1000, string|null $column = null, string|null $alias = null)
+ * @method \Illuminate\Database\Eloquent\Collection<int, static>|static[]|static|null find($id, $columns = ['*'])
+ * @method \Illuminate\Database\Eloquent\Collection<int, static>|static[]|static findOrFail($id, $columns = ['*'])
+ * @method \Illuminate\Database\Eloquent\Collection<int, static>|static[]|static findOr($id, $columns = ['*'], \Closure|null $callback = null)
+ * @method \Illuminate\Database\Eloquent\Collection<int, static>|static[] findMany($id, $columns = ['*'])
+ * @method \Illuminate\Database\Eloquent\Collection<int, static>|static[] fromQuery($query, $bindings = [])
+ * @method \Illuminate\Support\LazyCollection<int, static>|static[] lazy(int $chunkSize = 1000)
+ * @method \Illuminate\Support\LazyCollection<int, static>|static[] lazyById(int $chunkSize = 1000, string|null $column = null, string|null $alias = null)
+ * @method \Illuminate\Support\LazyCollection<int, static>|static[] lazyByIdDesc(int $chunkSize = 1000, string|null $column = null, string|null $alias = null)
  *
  * @property-read string $id
  * @property-read string $user_id
@@ -59,8 +59,8 @@ use const PHP_URL_HOST;
  * @property-read \Illuminate\Support\Carbon $created_at
  * @property-read \Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable $authenticatable
  *
- * @method \Illuminate\Database\Eloquent\Builder|\static whereEnabled()
- * @method \Illuminate\Database\Eloquent\Builder|\static whereDisabled()
+ * @method \Illuminate\Database\Eloquent\Builder|static whereEnabled()
+ * @method \Illuminate\Database\Eloquent\Builder|static whereDisabled()
  */
 class WebAuthnCredential extends Model
 {
@@ -101,13 +101,11 @@ class WebAuthnCredential extends Model
     protected $visible = ['id', 'origin', 'alias', 'aaguid', 'attestation_format', 'disabled_at'];
 
     /**
-     * @phpstan-ignore-next-line
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo|\Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo<\Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable, $this>
      */
-    public function authenticatable(): MorphTo
+    public function authenticatable(): MorphTo // @phpstan-ignore-line
     {
-        return $this->morphTo('authenticatable');
+        return $this->morphTo('authenticatable'); // @phpstan-ignore-line
     }
 
     /**
