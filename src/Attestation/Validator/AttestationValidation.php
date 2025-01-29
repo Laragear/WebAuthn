@@ -38,7 +38,7 @@ class AttestationValidation
     /**
      * Create a new Attestation Creation instance from a request and a user.
      */
-    public static function fromRequest(Request $request = null, WebAuthnAuthenticatable $user = null): static
+    public static function fromRequest(?Request $request = null, ?WebAuthnAuthenticatable $user = null): static
     {
         // @phpstan-ignore-next-line
         return new static($user, new JsonTransport(($request ?? app('request'))->only(static::REQUEST_KEYS)));

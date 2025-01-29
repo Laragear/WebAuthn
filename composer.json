@@ -32,21 +32,22 @@
         "issues": "https://github.com/Laragear/WebAuthn/issues"
     },
     "require": {
-        "php": "^8.2",
+        "php": "^8.1",
         "ext-json": "*",
         "ext-openssl": "*",
-        "illuminate/auth": "11.*|12.*",
-        "illuminate/config": "11.*|12.*",
-        "illuminate/database": "11.*|12.*",
-        "illuminate/encryption": "11.*|12.*",
-        "illuminate/http": "11.*|12.*",
-        "illuminate/session": "11.*|12.*",
-        "illuminate/support": "11.*|12.*",
-        "laragear/meta-model": "2.*"
+        "illuminate/auth": "10.*|11.*",
+        "illuminate/config": "10.*|11.*",
+        "illuminate/database": "10.*|11.*",
+        "illuminate/encryption": "10.*|11.*",
+        "illuminate/http": "10.*|11.*",
+        "illuminate/session": "10.*|11.*",
+        "illuminate/support": "10.*|11.*",
+        "laragear/meta-model": "^1.1"
     },
     "require-dev": {
         "ext-sodium": "*",
-        "orchestra/testbench": "9.*|10.*"
+        "orchestra/testbench": "8.*|9.*",
+        "livewire/livewire": "3.*"
     },
     "suggest": {
         "paragonie/sodium_compat": "To enable EdDSA 25519 keys from authenticators, if `ext-sodium` is unavailable."

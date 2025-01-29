@@ -381,7 +381,7 @@ class AuthenticatorData
         $length = unpack('nlength', substr($binary, 53, 2))['length'];
 
         // Set end offset.
-        $endOffset = 55 + $length;
+        $endOffset = 55 + $length; // @phpstan-ignore-line
 
         return (object) [
             'aaguid' => substr($binary, 37, 16),
@@ -395,7 +395,7 @@ class AuthenticatorData
      */
     protected static function readCredentialPublicKey(string $binary, int $offset, int &$endOffset): object
     {
-        $enc = CborDecoder::decodePortion($binary, $offset, $endOffset);
+        $enc = CborDecoder::decodePortion($binary, $offset, $endOffset); // @phpstan-ignore-line
 
         // COSE key-encoded elliptic curve public key in EC2 format
         $publicKey = (object) [
