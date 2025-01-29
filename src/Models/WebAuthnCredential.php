@@ -59,8 +59,8 @@ use const PHP_URL_HOST;
  * @property-read \Illuminate\Support\Carbon $created_at
  * @property-read \Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable $authenticatable
  *
- * @method \Illuminate\Database\Eloquent\Builder|\static whereEnabled()
- * @method \Illuminate\Database\Eloquent\Builder|\static whereDisabled()
+ * @method \Illuminate\Database\Eloquent\Builder|static whereEnabled()
+ * @method \Illuminate\Database\Eloquent\Builder|static whereDisabled()
  */
 class WebAuthnCredential extends Model
 {
@@ -103,9 +103,9 @@ class WebAuthnCredential extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo<\Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable, $this>
      */
-    public function authenticatable(): MorphTo
+    public function authenticatable(): MorphTo // @phpstan-ignore-line
     {
-        return $this->morphTo('authenticatable');
+        return $this->morphTo('authenticatable'); // @phpstan-ignore-line
     }
 
     /**
