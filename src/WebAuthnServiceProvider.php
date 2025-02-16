@@ -9,8 +9,6 @@ use Illuminate\Support\ServiceProvider;
 use Laragear\WebAuthn\Challenge\SessionChallengeRepository;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 
-use function method_exists;
-
 /**
  * @internal
  */
