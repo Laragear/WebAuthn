@@ -25,7 +25,6 @@ class WebAuthnData implements Arrayable
         ];
     }
 
-
     /**
      * Create a new WebAuthn Data instance.
      */

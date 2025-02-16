@@ -48,6 +48,5 @@ class AddUserDescriptor
         return $attestable->using
             ? ($attestable->using)($attestable->user, $attestable->uniqueCredentials)
             : $attestable->user->webAuthnData();
-
     }
 }
