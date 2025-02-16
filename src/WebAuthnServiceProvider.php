@@ -63,32 +63,12 @@ class WebAuthnServiceProvider extends ServiceProvider
      * Publishes migrations from the given path.
      *
      * @param  string[]|string  $paths
-     *
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    protected function publishesPackageMigrations(array|string $paths, string $groups = 'migrations'): void
+    protected function publishesPackageMigrations(array|string $paths): void
     {
-        if (method_exists(static::class, 'publishesMigrations')) { // @phpstan-ignore-line
-            foreach ((array) $paths as $path) {
-                $this->publishesMigrations([$path => $this->app->databasePath('migrations/')], 'migrations');
-            }
-
-            return;
+        foreach ((array) $paths as $path) {
+            $this->publishesMigrations([$path => $this->app->databasePath('migrations/')], 'migrations');
         }
-
-        $prefix = now()->format('Y_m_d_His');
-
-        $files = [];
-
-        foreach ($this->app->make('files')->files($paths) as $file) {
-            $filename = preg_replace('/^[\d|_]+/', '', $file->getFilename());
-
-            $files[$file->getRealPath()] = $this->app->databasePath("migrations/{$prefix}_$filename");
-        }
-
-        method_exists($this, 'publishesMigrations') // @phpstan-ignore-line
-            ? $this->publishesMigrations($files, $groups)
-            : $this->publishes($files, $groups);
     }
 
     /**
