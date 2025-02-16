@@ -3,6 +3,7 @@
 namespace Laragear\WebAuthn\Http;
 
 use Illuminate\Routing\RouteRegistrar;
+
 use function app;
 
 class Routes
@@ -16,7 +17,6 @@ class Routes
         string $assert = 'webauthn/login',
         string $assertController = 'App\Http\Controllers\WebAuthn\WebAuthnLoginController',
     ): RouteRegistrar {
-
         $router = app('router');
 
         return $router->middleware('web')

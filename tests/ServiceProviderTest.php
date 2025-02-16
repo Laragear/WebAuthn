@@ -3,17 +3,12 @@
 namespace Tests;
 
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Fluent;
 use Illuminate\Support\ServiceProvider;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 use Laragear\WebAuthn\WebAuthnAuthentication;
 use Laragear\WebAuthn\WebAuthnServiceProvider;
-use Orchestra\Testbench\Attributes\DefineEnvironment;
-
-use function version_compare;
 
 class ServiceProviderTest extends TestCase
 {

@@ -12,7 +12,6 @@ use Laragear\MetaModel\HasCustomization;
 use Laragear\WebAuthn\Enums\Formats;
 use Laragear\WebAuthn\Events\CredentialDisabled;
 use Laragear\WebAuthn\Events\CredentialEnabled;
-use Laragear\WebAuthn\Migrations\WebAuthnAuthenticationMigration;
 
 use function parse_url;
 
