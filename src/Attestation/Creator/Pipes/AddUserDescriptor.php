@@ -31,10 +31,13 @@ class AddUserDescriptor
     protected function retrieveUserUuid(AttestationCreation $attestable): string
     {
         // Try to find the User Handle (user_id) first to reuse it on the new credential.
-        $existingId = $attestable->user->webAuthnCredentials()->getQuery()->value('user_id')
-            ?? $attestable->user->webAuthnId();
+        $existingId = $attestable->user->webAuthnCredentials()->getQuery()->value('user_id');
 
-        return $existingId->getHex()->toString();
+        if ($existingId) {
+            return Uuid::fromString($existingId)->getHex()->toString();
+        }
+
+        return $attestable->user->webAuthnId()->getHex()->toString();
     }
 
     /**

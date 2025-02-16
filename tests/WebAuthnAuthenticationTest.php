@@ -37,7 +37,7 @@ class WebAuthnAuthenticationTest extends DatabaseTestCase
         static::assertSame([
             'name' => FakeAuthenticator::ATTESTATION_USER['name'],
             'displayName' => FakeAuthenticator::ATTESTATION_USER['displayName'],
-        ], $this->user->webAuthnData());
+        ], $this->user->webAuthnData()->toArray());
     }
 
     public function test_flushes_all_credentials(): void
