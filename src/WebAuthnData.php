@@ -4,6 +4,7 @@ namespace Laragear\WebAuthn;
 
 use Illuminate\Contracts\Support\Arrayable;
 
+/** @phpstan-consistent-constructor **/
 class WebAuthnData implements Arrayable
 {
     /**

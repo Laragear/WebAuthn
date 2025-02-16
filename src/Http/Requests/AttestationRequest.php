@@ -100,7 +100,7 @@ class AttestationRequest extends FormRequest
     /**
      * Use a callback to return the name and display name of the credential ID.
      *
-     * @param  \Closure(\Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable):array{name: string, displayName: string}  $callback
+     * @param  \Closure(\Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable, bool):\Laragear\WebAuthn\WebAuthnData  $callback
      * @return $this
      */
     public function using(Closure $callback): static

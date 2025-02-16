@@ -14,7 +14,7 @@ class AttestationCreation
     /**
      * Create a new Attestation Creation instance.
      *
-     * @param  (\Closure(\Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable):\Laragear\WebAuthn\WebAuthnData)|null  $using
+     * @param  (\Closure(\Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable, bool):\Laragear\WebAuthn\WebAuthnData)|null  $using
      */
     public function __construct(
         public ?WebAuthnAuthenticatable $user,
