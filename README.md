@@ -2,8 +2,8 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/laragear/webauthn.svg)](https://packagist.org/packages/laragear/webauthn)
 [![Latest stable test run](https://github.com/Laragear/WebAuthn/actions/workflows/php.yml/badge.svg?branch=1.x)](https://github.com/Laragear/WebAuthn/actions/workflows/php.yml)
-[![Codecov coverage](https://codecov.io/gh/Laragear/WebAuthn/branch/1.x/graph/badge.svg?token=HIngrvQeOj)](https://codecov.io/gh/Laragear/WebAuthn)
-[![CodeClimate Maintainability](https://api.codeclimate.com/v1/badges/39841b40ab4b05b8f9d3/maintainability)](https://codeclimate.com/github/Laragear/WebAuthn/maintainability)
+[![Coverage](https://codecov.io/gh/Laragear/WebAuthn/graph/badge.svg?token=HIngrvQeOj)](https://codecov.io/gh/Laragear/WebAuthn)
+[![Maintainability](https://qlty.sh/badges/9dea0798-e355-4d97-b959-da9ae2c792aa/maintainability.svg)](https://qlty.sh/gh/Laragear/projects/WebAuthn)
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=Laragear_WebAuthn&metric=alert_status)](https://sonarcloud.io/dashboard?id=Laragear_WebAuthn)
 [![Laravel Octane Compatibility](https://img.shields.io/badge/Laravel%20Octane-Compatible-success?style=flat&logo=laravel)](https://laravel.com/docs/11.x/octane#introduction)
 
