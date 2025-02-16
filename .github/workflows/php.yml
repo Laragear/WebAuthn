@@ -124,7 +124,7 @@ jobs:
 
       - name: Check exported files
         run: |
-          EXPECTED=LICENSE.md,MIGRATIONS.md,README.md,composer.json
+          EXPECTED=DATABASE.md,LICENSE.md,README.md,composer.json
           CURRENT=$(git archive HEAD | tar --list --exclude=src --exclude=src/* --exclude=.stubs --exclude=.stubs/*  --exclude=routes --exclude=routes/* --exclude=stubs --exclude=stubs/* --exclude=lang --exclude=lang/* --exclude=config --exclude=config/* --exclude=database --exclude=database/* --exclude=resources --exclude=resources/* | paste -s -d ,)
           echo CURRENT =${CURRENT}
           echo EXPECTED=${EXPECTED}
