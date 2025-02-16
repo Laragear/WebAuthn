@@ -2,6 +2,7 @@
 
 namespace Laragear\WebAuthn\Http\Requests;
 
+use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Foundation\Http\FormRequest;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 use UnexpectedValueException;
@@ -42,12 +43,14 @@ class AssertedRequest extends FormRequest
 
     /**
      * Logs in the user for this assertion request.
+     *
+     * @param  (\Closure(\Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable):bool)[]  $callbacks
      */
     public function login(
         ?string $guard = null,
         ?bool $remember = null,
         bool $destroySession = false,
-        callable|array|null $callbacks = null
+        callable|array|null $callbacks = null,
     ): ?WebAuthnAuthenticatable {
         /** @var \Illuminate\Contracts\Auth\StatefulGuard $auth */
         $auth = auth()->guard($guard);
@@ -58,24 +61,38 @@ class AssertedRequest extends FormRequest
         // the "attemptWhen" method of the Session Guard. Since these callback are expected
         // to run, we will fail miserably if the guard does not support attempt callbacks.
         if ($callbacks !== null) {
-            if (! method_exists($auth, 'attemptWhen')) {
-                $guard ??= config('auth.defaults.guard');
-                throw new UnexpectedValueException("The [$guard] guard does not support attempt callbacks.");
-            }
-
-            if ($auth->attemptWhen($this->validated(), $callbacks, $remember)) {
-                $this->session()->regenerate($destroySession);
-
-                return $auth->user(); // @phpstan-ignore-line
-            }
-
-            return null;
+            return $this->userWithCallbacks($auth, $callbacks, $remember, $destroySession);
         }
 
         if ($auth->attempt($this->validated(), $remember)) {
             $this->session()->regenerate($destroySession);
 
             return $auth->user(); // @phpstan-ignore-line
+        }
+
+        return null;
+    }
+
+    /**
+     * Authenticate the user using the given callbacks.
+     *
+     * @param  (\Closure(\Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable):bool)[]  $callbacks
+     */
+    protected function userWithCallbacks(
+        StatefulGuard $guard,
+        array $callbacks,
+        bool $remember,
+        bool $destroySession,
+    ): ?WebAuthnAuthenticatable {
+        if (!method_exists($guard, 'attemptWhen')) {
+            $name ??= config('auth.defaults.guard');
+            throw new UnexpectedValueException("The [$name] guard does not support attempt callbacks.");
+        }
+
+        if ($guard->attemptWhen($this->validated(), $callbacks, $remember)) {
+            $this->session()->regenerate($destroySession);
+
+            return $guard->user(); // @phpstan-ignore-line
         }
 
         return null;
