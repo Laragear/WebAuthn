@@ -165,7 +165,7 @@ WebAuthnRoutes::register(
 )->withoutMiddleware(VerifyCsrfToken::class);
 ```
 
-> [!INFO]
+> [!NOTE]
 > 
 > You can also delete the controllers and implement [attestation](#attestation) and [assertion](#assertion) manually.
 
@@ -268,7 +268,7 @@ public function register(AttestedRequest $request)
 
 > [!IMPORTANT]
 > 
-> Both `AttestationRequest` and `AttestedRequest` require the authenticated user. If the user is not authenticated, an HTTP 403 status code will be returned.
+> Both `AttestationRequest` and `AttestedRequest` require the authenticated user. If the user is not authenticated, an HTTP 403 status code will be returned. You may want to [temporarily log in](https://laravel.com/docs/authentication#authenticate-a-user-once) the user, or [attest manually](#manually-attesting-and-asserting).
 
 ### Attestation User verification
 
@@ -302,11 +302,11 @@ public function registerDevice(AttestationRequest $request)
 }
 ```
 
-In layman temrs, once the Resident Key is created, the authenticator will be able to find the correct credential for your app by finding which credentials match your Relaying Party ID (like `my-app.com`), and show the user these credentials. This effectively eliminates the step of the user sending its username so the server can return which credentials ID the authenticator should use.
+Once the Resident Key is created, the authenticator will be able to find the correct credential for your web application by finding which credentials match your Relaying Party ID (like `my-app.com`), and show the user these credentials. This effectively eliminates the step of the user sending its username or email so the server can return which credentials ID the authenticator should use.
 
 > [!IMPORTANT]
 >
-> The Authenticator WILL require [user verification](#attestation-user-verification) on login when using `userless()`. Its highly probable the user will also be asked for [user verification on login](#assertion-user-verification), as it will depend on the authenticator itself.
+> The Authenticator WILL require [user verification](#attestation-user-verification) on login when using `userless()`. Its highly probable the user will also be asked for [user verification on login](#assertion-user-verification).
 
 ### Multiple credentials per device
 
@@ -321,6 +321,28 @@ use Laragear\WebAuthn\Http\Requests\AttestationRequest;
 public function registerDevice(AttestationRequest $request)
 {
     return $request->allowDuplicates()->make();
+}
+```
+
+### Custom name and display name
+
+The application will use the user email as "name" and his name as "display name". Regardless of how authenticators will show it to the user, you may change these at runtime by using a callback. The callback will receive the user instance and a boolean if the attestation uses unique credentials, and should return an instance of `Laragear\WebAuthn\WebAuthnData`.
+
+```php
+// app\Http\Controllers\WebAuthn\WebAuthnRegisterController.php
+use App\Models\User;
+use Illuminate\Support\Str;
+use Laragear\WebAuthn\Http\Requests\AttestationRequest;
+use Laragear\WebAuthn\WebAuthnData;
+
+public function registerDevice(AttestationRequest $request)
+{
+    return $request->using(function (User $user) {
+        return WebAuthnData::make(
+            name: $user->email,
+            displayName: $user->alias ?? $user->name ?? Str::before($user->email, '@')
+        );
+    })->make();
 }
 ```
 
@@ -543,27 +565,23 @@ public function authenticate(Request $request, AssertionValidator $assertion)
 }
 ```
 
-Alternatively, you may add new pipes globally in the `register()` method of your `AppServiceProvider()` or `AuthServiceProvider()`, just by [extending the binding](https://laravel.com/docs/11.x/container#extending-bindings).
+Alternatively, you may add new pipes globally in the `registered()` method of your `bootstrap/app.php` file, just by [extending the binding](https://laravel.com/docs/11.x/container#extending-bindings).
 
 ```php
-namespace App\Providers;
-
-use Illuminate\Support\ServiceProvider;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidator;
+use Illuminate\Foundation\Application;
 
-class AppServiceProvider extends ServiceProvider
-{
-    public function register()
-    {
-        $this->app->extend(AssertionValidator::class, function ($pipeline) {
+return Application::configure(basePath: dirname(__DIR__))
+    ->registered(function (Application $app) {
+        $app->extend(AssertionValidator::class, function ($pipeline) {
             return $pipeline->pipe([
                 \App\Auth\WebAuthn\CheckIfUserIsCool::class,
                 \App\Auth\WebAuthn\LoginUser::class,
                 \App\Auth\WebAuthn\SendLoginNotification::class,
             ]);
         })
-    }
-}
+    })
+    ->create();
 ```
 
 > [!WARNING]
@@ -612,7 +630,7 @@ Storing and pulling challenges is done through a _repository_. By default, this 
 
 You may want to use your own, for example, if you need to _share_ the challenges across multiple application instances, or a common database table. Whatever is your use case, start by creating a class implementing the `Laragear\WebAuthn\Contracts\WebAuthnChallengeRepository` contract.
 
-The class should be able to store a `Challenge` instance, and pull it if it exists. Note that whe it's pulled, the data is deleted from the repository.
+The class should be able to store a `Challenge` instance, and pull it if it exists. Note that when it's pulled, the data is deleted from the repository.
 
 ```php
 namespace App\WebAuthn;
@@ -661,22 +679,19 @@ class MyRepository implements WebAuthnChallengeRepository
 }
 ```
 
-After that, _replace_ the default challenge repository resolver in the application container, ideally in your `register()` method of your `AppServiceProvider` class.
+After that, _replace_ the default challenge repository resolver in the application container, ideally in your `registered()` method of your `bootstrap/app.php` file.
 
 ```php
-namespace App\Providers;
-
 use App\WebAuthn\MyRepository;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Foundation\Application;
 use Laragear\WebAuthn\Contracts\WebAuthnChallengeRepository;
 
-class AppServiceProvider extends ServiceProvider
-{
-    public function boot()
-    {
-        $this->app->register(WebAuthnChallengeRepository::class, fn () => new MyRepository())
-    }
-}
+return Application::configure(basePath: dirname(__DIR__))
+    ->registered(function ($app) {
+        $app->singleton(WebAuthnChallengeRepository::class, fn () => new MyRepository())
+    })
+    ->create();
+    
 ```
 
 ## Origins
@@ -789,9 +804,9 @@ if (WebAuthn.isNotSupported()) {
 
 * **Does this store the user fingerprints, PINs or patterns in my site?**
 
-No, these are stored on-device and remain there.
+No.
 
-WebAuthn only stores a cryptographic public key generated randomly by the device.
+WebAuthn stores a private key on the user device, and transmit a public key to the application. These do not have any correlation to the user biometric data or passwords.
 
 * **Can a phishing site steal WebAuthn credentials and use them in my site to impersonate a user?**
 
@@ -815,7 +830,9 @@ You can also [disable them](#password-fallback) and make your site only compatib
 
 * **Can a user register two or more different _devices_ for the same account?**
 
-Yes.
+Yes. A User can register his PC and his Phone separately.
+
+Some devices _may_ sync their _passkeys_ between his devices, like Safari on iPhone, iPad and macOS. That type of sync is up to the manufacturer and OS.
 
 * **Can a user register two or more _credentials_ in the same device?**
 
@@ -823,7 +840,9 @@ Not by default, but [you can enable it](#multiple-credentials-per-device).
 
 * **If a user loses his device, can he register a new device?**
 
-Yes. If you're not using a [password fallback](#password-fallback), you may need to create a logic to register a new device using an email or SMS. It's assumed he is reading his email using a trusted device.
+Yes.
+
+If you're not using a [password fallback](#password-fallback), you may need to create a logic to register a new device using an email or SMS. It's assumed he is reading his email using a trusted device.
 
 * **What's the difference between disabling and deleting a credential?**
 
@@ -958,7 +977,7 @@ These are some details about this WebAuthn implementation you should be aware of
 * WebAuthn User Handle is UUID v4.
 * User Handle is reused when a new credential for the same user is created.
 * Credentials can be blacklisted (enabled/disabled).
-* Public Keys are encrypted by with application key in the database automatically, using the application key.
+* Public Keys are encrypted in the database automatically, using the application key.
 
 If you discover any security related issues, please email darkghosthunter@gmail.com instead of using the issue tracker.
 

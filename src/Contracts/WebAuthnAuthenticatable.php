@@ -4,16 +4,15 @@ namespace Laragear\WebAuthn\Contracts;
 
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
+use Laragear\WebAuthn\WebAuthnData;
 use Ramsey\Uuid\UuidInterface;
 
 interface WebAuthnAuthenticatable
 {
     /**
      * Returns displayable data to be used to create WebAuthn Credentials.
-     *
-     * @return array{name: string, displayName: string}
      */
-    public function webAuthnData(): array;
+    public function webAuthnData(): WebAuthnData;
 
     /**
      * An anonymized user identity string, as a UUID.

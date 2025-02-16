@@ -2,6 +2,7 @@
 
 namespace Laragear\WebAuthn\Http\Requests;
 
+use Closure;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Foundation\Http\FormRequest;
 use Laragear\WebAuthn\Attestation\Creator\AttestationCreation;
@@ -92,6 +93,19 @@ class AttestationRequest extends FormRequest
     public function allowDuplicates(): static
     {
         $this->attestation()->uniqueCredentials = false;
+
+        return $this;
+    }
+
+    /**
+     * Use a callback to return the name and display name of the credential ID.
+     *
+     * @param  \Closure(\Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable):array{name: string, displayName: string}  $callback
+     * @return $this
+     */
+    public function using(Closure $callback): static
+    {
+        $this->attestation()->using = $callback;
 
         return $this;
     }

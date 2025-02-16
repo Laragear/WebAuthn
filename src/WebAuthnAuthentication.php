@@ -19,15 +19,10 @@ trait WebAuthnAuthentication
 {
     /**
      * Returns displayable data to be used to create WebAuthn Credentials.
-     *
-     * @return array{name: string, displayName: string}
      */
-    public function webAuthnData(): array
+    public function webAuthnData(): WebAuthnData
     {
-        return [
-            'name' => $this->email,
-            'displayName' => $this->name,
-        ];
+        return WebAuthnData::make($this->email, $this->name);
     }
 
     /**
