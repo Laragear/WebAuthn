@@ -20,12 +20,12 @@ class SetResidentKeyConfiguration
         if ($attestable->residentKey) {
             $attestable->json->set('authenticatorSelection.residentKey', $attestable->residentKey->value);
 
-            $verifiesUser = $attestable->residentKey === ResidentKey::REQUIRED;
+            $verifiesUser = $attestable->residentKey === ResidentKey::Required;
 
             $attestable->json->set('authenticatorSelection.requireResidentKey', $verifiesUser);
 
             if ($verifiesUser) {
-                $attestable->userVerification = UserVerification::REQUIRED;
+                $attestable->userVerification = UserVerification::Required;
             }
         }
 

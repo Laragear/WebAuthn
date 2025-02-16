@@ -13,9 +13,6 @@ class WebAuthnLoginController
 {
     /**
      * Returns the challenge to assertion.
-     *
-     * @param  \Laragear\WebAuthn\Http\Requests\AssertionRequest  $request
-     * @return \Illuminate\Contracts\Support\Responsable
      */
     public function options(AssertionRequest $request): Responsable
     {
@@ -24,9 +21,6 @@ class WebAuthnLoginController
 
     /**
      * Log the user in.
-     *
-     * @param  \Laragear\WebAuthn\Http\Requests\AssertedRequest  $request
-     * @return \Illuminate\Http\Response
      */
     public function login(AssertedRequest $request): Response
     {

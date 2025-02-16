@@ -55,7 +55,7 @@ class AttestationRequest extends FormRequest
      */
     public function fastRegistration(): static
     {
-        $this->attestation()->userVerification = UserVerification::DISCOURAGED;
+        $this->attestation()->userVerification = UserVerification::Discouraged;
 
         return $this;
     }
@@ -67,7 +67,7 @@ class AttestationRequest extends FormRequest
      */
     public function secureRegistration(): static
     {
-        $this->attestation()->userVerification = UserVerification::REQUIRED;
+        $this->attestation()->userVerification = UserVerification::Required;
 
         return $this;
     }
@@ -79,7 +79,7 @@ class AttestationRequest extends FormRequest
      */
     public function userless(): static
     {
-        $this->attestation()->residentKey = ResidentKey::REQUIRED;
+        $this->attestation()->residentKey = ResidentKey::Required;
 
         return $this;
     }

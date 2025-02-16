@@ -114,7 +114,7 @@ class CreatorTest extends DatabaseTestCase
 
     public function test_asks_for_user_verification(): void
     {
-        $this->creation->userVerification = UserVerification::REQUIRED;
+        $this->creation->userVerification = UserVerification::Required;
 
         $this->response()
             ->assertSessionHas('_webauthn', static function (Challenge $challenge): bool {
@@ -129,7 +129,7 @@ class CreatorTest extends DatabaseTestCase
 
     public function test_asks_for_user_presence(): void
     {
-        $this->creation->userVerification = UserVerification::DISCOURAGED;
+        $this->creation->userVerification = UserVerification::Discouraged;
 
         $this->response()
             ->assertSessionHas('_webauthn', static function (Challenge $challenge): bool {
@@ -144,7 +144,7 @@ class CreatorTest extends DatabaseTestCase
 
     public function test_asks_for_resident_key(): void
     {
-        $this->creation->residentKey = ResidentKey::REQUIRED;
+        $this->creation->residentKey = ResidentKey::Required;
 
         $this->response()
             ->assertSessionHas('_webauthn', static function (Challenge $challenge): bool {

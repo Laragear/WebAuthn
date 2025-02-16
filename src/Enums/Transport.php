@@ -4,10 +4,10 @@ namespace Laragear\WebAuthn\Enums;
 
 enum Transport: string
 {
-    case SMART_CARD = 'smart-card';
-    case INTERNAL = 'internal';
-    case HYBRID = 'hybrid';
-    case USB = 'usb';
-    case NFC = 'nfc';
-    case BLE = 'ble';
+    case SmartCard = 'smart-card';
+    case Internal = 'internal';
+    case Hybrid = 'hybrid';
+    case Usb = 'usb';
+    case Nfc = 'nfc';
+    case Ble = 'ble';
 }

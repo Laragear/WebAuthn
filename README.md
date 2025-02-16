@@ -28,12 +28,11 @@ public function login(AssertedRequest $request)
 
 [![](.github/assets/support.png)](https://github.com/sponsors/DarkGhostHunter)
 
-Your support allows me to keep this package free, up-to-date and maintainable. Alternatively, you can **[spread the word!](http://twitter.com/share?text=I%20am%20using%20this%20cool%20PHP%20package&url=https://github.com%2FLaragear%2FWebAuthn&hashtags=PHP,Laravel)**
+Your support allows me to keep this package free, up-to-date and maintainable. Alternatively, you can **spread the word on social media!**
 
 ## Requirements
 
 * Laravel 11.x or later.
-* PHP 8.1 or later.
 * The `ext-openssl` extension.
 * The `ext-sodium` extension (optional, for EdDSA 25519 public keys).
 
@@ -969,4 +968,4 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 
 Contains Code from [Lukas Buchs WebAuthn 2.0](https://github.com/lbuchs/WebAuthn) implementation. The MIT License (MIT) where applicable.
 
-Laravel is a Trademark of Taylor Otwell. Copyright © 2011-2022 Laravel LLC.
+Laravel is a Trademark of Taylor Otwell. Copyright © 2011-2025 Laravel LLC.

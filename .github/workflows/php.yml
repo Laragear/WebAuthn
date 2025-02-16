@@ -50,18 +50,18 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - 8.1
           - 8.2
           - 8.3
+          - 8.4
         laravel-constraint:
-          - 10.*
           - 11.*
+          - 12.*
         dependencies:
           - lowest
           - highest
         exclude:
-          - laravel-constraint: 11.*
-            php-version: 8.1
+          - laravel-constraint: 12.*
+            php-version: 8.2
 
     steps:
       - name: Set up PHP
@@ -84,7 +84,10 @@ jobs:
         run: composer run-script test
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: Laragear/WebAuthn
 
   static_analysis:
     name: 3️⃣ Static Analysis

@@ -3,7 +3,7 @@
 namespace Laragear\WebAuthn\Http;
 
 use Illuminate\Routing\RouteRegistrar;
-use Illuminate\Support\Facades\Route;
+use function app;
 
 class Routes
 {
@@ -16,18 +16,21 @@ class Routes
         string $assert = 'webauthn/login',
         string $assertController = 'App\Http\Controllers\WebAuthn\WebAuthnLoginController',
     ): RouteRegistrar {
-        return Route::middleware('web')
-            ->group(static function () use ($assert, $assertController, $attest, $attestController): void {
-                Route::controller($attestController)
-                    ->group(static function () use ($attest): void {
-                        Route::post("$attest/options", 'options')->name('webauthn.register.options');
-                        Route::post("$attest", 'register')->name('webauthn.register');
+
+        $router = app('router');
+
+        return $router->middleware('web')
+            ->group(static function () use ($router, $assert, $assertController, $attest, $attestController): void {
+                $router->controller($attestController)
+                    ->group(static function () use ($router, $attest): void {
+                        $router->post("$attest/options", 'options')->name('webauthn.register.options');
+                        $router->post("$attest", 'register')->name('webauthn.register');
                     });
 
-                Route::controller($assertController)
-                    ->group(static function () use ($assert): void {
-                        Route::post("$assert/options", 'options')->name('webauthn.login.options');
-                        Route::post("$assert", 'login')->name('webauthn.login');
+                $router->controller($assertController)
+                    ->group(static function () use ($router, $assert): void {
+                        $router->post("$assert/options", 'options')->name('webauthn.login.options');
+                        $router->post("$assert", 'login')->name('webauthn.login');
                     });
             });
     }

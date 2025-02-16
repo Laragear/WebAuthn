@@ -37,8 +37,6 @@ class WebAuthnServiceProvider extends ServiceProvider
         $this->registerUserProvider();
 
         $this->registerChallengeRepository();
-
-        Models\WebAuthnCredential::$useTable = 'webauthn_credentials';
     }
 
     /**

@@ -8,21 +8,21 @@ namespace Laragear\WebAuthn\Enums;
  */
 enum Extension: string
 {
-    case APPID = 'appid';
-    case TX_AUTH_SIMPLE = 'txAuthSimple';
-    case TX_AUTH_GENERIC = 'txAuthGeneric';
-    case AUTHN_SEL = 'authnSel';
-    case EXTS = 'exts';
-    case UVI = 'uvi';
-    case LOC = 'loc';
-    case UVM = 'uvm';
-    case CRED_PROTECT = 'credProtect';
-    case CRED_BLOB = 'credBlob';
-    case LARGE_BLOB_KEY = 'largeBlobKey';
-    case MIN_PIN_LENGTH = 'minPinLength';
-    case HMAC_SECRET = 'hmac-secret';
-    case APPID_EXCLUDE = 'appidExclude';
-    case CRED_PROPS = 'credProps';
-    case LARGE_BLOB = 'largeBlob';
-    case PAYMENT = 'payment';
+    case Appid = 'appid';
+    case TxAuthSimple = 'txAuthSimple';
+    case TxAuthGeneric = 'txAuthGeneric';
+    case AuthnSel = 'authnSel';
+    case Exts = 'exts';
+    case Uvi = 'uvi';
+    case Loc = 'loc';
+    case Uvm = 'uvm';
+    case CredProtect = 'credProtect';
+    case CredBlob = 'credBlob';
+    case LargeBlobKey = 'largeBlobKey';
+    case MinPinLength = 'minPinLength';
+    case HmacSecret = 'hmac-secret';
+    case AppidExclude = 'appidExclude';
+    case CredProps = 'credProps';
+    case LargeBlob = 'largeBlob';
+    case Payment = 'payment';
 }

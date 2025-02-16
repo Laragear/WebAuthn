@@ -157,7 +157,7 @@ class CreatorTest extends DatabaseTestCase
 
     public function test_forces_user_verification(): void
     {
-        $this->creation->userVerification = UserVerification::REQUIRED;
+        $this->creation->userVerification = UserVerification::Required;
 
         $this->response()
             ->assertSessionHas('_webauthn', function (Challenge $challenge): bool {
@@ -166,7 +166,7 @@ class CreatorTest extends DatabaseTestCase
             ->assertJson([
                 'timeout' => 60000,
                 'challenge' => session('_webauthn')->data->toBase64Url(),
-                'userVerification' => UserVerification::REQUIRED->value,
+                'userVerification' => UserVerification::Required->value,
             ]);
     }
 

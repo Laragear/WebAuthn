@@ -72,8 +72,7 @@ class AssertedRequest extends FormRequest
             if ($auth->attemptWhen($this->validated(), $callbacks, $remember)) {
                 $this->session()->regenerate($destroySession);
 
-                // @phpstan-ignore-next-line
-                return $auth->user();
+                return $auth->user(); // @phpstan-ignore-line
             }
 
             return null;
@@ -82,8 +81,7 @@ class AssertedRequest extends FormRequest
         if ($auth->attempt($this->validated(), $remember)) {
             $this->session()->regenerate($destroySession);
 
-            // @phpstan-ignore-next-line
-            return $auth->user();
+            return $auth->user(); // @phpstan-ignore-line
         }
 
         return null;

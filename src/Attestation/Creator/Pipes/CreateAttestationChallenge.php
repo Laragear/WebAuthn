@@ -32,7 +32,7 @@ class CreateAttestationChallenge
             $this->config->get('webauthn.challenge.timeout')
         );
 
-        $attestable->challenge->verify = $attestable->userVerification === UserVerification::REQUIRED;
+        $attestable->challenge->verify = $attestable->userVerification === UserVerification::Required;
         $attestable->challenge->properties = [
             'user_uuid' => $attestable->json->get('user.id'),
             'user_handle' => $attestable->json->get('user.name'),

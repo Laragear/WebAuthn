@@ -8,11 +8,11 @@ namespace Laragear\WebAuthn\Enums;
  */
 enum Formats: string
 {
-    case PACKED = 'packed';
-    case TPM = 'tpm';
-    case ANDROID_KEY = 'android-key';
-    case ANDROID_SAFETYNET = 'android-safetynet';
-    case FIDO_U2F = 'fido-u2f';
-    case APPLE = 'apple';
-    case NONE = 'none';
+    case Packed = 'packed';
+    case Tpm = 'tpm';
+    case AndroidKey = 'android-key';
+    case AndroidSafetynet = 'android-safetynet';
+    case FidoU2F = 'fido-u2f';
+    case Apple = 'apple';
+    case None = 'none';
 }

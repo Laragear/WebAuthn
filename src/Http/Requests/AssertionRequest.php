@@ -70,7 +70,7 @@ class AssertionRequest extends FormRequest
      */
     public function fastLogin(): static
     {
-        $this->assertion()->userVerification = UserVerification::DISCOURAGED;
+        $this->assertion()->userVerification = UserVerification::Discouraged;
 
         return $this;
     }
@@ -82,7 +82,7 @@ class AssertionRequest extends FormRequest
      */
     public function secureLogin(): static
     {
-        $this->assertion()->userVerification = UserVerification::REQUIRED;
+        $this->assertion()->userVerification = UserVerification::Required;
 
         return $this;
     }

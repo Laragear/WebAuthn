@@ -32,7 +32,7 @@ class CreateAssertionChallenge
             $this->config->get('webauthn.challenge.timeout'),
         );
 
-        $assertion->challenge->verify = $assertion->userVerification === UserVerification::REQUIRED;
+        $assertion->challenge->verify = $assertion->userVerification === UserVerification::Required;
 
         if ($assertion->acceptedCredentials?->isNotEmpty()) {
             $assertion->challenge->properties['credentials'] = $assertion->acceptedCredentials
