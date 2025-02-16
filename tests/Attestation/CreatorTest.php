@@ -11,6 +11,7 @@ use Laragear\WebAuthn\ByteBuffer;
 use Laragear\WebAuthn\Challenge\Challenge;
 use Laragear\WebAuthn\Enums\ResidentKey;
 use Laragear\WebAuthn\Enums\UserVerification;
+use Laragear\WebAuthn\WebAuthnData;
 use Ramsey\Uuid\Uuid;
 use Tests\DatabaseTestCase;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
@@ -216,5 +217,22 @@ class CreatorTest extends DatabaseTestCase
             ->assertSessionHas('_webauthn', function (Challenge $challenge): bool {
                 return $challenge->data->hashEqual('1');
             });
+    }
+
+    public function test_uses_custom_name_and_display_name_at_runtime(): void
+    {
+        $this->creation->using = function (WebAuthnAuthenticatableUser $user, $unique): WebAuthnData {
+            static::assertTrue($unique);
+            return new WebAuthnData('foo', 'bar');
+        };
+
+        $this->response()
+            ->assertJsonFragment([
+                'user' => [
+                    'name' => 'foo',
+                    'displayName' => 'bar',
+                    'id' => session('_webauthn')->properties['user_uuid'],
+                ],
+            ]);
     }
 }
