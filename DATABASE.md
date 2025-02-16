@@ -9,13 +9,8 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Vendor\Package\Models\Driver;
 
 return Application::configure(basePath: dirname(__DIR__))
-    ->withRouting(
-        web: __DIR__.'/../routes/web.php',
-        commands: __DIR__.'/../routes/console.php',
-        health: '/up',
-    )
     ->booted(function () {
-        // Add the relationship.
+        // Customize the model
         Car::customize(function (Car $model) {
             $model->setTable('my_custom_car');
             $model->setConnection('readonly-mysql');
@@ -56,6 +51,10 @@ return Car::migration()->with(function (Blueprint $table) {
 });
 ```
 
+> [!NOTE]
+> 
+> The columns you add will be created _after_ the package adds its own columns. In other words, these will be set at the end of the table. 
+
 ### Relationships
 
 If the package supports it, you may add relationships through their proper migration columns. For example, if we want to add the `driver` relationship to the model, we can use the native `resolveRelationUsing()` on your `bootstrap/app.php()`.
@@ -67,11 +66,6 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Vendor\Package\Models\Driver;
 
 return Application::configure(basePath: dirname(__DIR__))
-    ->withRouting(
-        web: __DIR__.'/../routes/web.php',
-        commands: __DIR__.'/../routes/console.php',
-        health: '/up',
-    )
     ->booted(function () {
         // Add the relationship.
         Car::resolveRelationUsing('driver', function (Car $car) {
@@ -111,9 +105,9 @@ return Car::migration()
     });
 ```
 
-### Morphs
+## Morphs
 
-Some packages will create a morph relation automatically to easily handle default relationship across multiple models. For example, a morph migration to support an `owner` being either one of your models `Company` or `Person`.
+This package _may_ create a morph relation automatically, with the intent to easily handle default relationship across multiple models. For example, a morph migration to support an `owner` being either one of your models `Company` or `Person`.
 
 ```php
 use Laragear\Package\Models\Car;
@@ -123,9 +117,11 @@ $car = Car::find(1);
 $owners = $car->owner; // App/Models/Company or App/Models/Person
 ```
 
-You may find yourself with models that use UUID, ULID or other types of primary keys, but with a migration that creates morphs for integer primary keys.
+You may find yourself with models a given primary key type, but the package migration using morphs for the other type. For example, your `Company` or `Person` models using UUID, while the migration morph type uses integers.
 
-You can change the morph type with the `morph...` property access preferably, or the `morph()` method with `numeric`, `uuid` or `ulid` if you need to also set an index name (in case your database engine doesn't play nice with large ones).
+If that's your case, you can change the morph type with the `morph...` property access (preferably), or the `morph()` method with `numeric`, `uuid` or `ulid` if you need to also set an index name (in case your database engine doesn't play nice with large ones).
+
+For example, you can change the morph type of the `Car` migration to match the UUID type for the `Company` and `Person` models.
 
 ```php
 use Illuminate\Database\Schema\Blueprint;
