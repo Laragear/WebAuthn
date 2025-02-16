@@ -213,7 +213,7 @@ class WebAuthnCredential extends Model
             // on the Assertion procedure as the device returns which credential it used.
             $table->string('id', 510)->primary();
 
-            $this->createMorph($table, 'authenticatable', 'webauthn_user_index'); // @phpsan-ignore-line
+            $this->createMorph($table, 'authenticatable', 'webauthn_user_index'); // @phpstan-ignore-line
 
             // When requesting to create a credential, the app will set a "user handle" to be
             // a UUID to anonymize the user personal information. If a second credential is
