@@ -328,6 +328,8 @@ public function registerDevice(AttestationRequest $request)
 
 The application will use the user email as "name" and his name as "display name". Regardless of how authenticators will show it to the user, you may change these at runtime by using a callback. The callback will receive the user instance and a boolean if the attestation uses unique credentials, and should return an instance of `Laragear\WebAuthn\WebAuthnData`.
 
+This may be convenient if you want to add a counter in case a user can register [more than one credential in one device](#multiple-credentials-per-device). 
+
 ```php
 // app\Http\Controllers\WebAuthn\WebAuthnRegisterController.php
 use App\Models\User;
@@ -337,10 +339,17 @@ use Laragear\WebAuthn\WebAuthnData;
 
 public function registerDevice(AttestationRequest $request)
 {
-    return $request->using(function (User $user) {
+    return $request->using(function (User $user, bool $usesUniqueCredentials) {
+        // If it doesn't use unique credentials, add a counter for how many he has
+        $counter = $usesUniqueCredentials
+            ? ' #'. $user->webAuthnCredentials()->whereEnabled()->count() + 1
+            : '';
+            
+        $displayName = $user->alias ?? $user->name ?? Str::before($user->email, '@');
+    
         return WebAuthnData::make(
             name: $user->email,
-            displayName: $user->alias ?? $user->name ?? Str::before($user->email, '@')
+            displayName: $displayName . $counter
         );
     })->make();
 }
