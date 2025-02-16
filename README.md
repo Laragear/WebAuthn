@@ -106,7 +106,7 @@ php artisan migrate
 
 > [!TIP]
 > 
-> You can [modify the migration](MIGRATIONS.md) if you need to, like [changing the table name](MIGRATIONS.md#custom-table-name).
+> You can [modify the migration](DATABASE.md) if you need to, like changing the table name.
 
 ### 3. Implement the contract and trait
 
@@ -597,7 +597,7 @@ return Application::configure(basePath: dirname(__DIR__))
 >
 > The pipes list and the pipes themselves are **not covered by API changes**, and are marked as `internal`. These may change between minor or patch versions without notice. 
 
-## [Migrations](MIGRATIONS.md)
+## [Migrations](DATABASE.md)
 
 ## Challenges
 
