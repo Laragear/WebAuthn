@@ -223,6 +223,7 @@ class CreatorTest extends DatabaseTestCase
     {
         $this->creation->using = function (WebAuthnAuthenticatableUser $user, $unique): WebAuthnData {
             static::assertTrue($unique);
+
             return new WebAuthnData('foo', 'bar');
         };
 
