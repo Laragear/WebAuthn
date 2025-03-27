@@ -85,7 +85,7 @@ class AssertedRequest extends FormRequest
         bool $destroySession,
     ): ?WebAuthnAuthenticatable {
         if (! method_exists($guard, 'attemptWhen')) {
-            $name ??= config('auth.defaults.guard');
+            $name = config('auth.defaults.guard');
             throw new UnexpectedValueException("The [$name] guard does not support attempt callbacks.");
         }
 
