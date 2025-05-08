@@ -855,13 +855,13 @@ If you're not using a [password fallback](#password-fallback), you may need to c
 
 * **What's the difference between disabling and deleting a credential?**
 
-Disabling a credential doesn't delete it, so it's useful as a blacklisting mechanism and these can also be re-enabled.
+Disabling a credential doesn't delete it, so it's useful as a blacklisting mechanism and these can also be re-enabled later.
 
 When the credential is deleted, it goes away forever from the server, so the credential in the authenticator device becomes orphaned.
 
 * **Can I delete a credential from the user device?**
 
-No, there is no protocol in WebAuthn to delete a credential from the authenticator.
+No, there is no protocol in WebAuthn to delete a credential from the device or authenticator.
 
 That process must be done manually by the user in his device, and will vary depending on the browser, OS and device hardware.
 
@@ -883,6 +883,8 @@ Alternatively, for complex WebAuthn management, consider using the [`navigator.c
 
 This happens because you forgot [the first step](#1-add-the-webauthn-driver), using the WebAuthn driver to authenticate users.
 
+If you believe it's a deep problem, try to use [`navigator.credentials`](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/credentials) directly to find if the problem lies on the library or the frontend.
+
 * **Does WebAuthn eliminate bots? Can I forget about _captchas_?**
 
 Yes and no. To register users, you still need to use [captcha](https://github.com/Laragear/ReCaptcha), honeypots, or other mechanisms to stop bots from filling forms.
@@ -899,7 +901,7 @@ Yes, public keys are encrypted when saved into the database with your app key.
 
 * **I changed my `APP_KEY` and nobody can log in**
 
-Laravel 11.x includes a [key rotation mechanism](https://laravel.com/docs/11.x/encryption#gracefully-rotating-encryption-keys) to avoid locking out all your users if you change your `APP_KEY`.
+Laravel, since version 11.x, includes a [key rotation mechanism](https://laravel.com/docs/11.x/encryption#gracefully-rotating-encryption-keys) to avoid locking out all your users if you change your `APP_KEY`.
 
 Older Laravel versions will require re-encryption. You will have to manually create a console command that decrypts (with the old key) and re-encrypts (with the new key) the `public_key` column of the table where the authentication data is.
 
@@ -907,13 +909,13 @@ Older Laravel versions will require re-encryption. You will have to manually cre
 
 No. You're free to create your own flow for recovery.
 
-My recommendation is to email the user, pointing to a route that registers a new device, and immediately redirect him to blacklist which credential was lost (or blacklist the only one he has).
+My recommendation is to email the user, pointing to a protected route that registers a new device, and immediately redirect him to blacklist which credential was lost (or blacklist the only one he has).
 
 * **Can I use my smartphone as authenticator through my PC or Mac?**
 
 Sometimes.
 
-While this is entirely up to hardware, OS and browser vendor themselves, modern _platforms_ will show a QR code, push notification, or ask to bring closer your smartphone to complete the WebAuthn ceremony. Please check your target platforms of choice.
+While this is entirely up to hardware, OS and browser vendor themselves, modern _platforms_ will show a QR code, push notification, or connecto your smartphone via Bluetooth or NFC to complete the WebAuthn ceremony. Please check your target platforms of choice.
 
 * **Why my device doesn't show Windows Hello/Passkey/TouchID/FaceID/OpticID/pattern/fingerprint authentication?**
 
@@ -959,11 +961,11 @@ Yes. Instead of using `webauthn:install`, use `vendor:publish` and follow the pr
 
 * **Why `ext-sodium` is required as optional?**
 
-Some authenticators can create EdDSA 25519 public keys, which are part of [W3C WebAuthn 3.0 draft](https://www.w3.org/TR/webauthn-3/#dom-publickeycredentialcreationoptions-pubkeycredparams). These keys are shorter and don't require too much computational power to verify, which opens the usage for low-power or "passive" authenticators (like smart-cards). 
+Some authenticators can create EdDSA 25519 public keys, which are part of [W3C WebAuthn 3.0 draft](https://www.w3.org/TR/webauthn-3/#dom-publickeycredentialcreationoptions-pubkeycredparams). These keys are shorter and don't require too much computational power to verify, which opens the usage for low-power or "passive" authenticators (like NFC smart-cards). 
 
-If sodium or the [`paragonie/sodium-compat`](https://github.com/paragonie/sodium_compat) package are not installed, the server won't report EdDSA 25519 compatibility to the authenticator, and any EdDSA 25519 public key previously stored will fail validation. 
+If `sodium` or the [`paragonie/sodium-compat`](https://github.com/paragonie/sodium_compat) package is not installed, the server won't report EdDSA 25519 compatibility to the authenticator, and any EdDSA 25519 public key previously stored will fail validation. 
 
-Consider also that there are no signs of EdDSA 25519 incorporation into PHP `ext-openssl` extension.
+Consider also that there are no signs of EdDSA 25519 incorporation into PHP `ext-openssl` extension, as this algorithm is exclusive to htye `sodium` extension.
 
 ## Laravel Octane Compatibility
 
