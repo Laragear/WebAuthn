@@ -47,6 +47,8 @@ body:
           required: true
         - label: I can reproduce this bug in isolation (vanilla Laravel install)
           required: true
+        - label: I'm using `navigator.credentials` directly to debug the problem.
+          required: true
         - label: I can suggest a workaround as a Pull Request
           required: false
   - type: textarea
