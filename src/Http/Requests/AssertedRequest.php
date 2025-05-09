@@ -2,8 +2,9 @@
 
 namespace Laragear\WebAuthn\Http\Requests;
 
-use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 use UnexpectedValueException;
 
@@ -60,7 +61,7 @@ class AssertedRequest extends FormRequest
         // If the developer is using a callback or an array of callbacks, we will try to use
         // the "attemptWhen" method of the Session Guard. Since these callback are expected
         // to run, we will fail miserably if the guard does not support attempt callbacks.
-        if ($callbacks !== null) {
+        if ($callbacks = Arr::wrap($callbacks)) {
             return $this->userWithCallbacks($auth, $callbacks, $remember, $destroySession);
         }
 
@@ -76,11 +77,11 @@ class AssertedRequest extends FormRequest
     /**
      * Authenticate the user using the given callbacks.
      *
-     * @param  (\Closure(\Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable):bool)[]  $callbacks
+     * @param  (\Closure(\Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable):bool)[]|null  $callbacks
      */
     protected function userWithCallbacks(
-        StatefulGuard $guard,
-        array $callbacks,
+        Guard $guard,
+        ?array $callbacks,
         bool $remember,
         bool $destroySession,
     ): ?WebAuthnAuthenticatable {
