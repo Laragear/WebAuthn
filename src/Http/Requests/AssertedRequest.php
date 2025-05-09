@@ -2,7 +2,6 @@
 
 namespace Laragear\WebAuthn\Http\Requests;
 
-use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
