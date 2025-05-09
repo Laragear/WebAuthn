@@ -3,6 +3,7 @@
 namespace Laragear\WebAuthn\Http\Requests;
 
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
@@ -77,11 +78,11 @@ class AssertedRequest extends FormRequest
     /**
      * Authenticate the user using the given callbacks.
      *
-     * @param  (\Closure(\Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable):bool)[]|null  $callbacks
+     * @param  (\Closure(\Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable):bool)[]  $callbacks
      */
     protected function userWithCallbacks(
-        Guard $guard,
-        ?array $callbacks,
+        StatefulGuard $guard,
+        array $callbacks,
         bool $remember,
         bool $destroySession,
     ): ?WebAuthnAuthenticatable {

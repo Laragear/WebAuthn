@@ -17,8 +17,6 @@ class SetResidentKeyConfiguration
      */
     public function handle(AttestationCreation $attestable, Closure $next): mixed
     {
-        $attestable->residentKey = ResidentKey::Preferred;
-
         $attestable->json->set('authenticatorSelection.residentKey', $attestable->residentKey->value);
 
         $verifiesUser = $attestable->residentKey === ResidentKey::Required;
