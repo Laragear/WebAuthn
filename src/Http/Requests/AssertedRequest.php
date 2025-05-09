@@ -6,7 +6,6 @@ use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Foundation\Http\FormRequest;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 use UnexpectedValueException;
-
 use function auth;
 use function config;
 use function method_exists;
@@ -76,11 +75,11 @@ class AssertedRequest extends FormRequest
     /**
      * Authenticate the user using the given callbacks.
      *
-     * @param  (\Closure(\Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable):bool)[]  $callbacks
+     * @param  (\Closure(\Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable):bool)[]|null  $callbacks
      */
     protected function userWithCallbacks(
         StatefulGuard $guard,
-        array $callbacks,
+        ?array $callbacks,
         bool $remember,
         bool $destroySession,
     ): ?WebAuthnAuthenticatable {
