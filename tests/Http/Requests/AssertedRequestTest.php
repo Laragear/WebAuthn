@@ -4,7 +4,7 @@ namespace Tests\Http\Requests;
 
 use Illuminate\Auth\Events\Login;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
-use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Contracts\Session\Session as SessionContract;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
@@ -327,7 +327,7 @@ class AssertedRequestTest extends DatabaseTestCase
             $request->login(callbacks: fn (): bool => true);
         });
 
-        $guard = Mockery::mock(Guard::class);
+        $guard = Mockery::mock(StatefulGuard::class);
         $guard->expects('attempt')->never();
         $guard->expects('attemptWhen')->never();
 

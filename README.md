@@ -288,9 +288,9 @@ public function createChallenge(AttestationRequest $request)
 
 ### Userless/One-touch/Typeless Login
 
-This enables one click/tap login, without the need to specify the user credentials (like the email) beforehand.
+When asking to create a credential, the server will tell the authenticator to _prefer_ resident keys, which saves the "Username ID" of the credential inside itself. This is what enables one click/tap login, without the need to specify the user credentials (like the email) beforehand.
 
-For this to work, the device has to save the "username id" inside itself. Some authenticators _may_ save it regardless, others may be not compatible. To make this mandatory when creating the WebAuthn Credential, use the `userless()` method of the `AttestationRequest` form request.
+If you want this to be mandatory, use the `userless()` method of the `AttestationRequest` form request.
 
 ```php
 // app\Http\Controllers\WebAuthn\WebAuthnRegisterController.php
@@ -306,7 +306,7 @@ Once the Resident Key is created, the authenticator will be able to find the cor
 
 > [!IMPORTANT]
 >
-> The Authenticator WILL require [user verification](#attestation-user-verification) on login when using `userless()`. Its highly probable the user will also be asked for [user verification on login](#assertion-user-verification).
+> The Authenticator WILL require [user verification](#attestation-user-verification) on login when using `userless()`. It's highly probable the user will also be asked for [user verification on login](#assertion-user-verification).
 
 ### Multiple credentials per device
 
@@ -909,13 +909,13 @@ Older Laravel versions will require re-encryption. You will have to manually cre
 
 No. You're free to create your own flow for recovery.
 
-My recommendation is to email the user, pointing to a protected route that registers a new device, and immediately redirect him to blacklist which credential was lost (or blacklist the only one he has).
+My recommendation is to email the user, pointing to a signed route that registers a new device, and immediately redirect him to blacklist which credential was lost (or blacklist the only one he has).
 
 * **Can I use my smartphone as authenticator through my PC or Mac?**
 
 Sometimes.
 
-While this is entirely up to hardware, OS and browser vendor themselves, modern _platforms_ will show a QR code, push notification, or connecto your smartphone via Bluetooth or NFC to complete the WebAuthn ceremony. Please check your target platforms of choice.
+While this is entirely up to hardware, OS and browser vendor themselves, modern _platforms_ will show a QR code, push notification, or connect to your smartphone via Bluetooth or NFC to complete the WebAuthn ceremony. Please check your target platforms of choice.
 
 * **Why my device doesn't show Windows Hello/Passkey/TouchID/FaceID/OpticID/pattern/fingerprint authentication?**
 
@@ -965,7 +965,7 @@ Some authenticators can create EdDSA 25519 public keys, which are part of [W3C W
 
 If `sodium` or the [`paragonie/sodium-compat`](https://github.com/paragonie/sodium_compat) package is not installed, the server won't report EdDSA 25519 compatibility to the authenticator, and any EdDSA 25519 public key previously stored will fail validation. 
 
-Consider also that there are no signs of EdDSA 25519 incorporation into PHP `ext-openssl` extension, as this algorithm is exclusive to htye `sodium` extension.
+Consider also that there are no signs of EdDSA 25519 incorporation into PHP `ext-openssl` extension, as this algorithm is exclusive to the `sodium` extension.
 
 ## Laravel Octane Compatibility
 

@@ -123,6 +123,8 @@ class CreatorTest extends DatabaseTestCase
             })
             ->assertJsonFragment([
                 'authenticatorSelection' => [
+                    'requireResidentKey' => false,
+                    'residentKey' => 'preferred',
                     'userVerification' => 'required',
                 ],
             ]);
@@ -138,6 +140,8 @@ class CreatorTest extends DatabaseTestCase
             })
             ->assertJsonFragment([
                 'authenticatorSelection' => [
+                    'requireResidentKey' => false,
+                    'residentKey' => 'preferred',
                     'userVerification' => 'discouraged',
                 ],
             ]);

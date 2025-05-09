@@ -18,10 +18,10 @@ class AttestationCreation
      */
     public function __construct(
         public ?WebAuthnAuthenticatable $user,
-        public ?ResidentKey $residentKey = null,
-        public ?UserVerification $userVerification = null,
         public ?Challenge $challenge = null,
         public ?Closure $using = null,
+        public ResidentKey $residentKey = ResidentKey::Preferred,
+        public UserVerification $userVerification = UserVerification::Preferred,
         public JsonTransport $json = new JsonTransport(),
         public bool $uniqueCredentials = true,
     ) {
