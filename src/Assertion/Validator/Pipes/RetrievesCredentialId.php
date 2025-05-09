@@ -36,7 +36,7 @@ class RetrievesCredentialId
             throw AssertionException::make('Credential ID does not exist.');
         }
 
-        if ($validation->credential->isDisabled()) { // @phpstan-ignore-line
+        if ($validation->credential->isDisabled()) {
             throw AssertionException::make('Credential ID is blacklisted.');
         }
 
