@@ -4,7 +4,6 @@ namespace Tests\Http\Requests;
 
 use Illuminate\Auth\Events\Login;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
-use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Contracts\Session\Session as SessionContract;
 use Illuminate\Support\Arr;
