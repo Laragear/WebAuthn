@@ -7,6 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
 use UnexpectedValueException;
+
 use function auth;
 use function config;
 use function method_exists;
