@@ -4,8 +4,8 @@
 
 namespace Tests\Auth;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidator;
 use Laragear\WebAuthn\Exceptions\AssertionException;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
@@ -82,7 +82,7 @@ class EloquentWebAuthnProviderTest extends DatabaseTestCase
 
         static::assertTrue(WebAuthnAuthenticatableUser::query()->first()->is($retrieved));
 
-        $provider->resolveWebAuthnCredentialsWith(fn (string $id) => fn(Builder $query) => $query->whereNull('id'));
+        $provider->resolveWebAuthnCredentialsWith(fn (string $id) => fn (Builder $query) => $query->whereNull('id'));
 
         $retrieved = $provider->retrieveByCredentials([
             'id' => FakeAuthenticator::CREDENTIAL_ID,

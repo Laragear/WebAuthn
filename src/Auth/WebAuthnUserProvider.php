@@ -141,6 +141,6 @@ class WebAuthnUserProvider extends EloquentUserProvider
                     // @phpstan-ignore-next-line
                     $query->whereKey($id)->whereEnabled();
                 });
-        };
+            };
     }
 }
