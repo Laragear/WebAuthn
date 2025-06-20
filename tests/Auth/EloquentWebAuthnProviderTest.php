@@ -4,8 +4,6 @@
 
 namespace Tests\Auth;
 
-use Tests\Stubs\NullCredentialResolver;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidator;
 use Laragear\WebAuthn\Exceptions\AssertionException;
@@ -15,6 +13,7 @@ use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 use Tests\DatabaseTestCase;
 use Tests\FakeAuthenticator;
+use Tests\Stubs\NullCredentialResolver;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
 
 class EloquentWebAuthnProviderTest extends DatabaseTestCase

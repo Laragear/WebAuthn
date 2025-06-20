@@ -53,5 +53,5 @@ return [
         'key' => '_webauthn',
     ],
 
-    'credential_resolver' => [DefaultCredentialResolver::class, 'resolveWebAuthnCredentials']
+    'credential_resolver' => [DefaultCredentialResolver::class, 'resolveWebAuthnCredentials'],
 ];
