@@ -104,6 +104,7 @@ class WebAuthnServiceProvider extends ServiceProvider
                         $config['model'],
                         $app->make(Assertion\Validator\AssertionValidator::class),
                         $config['password_fallback'] ?? true,
+                        ($app['config']['webauthn.credential_resolver'])(...),
                     );
                 }
             );

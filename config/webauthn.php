@@ -1,5 +1,7 @@
 <?php
 
+use Laragear\WebAuthn\Auth\DefaultCredentialResolver;
+
 return [
 
     /*
@@ -50,4 +52,6 @@ return [
         'timeout' => 60,
         'key' => '_webauthn',
     ],
+
+    'credential_resolver' => [DefaultCredentialResolver::class, 'resolveWebAuthnCredentials']
 ];

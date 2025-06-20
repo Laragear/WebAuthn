@@ -4,6 +4,7 @@
 
 namespace Tests\Auth;
 
+use Tests\Stubs\NullCredentialResolver;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidator;
@@ -82,7 +83,8 @@ class EloquentWebAuthnProviderTest extends DatabaseTestCase
 
         static::assertTrue(WebAuthnAuthenticatableUser::query()->first()->is($retrieved));
 
-        $provider->resolveWebAuthnCredentialsWith(fn (string $id) => fn (Builder $query) => $query->whereNull('id'));
+        $this->app->make('config')->set('webauthn.credential_resolver', [NullCredentialResolver::class, 'resolveWebAuthnCredentials']);
+        $provider = Auth::createUserProvider('users');
 
         $retrieved = $provider->retrieveByCredentials([
             'id' => FakeAuthenticator::CREDENTIAL_ID,
