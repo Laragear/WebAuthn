@@ -2,6 +2,7 @@
 
 namespace Laragear\WebAuthn\Auth;
 
+use Closure;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 use Illuminate\Contracts\Database\Eloquent\Builder;
@@ -24,6 +25,8 @@ use function logger;
  */
 class WebAuthnUserProvider extends EloquentUserProvider
 {
+    protected ?Closure $webAuthnCredentialResolver = null;
+
     /**
      * Create a new database user provider.
      */
@@ -51,12 +54,7 @@ class WebAuthnUserProvider extends EloquentUserProvider
 
             unset($credentials['id'], $credentials['rawId'], $credentials['response'], $credentials['type']);
 
-            $credentials = [...$credentials, static function (Builder $query) use ($id): void {
-                $query->whereHas('webAuthnCredentials', static function (Builder $query) use ($id): void {
-                    // @phpstan-ignore-next-line
-                    $query->whereKey($id)->whereEnabled();
-                });
-            }];
+            $credentials = [...$credentials, $this->webAuthnCredentialsResolver($id)];
         }
 
         return parent::retrieveByCredentials($credentials);
@@ -127,5 +125,22 @@ class WebAuthnUserProvider extends EloquentUserProvider
         if (! $this->isSignedChallenge($credentials) && method_exists(get_parent_class($this), 'rehashPasswordIfRequired')) {
             parent::rehashPasswordIfRequired($user, $credentials, $force);
         }
+    }
+
+    public function resolveWebAuthnCredentialsWith(Closure $resolver): void
+    {
+        $this->webAuthnCredentialResolver = $resolver;
+    }
+
+    protected function webAuthnCredentialsResolver(string $id): Closure
+    {
+        return $this->webAuthnCredentialResolver
+            ? call_user_func($this->webAuthnCredentialResolver, $id)
+            : static function (Builder $query) use ($id): void {
+                $query->whereHas('webAuthnCredentials', static function (Builder $query) use ($id): void {
+                    // @phpstan-ignore-next-line
+                    $query->whereKey($id)->whereEnabled();
+                });
+        };
     }
 }

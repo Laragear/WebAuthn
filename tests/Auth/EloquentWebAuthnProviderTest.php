@@ -5,6 +5,7 @@
 namespace Tests\Auth;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidator;
 use Laragear\WebAuthn\Exceptions\AssertionException;
 use Laragear\WebAuthn\Models\WebAuthnCredential;
@@ -60,6 +61,31 @@ class EloquentWebAuthnProviderTest extends DatabaseTestCase
 
         $retrieved = $provider->retrieveByCredentials([
             'id' => '27EdS6eTDHCTa9Y73G9gY1b81yVJuuiu1TTyorFicBf',
+            'rawId' => 'raw',
+            'response' => ['something'],
+            'type' => 'public-key',
+        ]);
+
+        static::assertNull($retrieved);
+    }
+
+    public function test_custom_webauthn_resolver(): void
+    {
+        $provider = Auth::createUserProvider('users');
+
+        $retrieved = $provider->retrieveByCredentials([
+            'id' => FakeAuthenticator::CREDENTIAL_ID,
+            'rawId' => 'raw',
+            'response' => ['something'],
+            'type' => 'public-key',
+        ]);
+
+        static::assertTrue(WebAuthnAuthenticatableUser::query()->first()->is($retrieved));
+
+        $provider->resolveWebAuthnCredentialsWith(fn (string $id) => fn(Builder $query) => $query->whereNull('id'));
+
+        $retrieved = $provider->retrieveByCredentials([
+            'id' => FakeAuthenticator::CREDENTIAL_ID,
             'rawId' => 'raw',
             'response' => ['something'],
             'type' => 'public-key',
