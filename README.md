@@ -61,9 +61,8 @@ The private key doesn't leave the authenticator, there are no shared passwords s
 ## Set up
 
 We need to make sure your users can register their devices and authenticate with them.
-
-1. [Publish the files](#2-publish-files-and-migrate)
-2. [Add the WebAuthn driver](#1-add-the-webauthn-driver)
+1. [Add the WebAuthn driver](#1-add-the-webauthn-driver)
+2. [Publish the files and migrate](#2-publish-files-and-migrate)
 3. [Implement the contract and trait](#3-implement-the-contract-and-trait)
 4. [Register the controllers](#4-register-the-routes-and-controllers) _(optional)_
 5. [Use the Javascript helper](#5-use-the-javascript-helper) _(optional)_
