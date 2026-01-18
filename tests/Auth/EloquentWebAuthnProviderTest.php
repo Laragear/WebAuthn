@@ -5,7 +5,6 @@
 namespace Tests\Auth;
 
 use Illuminate\Foundation\Auth\User;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidator;
 use Laragear\WebAuthn\Auth\WebAuthnUserProvider;
@@ -17,11 +16,9 @@ use Ramsey\Uuid\Uuid;
 use Tests\DatabaseTestCase;
 use Tests\FakeAuthenticator;
 use Tests\Stubs\WebAuthnAuthenticatableUser;
-use function is_array;
 
 class EloquentWebAuthnProviderTest extends DatabaseTestCase
 {
-
     protected function setUp(): void
     {
         parent::setUp();
