@@ -96,7 +96,7 @@ class WebAuthnUserProvider extends EloquentUserProvider
      */
     public function validateCredentials($user, array $credentials): bool
     {
-        if (isset(static::$validateUsing) && is_bool($result = (static::$validateUsing)($user, $credentials))) {
+        if (isset(static::$validateUsing) && is_bool($result = (static::$validateUsing)($user, $credentials))) { // @phpstan-ignore-line
             return $result;
         }
 
