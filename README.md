@@ -450,6 +450,22 @@ public function login(Request $request)
 
 You may disable the fallback to only allow WebAuthn authentication by [setting `password_fallback` to `false`](#1-add-the-webauthn-driver). This may force you to handle classic user/password using a separate guard.
 
+#### Custom credential validation
+
+If you require to programmatically validate the user credentials, you may set a callback in the `Laragear\WebAuthn\Auth\WebAuthnUserProvider::$validateUsing`. It will take precedence over any other check. While the callback may return boolean, you can return `null|void` to continue with normal validation. 
+
+```php
+use Laragear\WebAuthn\Auth\WebAuthnUserProvider;
+use App\Models\User;
+use Ldap\LdapAuth;
+
+WebAuthnUserProvider::$validateUsing = function (User $user, array $credentials) {
+    if ($user->prefersLdapAuth()) {
+        return LdapAuth::attempt($user, $credentials);
+    }
+}
+```
+
 ### Detecting Cloned Credentials
 
 During assertion, the package will automatically detect if a Credential has been cloned by comparing how many times the user has logged in with it.
