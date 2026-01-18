@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Laragear\WebAuthn\Assertion\Validator\AssertionValidator;
 use Laragear\WebAuthn\Auth\WebAuthnUserProvider;
 use Laragear\WebAuthn\Exceptions\AssertionException;
-use Laragear\WebAuthn\Repositories\Eloquent\WebAuthnCredential;
+use Laragear\WebAuthn\Models\WebAuthnCredential;
 use Mockery;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
