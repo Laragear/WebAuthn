@@ -103,7 +103,7 @@ class CborDecoder
      *
      * @throws \Laragear\WebAuthn\Exceptions\DataException
      */
-    public static function decodePortion(ByteBuffer|string $bufOrBin, int $startOffset, ?int &$endOffset = null): ByteBuffer|array|bool|float|int|string|null // @phpstan-ignore-line
+    public static function decodePortion(ByteBuffer|string $bufOrBin, int $startOffset, ?int &$endOffset = null): ByteBuffer|array|bool|float|int|string|null
     {
         $buf = $bufOrBin instanceof ByteBuffer ? $bufOrBin : new ByteBuffer($bufOrBin);
 

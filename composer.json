@@ -46,7 +46,7 @@
     },
     "require-dev": {
         "ext-sodium": "*",
-        "orchestra/testbench": "9.*|10.*"
+        "orchestra/testbench": "^9.16|10.*"
     },
     "suggest": {
         "paragonie/sodium_compat": "To enable EdDSA 25519 keys from authenticators, if `ext-sodium` is unavailable."

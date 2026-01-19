@@ -2,6 +2,7 @@
 
 namespace Laragear\WebAuthn\Auth;
 
+use Closure;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 use Illuminate\Contracts\Database\Eloquent\Builder;
@@ -15,6 +16,7 @@ use Laragear\WebAuthn\JsonTransport;
 use function class_implements;
 use function config;
 use function in_array;
+use function is_bool;
 use function logger;
 
 /**
@@ -24,6 +26,13 @@ use function logger;
  */
 class WebAuthnUserProvider extends EloquentUserProvider
 {
+    /**
+     * Custom callback to validate the user credentials.
+     *
+     * @var (\Closure(\Illuminate\Contracts\Auth\Authenticatable|\Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable, array):bool|null)|null
+     */
+    public static ?Closure $validateUsing;
+
     /**
      * Create a new database user provider.
      */
@@ -87,6 +96,10 @@ class WebAuthnUserProvider extends EloquentUserProvider
      */
     public function validateCredentials($user, array $credentials): bool
     {
+        if (isset(static::$validateUsing) && is_bool($result = (static::$validateUsing)($user, $credentials))) { // @phpstan-ignore-line
+            return $result;
+        }
+
         if ($user instanceof WebAuthnAuthenticatable && $this->isSignedChallenge($credentials)) {
             return $this->validateWebAuthn($user, $credentials);
         }
