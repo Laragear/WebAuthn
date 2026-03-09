@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Check file permissions
         run: |
@@ -29,11 +29,11 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.3
+          php-version: latest
           tools: parallel-lint
 
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Validate Composer configuration
         run: composer validate --strict
@@ -50,18 +50,15 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - 8.2
           - 8.3
           - 8.4
+          - 8.5
         laravel-constraint:
-          - 11.*
           - 12.*
+          - 13.*
         dependencies:
           - lowest
           - highest
-        exclude:
-          - laravel-constraint: 12.*
-            php-version: 8.2
 
     steps:
       - name: Set up PHP
@@ -72,7 +69,7 @@ jobs:
           coverage: xdebug
 
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install dependencies
         uses: ramsey/composer-install@v3
@@ -104,7 +101,7 @@ jobs:
           coverage: none
 
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install dependencies
         uses: ramsey/composer-install@v3
@@ -120,7 +117,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Check exported files
         run: |

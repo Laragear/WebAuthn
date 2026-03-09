@@ -14,10 +14,10 @@ use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
  */
 class WebAuthnServiceProvider extends ServiceProvider
 {
-    public const CONTROLLERS = __DIR__.'/../stubs/controllers';
-    public const CONFIG = __DIR__.'/../config/webauthn.php';
-    public const MIGRATIONS = __DIR__.'/../database/migrations';
-    public const JS = __DIR__.'/../resources/js';
+    public const string CONTROLLERS = __DIR__.'/../stubs/controllers';
+    public const string CONFIG = __DIR__.'/../config/webauthn.php';
+    public const string MIGRATIONS = __DIR__.'/../database/migrations';
+    public const string JS = __DIR__.'/../resources/js';
 
     /**
      * Register the service provider.
@@ -31,9 +31,7 @@ class WebAuthnServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(static::CONFIG, 'webauthn');
 
         $this->registerUser();
-
         $this->registerUserProvider();
-
         $this->registerChallengeRepository();
     }
 

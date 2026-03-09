@@ -5,7 +5,7 @@
 [![Coverage](https://codecov.io/gh/Laragear/WebAuthn/graph/badge.svg?token=HIngrvQeOj)](https://codecov.io/gh/Laragear/WebAuthn)
 [![Maintainability](https://qlty.sh/badges/9dea0798-e355-4d97-b959-da9ae2c792aa/maintainability.svg)](https://qlty.sh/gh/Laragear/projects/WebAuthn)
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=Laragear_WebAuthn&metric=alert_status)](https://sonarcloud.io/dashboard?id=Laragear_WebAuthn)
-[![Laravel Octane Compatibility](https://img.shields.io/badge/Laravel%20Octane-Compatible-success?style=flat&logo=laravel)](https://laravel.com/docs/11.x/octane#introduction)
+[![Laravel Octane Compatibility](https://img.shields.io/badge/Laravel%20Octane-Compatible-success?style=flat&logo=laravel)](https://laravel.com/docs/13.x/octane#introduction)
 
 Authenticate users with Passkeys: fingerprints, patterns and biometric data.
 
@@ -32,7 +32,8 @@ Your support allows me to keep this package free, up-to-date and maintainable. A
 
 ## Requirements
 
-* Laravel 11.x or later.
+* PHP 8.3 or later
+* Laravel 12 or later
 * The `ext-openssl` extension.
 * The `ext-sodium` extension (optional, for EdDSA 25519 public keys).
 
@@ -1005,7 +1006,7 @@ These are some details about this WebAuthn implementation you should be aware of
 * Credentials can be blacklisted (enabled/disabled).
 * Public Keys are encrypted in the database automatically, using the application key.
 
-If you discover any security related issues, please email darkghosthunter@gmail.com instead of using the issue tracker.
+If you discover any security-related issues, please email darkghosthunter@gmail.com instead of using the issue tracker.
 
 ## License
 
@@ -1013,4 +1014,4 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 
 Contains Code from [Lukas Buchs WebAuthn 2.0](https://github.com/lbuchs/WebAuthn) implementation. The MIT License (MIT) where applicable.
 
-Laravel is a Trademark of Taylor Otwell. Copyright © 2011-2025 Laravel LLC.
+Laravel is a Trademark of Taylor Otwell. Copyright © 2011–2026 Laravel LLC.
