@@ -1,7 +1,7 @@
 # WebAuthn
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/laragear/webauthn.svg)](https://packagist.org/packages/laragear/webauthn)
-[![Latest stable test run](https://github.com/Laragear/WebAuthn/actions/workflows/php.yml/badge.svg?branch=1.x)](https://github.com/Laragear/WebAuthn/actions/workflows/php.yml)
+[![Latest stable test run](https://github.com/Laragear/WebAuthn/actions/workflows/php.yml/badge.svg)](https://github.com/Laragear/WebAuthn/actions/workflows/php.yml)
 [![Coverage](https://codecov.io/gh/Laragear/WebAuthn/graph/badge.svg?token=HIngrvQeOj)](https://codecov.io/gh/Laragear/WebAuthn)
 [![Maintainability](https://qlty.sh/badges/9dea0798-e355-4d97-b959-da9ae2c792aa/maintainability.svg)](https://qlty.sh/gh/Laragear/projects/WebAuthn)
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=Laragear_WebAuthn&metric=alert_status)](https://sonarcloud.io/dashboard?id=Laragear_WebAuthn)
