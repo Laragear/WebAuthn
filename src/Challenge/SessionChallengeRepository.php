@@ -9,6 +9,7 @@ use Laragear\WebAuthn\Assertion\Validator\AssertionValidation;
 use Laragear\WebAuthn\Attestation\Creator\AttestationCreation;
 use Laragear\WebAuthn\Attestation\Validator\AttestationValidation;
 use Laragear\WebAuthn\Contracts\WebAuthnChallengeRepository;
+
 use function is_array;
 
 /**

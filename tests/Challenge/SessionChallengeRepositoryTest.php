@@ -10,6 +10,7 @@ use Laragear\WebAuthn\Challenge\SessionChallengeRepository;
 use Mockery;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
+
 use function now;
 
 class SessionChallengeRepositoryTest extends TestCase

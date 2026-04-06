@@ -8,6 +8,7 @@ use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Facades\Date;
 use JsonSerializable;
 use Laragear\WebAuthn\ByteBuffer;
+
 use function json_encode;
 
 class Challenge implements JsonSerializable, Arrayable, Jsonable
@@ -49,7 +50,7 @@ class Challenge implements JsonSerializable, Arrayable, Jsonable
      */
     public function isExpired(): bool
     {
-        return !$this->isValid();
+        return ! $this->isValid();
     }
 
     /**
