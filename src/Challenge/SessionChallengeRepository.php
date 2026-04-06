@@ -10,6 +10,8 @@ use Laragear\WebAuthn\Attestation\Creator\AttestationCreation;
 use Laragear\WebAuthn\Attestation\Validator\AttestationValidation;
 use Laragear\WebAuthn\Contracts\WebAuthnChallengeRepository;
 
+use function is_array;
+
 /**
  * @internal
  */
@@ -38,8 +40,12 @@ class SessionChallengeRepository implements WebAuthnChallengeRepository
      */
     public function pull(AttestationValidation|AssertionValidation $ceremony): ?Challenge
     {
-        /** @var \Laragear\WebAuthn\Challenge\Challenge|null $challenge */
+        /** @var \Laragear\WebAuthn\Challenge\Challenge|array|null $challenge */
         $challenge = $this->session->pull($this->config->get('webauthn.challenge.key'));
+
+        if (is_array($challenge)) {
+            $challenge = Challenge::fromArray($challenge);
+        }
 
         // Only return the challenge if it's valid (not expired)
         if ($challenge?->isValid()) {

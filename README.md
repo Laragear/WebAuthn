@@ -649,6 +649,10 @@ public function create(Request $request, AttestationCreator $assertion)
 }
 ```
 
+> [!IMPORTANT]
+> 
+> When instancing a challenge manually, ensure you set the exact timestamp where it will expire, not the relative seconds for expiration.
+
 ### Custom Challenge Repository
 
 Storing and pulling challenges is done through a _repository_. By default, this library includes a repository that uses your application Session, which is the easiest and securer way to store and pull challenges.
