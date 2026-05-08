@@ -1,3 +1,7 @@
+# This package has been superseded by [`laravel/passkeys-server`](https://github.com/laravel/passkeys-server)
+
+This package is no longer maintained due to an official implementation.
+
 # WebAuthn
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/laragear/webauthn.svg)](https://packagist.org/packages/laragear/webauthn)

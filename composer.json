@@ -27,6 +27,7 @@
             "homepage": "https://github.com/sponsors/DarkGhostHunter"
         }
     ],
+    "abandoned": "laravel/passkeys-server",
     "support": {
         "source": "https://github.com/Laragear/WebAuthn",
         "issues": "https://github.com/Laragear/WebAuthn/issues"
