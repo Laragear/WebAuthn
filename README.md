@@ -1,4 +1,4 @@
-# This package has been superseded by [`laravel/passkeys-server`](https://github.com/laravel/passkeys-server)
+# This package has been superseded by [`laravel/passkeys`](https://github.com/laravel/passkeys-server)
 
 This package is no longer maintained due to an official implementation.
 
